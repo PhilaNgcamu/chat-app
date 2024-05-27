@@ -57,20 +57,24 @@ const UserLogin = ({ navigation }) => {
         </TouchableOpacity>
       </View>
 
-      <TextInput
-        style={styles.input}
-        placeholder="Email"
-        value={email}
-        onChangeText={setEmail}
-        keyboardType="email-address"
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Password"
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
-      />
+      <View style={styles.inputContainer}>
+        <Text style={styles.label}>Your email</Text>
+        <TextInput
+          style={styles.input}
+          value={email}
+          onChangeText={setEmail}
+          keyboardType="email-address"
+        />
+      </View>
+      <View style={styles.inputContainer}>
+        <Text style={styles.label}>Your password</Text>
+        <TextInput
+          style={styles.input}
+          value={password}
+          onChangeText={setPassword}
+          secureTextEntry
+        />
+      </View>
       <TouchableOpacity style={styles.button}>
         <Text style={styles.buttonText}>Login</Text>
       </TouchableOpacity>
@@ -106,20 +110,22 @@ const styles = StyleSheet.create({
   logo: {
     width: 50,
     height: 50,
+    borderColor: "#000E08",
+    borderWidth: 1,
     borderRadius: 25,
-    marginHorizontal: 8,
-  },
-  button: {
-    backgroundColor: "#41B2A4",
-    padding: 16,
-    borderRadius: 4,
-    marginTop: 16,
+    margin: 8,
   },
   buttonText: {
-    color: "white",
     fontFamily: "Poppins-Bold",
-    fontSize: 24,
+    fontSize: 16,
     textAlign: "center",
+    color: "#FFFFFF",
+  },
+  button: {
+    backgroundColor: "#24786D",
+    padding: 12,
+    borderRadius: 20,
+    marginTop: 16,
   },
   loginContainer: {
     position: "relative",
@@ -136,11 +142,19 @@ const styles = StyleSheet.create({
     fontSize: 24,
     marginBottom: 16,
   },
+  inputContainer: {
+    marginBottom: 16,
+  },
+  label: {
+    fontFamily: "Poppins-Regular",
+    fontSize: 14,
+    color: "#24786D",
+    marginBottom: 4,
+  },
   input: {
-    borderWidth: 1,
-    borderColor: "gray",
+    borderColor: "#CDD1D0",
+    borderBottomWidth: 1,
     padding: 8,
-    marginBottom: 8,
     borderRadius: 4,
   },
   stroke: {
