@@ -3,13 +3,10 @@ import { StyleSheet, Text, View } from "react-native";
 import UserSignup from "./components/onboarding/UserSignup";
 import UserLogin from "./components/onboarding/UserLogin";
 import UserProfile from "./components/userProfile/UserProfile";
+import IndividualChat from "./components/IndividualChat/IndividualChat";
 
 export default function App() {
-  return (
-    <View style={styles.container}>
-      <UserProfile />
-    </View>
-  );
+  return <IndividualChat />;
 }
 
 const styles = StyleSheet.create({
