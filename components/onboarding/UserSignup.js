@@ -30,7 +30,13 @@ const UserSignup = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Sign up with Email</Text>
+      <View style={styles.titleContainer}>
+        <Text style={styles.title}>Sign up with </Text>
+        <View style={styles.emailContainer}>
+          <Text style={styles.emailText}>Email</Text>
+          <View style={styles.stroke} />
+        </View>
+      </View>
 
       <Text style={styles.subtitle}>
         Get chatting with friends and family today by signing up for our chat
@@ -90,11 +96,34 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     padding: 16,
   },
+  titleContainer: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: 8,
+  },
   title: {
     textAlign: "center",
     fontFamily: "Poppins-Bold",
     fontSize: 24,
-    marginBottom: 16,
+  },
+  emailContainer: {
+    position: "relative",
+  },
+  emailText: {
+    fontFamily: "Poppins-Bold",
+    fontSize: 24,
+    zIndex: 1,
+  },
+  stroke: {
+    position: "absolute",
+    zIndex: 0,
+    width: 60,
+    bottom: 8,
+    left: -3,
+    right: 0,
+    height: 10,
+    backgroundColor: "#41B2A4",
   },
   subtitle: {
     textAlign: "center",
@@ -130,10 +159,6 @@ const styles = StyleSheet.create({
     padding: 12,
     borderRadius: 20,
     marginTop: 16,
-  },
-  error: {
-    color: "red",
-    marginBottom: 8,
   },
 });
 
