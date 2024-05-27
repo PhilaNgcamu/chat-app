@@ -109,12 +109,12 @@ const styles = StyleSheet.create({
   label: {
     fontFamily: "Poppins-Regular",
     fontSize: 14,
-    color: "#797C7B",
+    color: "#24786D",
     marginBottom: 4,
   },
   input: {
     borderBottomWidth: 1,
-    borderBottomColor: "gray",
+    borderBottomColor: "#24786D",
     paddingBottom: 8,
     fontFamily: "Poppins-Regular",
     fontSize: 16,
