@@ -15,7 +15,7 @@ const UserSignup = ({ navigation }) => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
-  const [fontsLoaded] = useFonts({
+  const [fontsLoaded, fontError] = useFonts({
     "Poppins-Bold": require("../../assets/fonts/Poppins-Bold.ttf"),
     "Poppins-Regular": require("../../assets/fonts/Poppins-Regular.ttf"),
   });
