@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Image,
   Alert,
+  ActivityIndicator,
 } from "react-native";
 import { useFonts } from "expo-font";
 import {
@@ -15,7 +16,7 @@ import {
   FacebookAuthProvider,
   signInWithPopup,
 } from "firebase/auth";
-import { FIREBASE_AUTH } from "../../backend/FirebaseConfig";
+import { auth } from "../../backend/FirebaseConfig";
 
 const facebookLogo = require("../../assets/facebook.png");
 const googleLogo = require("../../assets/google.png");
@@ -26,12 +27,10 @@ const UserLogin = ({ navigation }) => {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const [fontsLoaded, fontError] = useFonts({
+  const [fontsLoaded] = useFonts({
     "Poppins-Bold": require("../../assets/fonts/Poppins-Bold.ttf"),
     "Poppins-Regular": require("../../assets/fonts/Poppins-Regular.ttf"),
   });
-
-  const auth = FIREBASE_AUTH;
 
   const handleLogin = async () => {
     setLoading(true);
@@ -47,9 +46,14 @@ const UserLogin = ({ navigation }) => {
   };
 
   const handleGoogleLogin = async () => {
+    const provider = new GoogleAuthProvider();
+    provider.setCustomParameters({
+      prompt: "select_account",
+    });
+
     try {
-      const provider = new GoogleAuthProvider();
-      await signInWithPopup(auth, provider);
+      const result = await signInWithPopup(auth, provider);
+      const credential = GoogleAuthProvider.credentialFromResult(result);
       Alert.alert("Google Login Successful");
       navigation.navigate("Home");
     } catch (error) {
@@ -58,9 +62,14 @@ const UserLogin = ({ navigation }) => {
   };
 
   const handleFacebookLogin = async () => {
+    const provider = new FacebookAuthProvider();
+    provider.setCustomParameters({
+      display: "popup",
+    });
+
     try {
-      const provider = new FacebookAuthProvider();
-      await signInWithPopup(auth, provider);
+      const result = await signInWithPopup(auth, provider);
+      const credential = FacebookAuthProvider.credentialFromResult(result);
       Alert.alert("Facebook Login Successful");
       navigation.navigate("Home");
     } catch (error) {
