@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -7,16 +7,20 @@ import {
   TouchableOpacity,
   Image,
   Alert,
-  ActivityIndicator,
 } from "react-native";
 import { useFonts } from "expo-font";
 import {
   signInWithEmailAndPassword,
   GoogleAuthProvider,
   FacebookAuthProvider,
-  signInWithPopup,
+  signInWithCredential,
 } from "firebase/auth";
-import { auth } from "../../backend/FirebaseConfig";
+import * as Google from "expo-auth-session/providers/google";
+import * as Facebook from "expo-auth-session/providers/facebook";
+import * as WebBrowser from "expo-web-browser";
+import { FIREBASE_AUTH } from "../../backend/FirebaseConfig";
+
+WebBrowser.maybeCompleteAuthSession();
 
 const facebookLogo = require("../../assets/facebook.png");
 const googleLogo = require("../../assets/google.png");
@@ -27,10 +31,22 @@ const UserLogin = ({ navigation }) => {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const [fontsLoaded] = useFonts({
+  const [fontsLoaded, fontError] = useFonts({
     "Poppins-Bold": require("../../assets/fonts/Poppins-Bold.ttf"),
     "Poppins-Regular": require("../../assets/fonts/Poppins-Regular.ttf"),
   });
+
+  const [request, response, promptAsync] = Google.useIdTokenAuthRequest({
+    clientId:
+      "746597502071-jrpusr4bles8endof8oa2ihitg9sda2a.apps.googleusercontent.com",
+  });
+
+  const [facebookRequest, facebookResponse, facebookPromptAsync] =
+    Facebook.useAuthRequest({
+      clientId: "3843000872603631",
+    });
+
+  const auth = FIREBASE_AUTH;
 
   const handleLogin = async () => {
     setLoading(true);
@@ -46,38 +62,30 @@ const UserLogin = ({ navigation }) => {
   };
 
   const handleGoogleLogin = async () => {
-    const provider = new GoogleAuthProvider();
-    provider.setCustomParameters({
-      prompt: "select_account",
-    });
-
-    try {
-      const result = await signInWithPopup(auth, provider);
-      const credential = GoogleAuthProvider.credentialFromResult(result);
+    const result = await promptAsync();
+    if (result.type === "success") {
+      const { id_token } = result.params;
+      const credential = GoogleAuthProvider.credential(id_token);
+      await signInWithCredential(auth, credential);
       Alert.alert("Google Login Successful");
       navigation.navigate("Home");
-    } catch (error) {
-      Alert.alert(error.message);
     }
   };
 
   const handleFacebookLogin = async () => {
-    const provider = new FacebookAuthProvider();
-    provider.setCustomParameters({
-      display: "popup",
-    });
-
-    try {
-      const result = await signInWithPopup(auth, provider);
-      const credential = FacebookAuthProvider.credentialFromResult(result);
+    const result = await facebookPromptAsync();
+    if (result.type === "success") {
+      const { access_token } = result.params;
+      const credential = FacebookAuthProvider.credential(access_token);
+      await signInWithCredential(auth, credential);
       Alert.alert("Facebook Login Successful");
       navigation.navigate("Home");
-    } catch (error) {
-      Alert.alert(error.message);
     }
   };
 
-  const handleAppleLogin = () => {};
+  const handleAppleLogin = () => {
+    // Implement Apple login here
+  };
 
   if (!fontsLoaded) {
     return (
@@ -105,7 +113,7 @@ const UserLogin = ({ navigation }) => {
         <TouchableOpacity onPress={handleFacebookLogin}>
           <Image source={facebookLogo} style={styles.logo} />
         </TouchableOpacity>
-        <TouchableOpacity onPress={handleGoogleLogin}>
+        <TouchableOpacity disabled={!request} onPress={handleGoogleLogin}>
           <Image source={googleLogo} style={styles.logo} />
         </TouchableOpacity>
         <TouchableOpacity onPress={handleAppleLogin}>
