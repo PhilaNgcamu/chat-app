@@ -8,13 +8,12 @@ import { getFirestore } from "firebase/firestore";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDietKwCutTxn_MLPkdpseopWo7X3eICUY",
-  authDomain: "chat-app-lss.firebaseapp.com",
-  projectId: "chat-app-lss",
-  storageBucket: "chat-app-lss.appspot.com",
-  messagingSenderId: "746597502071",
-  appId: "1:746597502071:web:94bd242563ee66c99d8a72",
-  measurementId: "G-LTEHJNPFK3",
+  apiKey: "AIzaSyCqcsdwFL_EveXmtr_fiGu_Ww9Q1HVXmJo",
+  authDomain: "lss-chat-app.firebaseapp.com",
+  projectId: "lss-chat-app",
+  storageBucket: "lss-chat-app.appspot.com",
+  messagingSenderId: "137259105751",
+  appId: "1:137259105751:web:63813f0e1b50f5c14f9f92",
 };
 
 export const FIREBASE_APP = initializeApp(firebaseConfig);

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -14,7 +14,6 @@ import {
   GoogleAuthProvider,
   FacebookAuthProvider,
   signInWithCredential,
-  getAuth,
 } from "firebase/auth";
 import * as Google from "expo-auth-session/providers/google";
 import * as Facebook from "expo-auth-session/providers/facebook";
@@ -39,7 +38,7 @@ const UserLogin = ({ navigation }) => {
 
   const [request, response, promptAsync] = Google.useIdTokenAuthRequest({
     clientId:
-      "746597502071-jrpusr4bles8endof8oa2ihitg9sda2a.apps.googleusercontent.com",
+      "137259105751-5uidm3aj8hlhiqmhinm0nitu6t7f3hnc.apps.googleusercontent.com",
   });
 
   const [facebookRequest, facebookResponse, facebookPromptAsync] =
@@ -48,6 +47,36 @@ const UserLogin = ({ navigation }) => {
     });
 
   const auth = FIREBASE_AUTH;
+
+  useEffect(() => {
+    if (response?.type === "success") {
+      const { id_token } = response.params;
+      const credential = GoogleAuthProvider.credential(id_token);
+      signInWithCredential(auth, credential)
+        .then(() => {
+          Alert.alert("Google Login Successful");
+          navigation.navigate("Home");
+        })
+        .catch((error) => {
+          Alert.alert(error.message);
+        });
+    }
+  }, [response]);
+
+  useEffect(() => {
+    if (facebookResponse?.type === "success") {
+      const { access_token } = facebookResponse.params;
+      const credential = FacebookAuthProvider.credential(access_token);
+      signInWithCredential(auth, credential)
+        .then(() => {
+          Alert.alert("Facebook Login Successful");
+          navigation.navigate("Home");
+        })
+        .catch((error) => {
+          Alert.alert(error.message);
+        });
+    }
+  }, [facebookResponse]);
 
   const handleLogin = async () => {
     setLoading(true);
@@ -62,29 +91,17 @@ const UserLogin = ({ navigation }) => {
     }
   };
 
-  const handleGoogleLogin = async () => {
-    const result = await promptAsync();
-    if (result.type === "success") {
-      const { id_token } = result.params;
-      const credential = GoogleAuthProvider.credential(id_token);
-      await signInWithCredential(auth, credential);
-      Alert.alert("Google Login Successful");
-      navigation.navigate("Home");
-    }
+  const handleGoogleLogin = () => {
+    promptAsync();
   };
 
-  const handleFacebookLogin = async () => {
-    const result = await facebookPromptAsync();
-    if (result.type === "success") {
-      const { access_token } = result.params;
-      const credential = FacebookAuthProvider.credential(access_token);
-      await signInWithCredential(auth, credential);
-      Alert.alert("Facebook Login Successful");
-      navigation.navigate("Home");
-    }
+  const handleFacebookLogin = () => {
+    facebookPromptAsync();
   };
 
-  const handleAppleLogin = () => {};
+  const handleAppleLogin = () => {
+    // Implement Apple login here
+  };
 
   if (!fontsLoaded) {
     return (
