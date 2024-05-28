@@ -7,14 +7,5 @@ import IndividualChat from "./components/IndividualChat/IndividualChat";
 import GroupChat from "./components/GroupChat/GroupChat";
 
 export default function App() {
-  return <GroupChat />;
+  return <UserSignup />;
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});
