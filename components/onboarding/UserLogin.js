@@ -1,4 +1,3 @@
-import firebase from "firebase/compat/app";
 import React, { useState } from "react";
 import {
   View,
@@ -7,8 +6,16 @@ import {
   StyleSheet,
   TouchableOpacity,
   Image,
+  Alert,
 } from "react-native";
 import { useFonts } from "expo-font";
+import {
+  signInWithEmailAndPassword,
+  GoogleAuthProvider,
+  FacebookAuthProvider,
+  signInWithPopup,
+} from "firebase/auth";
+import { FIREBASE_AUTH } from "../../backend/FirebaseConfig";
 
 const facebookLogo = require("../../assets/facebook.png");
 const googleLogo = require("../../assets/google.png");
@@ -17,11 +24,51 @@ const appleLogo = require("../../assets/apple.png");
 const UserLogin = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const [fontsLoaded, fontError] = useFonts({
     "Poppins-Bold": require("../../assets/fonts/Poppins-Bold.ttf"),
     "Poppins-Regular": require("../../assets/fonts/Poppins-Regular.ttf"),
   });
+
+  const auth = FIREBASE_AUTH;
+
+  const handleLogin = async () => {
+    setLoading(true);
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      Alert.alert("Login Successful");
+      navigation.navigate("Home");
+    } catch (error) {
+      Alert.alert(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleGoogleLogin = async () => {
+    try {
+      const provider = new GoogleAuthProvider();
+      await signInWithPopup(auth, provider);
+      Alert.alert("Google Login Successful");
+      navigation.navigate("Home");
+    } catch (error) {
+      Alert.alert(error.message);
+    }
+  };
+
+  const handleFacebookLogin = async () => {
+    try {
+      const provider = new FacebookAuthProvider();
+      await signInWithPopup(auth, provider);
+      Alert.alert("Facebook Login Successful");
+      navigation.navigate("Home");
+    } catch (error) {
+      Alert.alert(error.message);
+    }
+  };
+
+  const handleAppleLogin = () => {};
 
   if (!fontsLoaded) {
     return (
@@ -46,13 +93,13 @@ const UserLogin = ({ navigation }) => {
       </Text>
 
       <View style={styles.logoContainer}>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={handleFacebookLogin}>
           <Image source={facebookLogo} style={styles.logo} />
         </TouchableOpacity>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={handleGoogleLogin}>
           <Image source={googleLogo} style={styles.logo} />
         </TouchableOpacity>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={handleAppleLogin}>
           <Image source={appleLogo} style={styles.logo} />
         </TouchableOpacity>
       </View>
@@ -75,8 +122,14 @@ const UserLogin = ({ navigation }) => {
           secureTextEntry
         />
       </View>
-      <TouchableOpacity style={styles.button}>
-        <Text style={styles.buttonText}>Login</Text>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={handleLogin}
+        disabled={loading}
+      >
+        <Text style={styles.buttonText}>
+          {loading ? "Logging in..." : "Login"}
+        </Text>
       </TouchableOpacity>
     </View>
   );
