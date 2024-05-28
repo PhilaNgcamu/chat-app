@@ -32,7 +32,6 @@ const GroupChat = () => {
 
   const handleJoinGroup = () => {
     setIsJoiningGroup(false);
-    // Implement group joining logic here
   };
 
   const handleSendMessage = () => {
