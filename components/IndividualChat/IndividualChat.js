@@ -22,13 +22,12 @@ const IndividualChat = ({ contactName, contactStatus }) => {
   });
 
   useEffect(() => {
-    // Simulate the other user typing
     let typingTimeout;
     if (message.length > 0) {
       setIsTyping(true);
       typingTimeout = setTimeout(() => {
         setIsTyping(false);
-      }, 2000);
+      }, 1500);
     } else {
       setIsTyping(false);
     }
