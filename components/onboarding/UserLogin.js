@@ -14,6 +14,7 @@ import {
   GoogleAuthProvider,
   FacebookAuthProvider,
   signInWithCredential,
+  getAuth,
 } from "firebase/auth";
 import * as Google from "expo-auth-session/providers/google";
 import * as Facebook from "expo-auth-session/providers/facebook";
@@ -83,9 +84,7 @@ const UserLogin = ({ navigation }) => {
     }
   };
 
-  const handleAppleLogin = () => {
-    // Implement Apple login here
-  };
+  const handleAppleLogin = () => {};
 
   if (!fontsLoaded) {
     return (
