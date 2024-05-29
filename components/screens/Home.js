@@ -2,7 +2,7 @@ import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { signOut } from "firebase/auth";
-import auth from "../../backend/firebaseConfig";
+import { auth } from "../../backend/firebaseConfig";
 
 const Home = () => {
   const navigation = useNavigation();
