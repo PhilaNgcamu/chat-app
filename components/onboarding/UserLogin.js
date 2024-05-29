@@ -5,7 +5,6 @@ import {
   TextInput,
   StyleSheet,
   TouchableOpacity,
-  Image,
   Alert,
 } from "react-native";
 import { useFonts } from "expo-font";
@@ -15,10 +14,6 @@ import * as WebBrowser from "expo-web-browser";
 import { FIREBASE_AUTH } from "../../backend/FirebaseConfig";
 
 WebBrowser.maybeCompleteAuthSession();
-
-const facebookLogo = require("../../assets/facebook.png");
-const googleLogo = require("../../assets/google.png");
-const appleLogo = require("../../assets/apple.png");
 
 const UserLogin = ({ navigation }) => {
   const [email, setEmail] = useState("");
