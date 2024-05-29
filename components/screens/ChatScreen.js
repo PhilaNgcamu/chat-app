@@ -21,6 +21,7 @@ const ChatScreen = ({ route }) => {
         user: {
           _id: 2,
           name: "John Doe",
+          avatar: "https://via.placeholder.com/150", // Add avatar URL
         },
         received: true,
       },
@@ -44,12 +45,12 @@ const ChatScreen = ({ route }) => {
         right: {
           backgroundColor: "#0084ff",
           borderRadius: 15,
-          padding: 5,
+          padding: 10,
         },
         left: {
           backgroundColor: "#f0f0f0",
           borderRadius: 15,
-          padding: 5,
+          padding: 10,
         },
       }}
       textStyle={{
@@ -65,8 +66,8 @@ const ChatScreen = ({ route }) => {
 
   const renderSend = (props) => (
     <Send {...props}>
-      <View style={styles.sendingContainer}>
-        <MaterialIcons name="send" size={30} color="#0084ff" />
+      <View style={styles.sendContainer}>
+        <MaterialIcons name="send" size={24} color="#0084ff" />
       </View>
     </Send>
   );
@@ -109,11 +110,11 @@ const ChatScreen = ({ route }) => {
 };
 
 const styles = StyleSheet.create({
-  sendingContainer: {
+  sendContainer: {
     justifyContent: "center",
     alignItems: "center",
-    marginRight: 10,
     marginBottom: 5,
+    marginRight: 5,
   },
   loadingContainer: {
     flex: 1,
@@ -123,7 +124,8 @@ const styles = StyleSheet.create({
   inputToolbar: {
     borderTopWidth: 1,
     borderTopColor: "#e0e0e0",
-    padding: 5,
+    paddingVertical: 5,
+    paddingHorizontal: 10,
   },
   avatar: {
     width: 40,
