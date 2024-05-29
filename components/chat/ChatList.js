@@ -5,14 +5,10 @@ import {
   FlatList,
   TouchableOpacity,
   StyleSheet,
+  Image,
 } from "react-native";
-import {
-  getFirestore,
-  collection,
-  query,
-  where,
-  getDocs,
-} from "firebase/firestore";
+import { MaterialIcons } from "@expo/vector-icons";
+import { collection, query, where, getDocs } from "firebase/firestore";
 import { auth, db } from "../../backend/firebaseConfig";
 
 const ChatList = ({ navigation }) => {
@@ -37,19 +33,42 @@ const ChatList = ({ navigation }) => {
   const renderItem = ({ item }) => (
     <TouchableOpacity
       style={styles.chatItem}
-      onPress={() => navigation.navigate("ChatScreen", { chatId: item.id })}
+      onPress={() =>
+        navigation.navigate("ChatScreen", {
+          chatId: item.id,
+          chatName: item.name,
+        })
+      }
     >
-      <Text style={styles.chatText}>{item.id}</Text>
+      <View style={styles.chatInfo}>
+        <Image
+          source={{ uri: item.avatar || "https://via.placeholder.com/150" }}
+          style={styles.avatar}
+        />
+        <View style={styles.chatDetails}>
+          <Text style={styles.chatTitle}>{item.name || "Chat"}</Text>
+          <Text style={styles.chatLastMessage}>
+            {item.lastMessage || "No messages yet..."}
+          </Text>
+        </View>
+      </View>
     </TouchableOpacity>
   );
 
   return (
     <View style={styles.container}>
-      <FlatList
-        data={chats}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.id}
-      />
+      {chats.length === 0 ? (
+        <View style={styles.emptyStateContainer}>
+          <MaterialIcons name="chat-bubble-outline" size={80} color="#ddd" />
+          <Text style={styles.emptyStateText}>No chats available</Text>
+        </View>
+      ) : (
+        <FlatList
+          data={chats}
+          renderItem={renderItem}
+          keyExtractor={(item) => item.id}
+        />
+      )}
     </View>
   );
 };
@@ -57,15 +76,46 @@ const ChatList = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
+    backgroundColor: "#fff",
+  },
+  emptyStateContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  emptyStateText: {
+    fontSize: 18,
+    color: "#888",
+    marginTop: 20,
   },
   chatItem: {
     padding: 16,
     borderBottomWidth: 1,
     borderBottomColor: "#ddd",
+    flexDirection: "row",
+    alignItems: "center",
   },
-  chatText: {
-    fontSize: 16,
+  chatInfo: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  avatar: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    marginRight: 16,
+  },
+  chatDetails: {
+    flex: 1,
+  },
+  chatTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+  },
+  chatLastMessage: {
+    fontSize: 14,
+    color: "#888",
+    marginTop: 4,
   },
 });
 

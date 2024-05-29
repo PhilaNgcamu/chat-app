@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   FlatList,
   StyleSheet,
+  Image,
 } from "react-native";
 import { useRoute } from "@react-navigation/native";
 import {
@@ -48,6 +49,8 @@ const ChatScreen = () => {
           timestamp: serverTimestamp(),
           uid: auth.currentUser.uid,
           displayName: auth.currentUser.displayName,
+          avatar:
+            auth.currentUser.photoURL || "https://via.placeholder.com/150",
         });
         setMessage("");
       } catch (error) {
@@ -65,20 +68,26 @@ const ChatScreen = () => {
           : styles.theirMessage,
       ]}
     >
-      <Text style={styles.messageText}>{item.data.message}</Text>
-      <Text style={styles.timestamp}>
-        {item.data.timestamp?.toDate().toLocaleTimeString()}
-      </Text>
+      <Image source={{ uri: item.data.avatar }} style={styles.avatar} />
+      <View style={styles.messageContent}>
+        <Text style={styles.displayName}>{item.data.displayName}</Text>
+        <Text style={styles.messageText}>{item.data.message}</Text>
+        <Text style={styles.timestamp}>
+          {item.data.timestamp?.toDate().toLocaleTimeString()}
+        </Text>
+      </View>
     </View>
   );
 
   return (
     <View style={styles.container}>
+      <Text style={styles.chatTitle}>{chatName}</Text>
       <FlatList
         data={messages}
         renderItem={renderItem}
         keyExtractor={(item) => item.id}
         style={styles.messagesList}
+        inverted
       />
       <View style={styles.inputContainer}>
         <TextInput
@@ -100,14 +109,25 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff",
   },
+  chatTitle: {
+    fontSize: 20,
+    fontWeight: "bold",
+    textAlign: "center",
+    padding: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: "#ddd",
+  },
   messagesList: {
     flex: 1,
     padding: 16,
   },
   messageContainer: {
+    flexDirection: "row",
+    alignItems: "flex-end",
     marginVertical: 4,
     padding: 10,
     borderRadius: 10,
+    maxWidth: "75%",
   },
   myMessage: {
     backgroundColor: "#DCF8C6",
@@ -116,6 +136,19 @@ const styles = StyleSheet.create({
   theirMessage: {
     backgroundColor: "#ECECEC",
     alignSelf: "flex-start",
+  },
+  messageContent: {
+    marginLeft: 10,
+  },
+  avatar: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+  },
+  displayName: {
+    fontSize: 12,
+    fontWeight: "bold",
+    color: "#333",
   },
   messageText: {
     fontSize: 16,
