@@ -7,18 +7,34 @@ import {
   View,
 } from "react-native";
 import { useFonts } from "expo-font";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import auth from "../../backend/firebaseConfig";
 
-// User registration and authentication
 const UserSignup = ({ navigation }) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [error, setError] = useState(null);
 
   const [fontsLoaded, fontError] = useFonts({
     "Poppins-Bold": require("../../assets/fonts/Poppins-Bold.ttf"),
     "Poppins-Regular": require("../../assets/fonts/Poppins-Regular.ttf"),
   });
+
+  const handleSignup = async () => {
+    if (password !== confirmPassword) {
+      setError("Passwords do not match");
+      return;
+    }
+
+    try {
+      await createUserWithEmailAndPassword(auth, email, password);
+      navigation.navigate("Home");
+    } catch (error) {
+      setError(error.message);
+    }
+  };
 
   if (!fontsLoaded) {
     return (
@@ -42,6 +58,8 @@ const UserSignup = ({ navigation }) => {
         Get chatting with friends and family today by signing up for our chat
         app!
       </Text>
+
+      {error && <Text style={styles.error}>{error}</Text>}
 
       <View style={styles.inputContainer}>
         <Text style={styles.label}>Your Name</Text>
@@ -83,7 +101,7 @@ const UserSignup = ({ navigation }) => {
         />
       </View>
 
-      <TouchableOpacity style={styles.button}>
+      <TouchableOpacity style={styles.button} onPress={handleSignup}>
         <Text style={styles.buttonText}>Create an account</Text>
       </TouchableOpacity>
     </View>
@@ -159,6 +177,12 @@ const styles = StyleSheet.create({
     padding: 12,
     borderRadius: 20,
     marginTop: 16,
+  },
+  error: {
+    color: "red",
+    fontFamily: "Poppins-Regular",
+    marginBottom: 16,
+    textAlign: "center",
   },
 });
 

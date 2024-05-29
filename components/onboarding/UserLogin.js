@@ -11,7 +11,7 @@ import { useFonts } from "expo-font";
 import { signInWithEmailAndPassword } from "firebase/auth";
 
 import * as WebBrowser from "expo-web-browser";
-import { FIREBASE_AUTH } from "../../backend/FirebaseConfig";
+import { FIREBASE_AUTH } from "../../backend/firebaseConfig";
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -38,18 +38,6 @@ const UserLogin = ({ navigation }) => {
     } finally {
       setLoading(false);
     }
-  };
-
-  const handleGoogleLogin = () => {
-    promptAsync();
-  };
-
-  const handleFacebookLogin = () => {
-    facebookPromptAsync();
-  };
-
-  const handleAppleLogin = () => {
-    // Implement Apple login here
   };
 
   if (!fontsLoaded) {

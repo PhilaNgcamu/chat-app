@@ -5,10 +5,9 @@ import UserLogin from "./components/onboarding/UserLogin";
 import UserProfile from "./components/userProfile/UserProfile";
 import IndividualChat from "./components/IndividualChat/IndividualChat";
 import GroupChat from "./components/GroupChat/GroupChat";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
-const Stack = createNativeStackNavigator();
+import AppNavigator from "./components/screens/Navigation";
 
 export default function App() {
-  return <UserLogin />;
+  return <AppNavigator />;
 }
