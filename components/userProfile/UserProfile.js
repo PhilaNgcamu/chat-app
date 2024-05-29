@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -6,21 +6,67 @@ import {
   StyleSheet,
   TouchableOpacity,
   Image,
+  Alert,
 } from "react-native";
 import { useFonts } from "expo-font";
+import { getAuth, updateProfile, updateEmail } from "firebase/auth";
+import { getFirestore, doc, setDoc, getDoc } from "firebase/firestore";
+import { db } from "../../backend/firebaseConfig";
 import * as ImagePicker from "expo-image-picker";
 
 const UserProfile = () => {
-  const [name, setName] = useState("");
+  const auth = getAuth();
+  const user = auth.currentUser;
+  const [name, setName] = useState(user.displayName || "");
+  const [email, setEmail] = useState(user.email || "");
   const [statusMessage, setStatusMessage] = useState("");
-  const [email, setEmail] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [profilePicture, setProfilePicture] = useState(null);
+  const [profilePicture, setProfilePicture] = useState(user.photoURL || "");
 
   const [fontsLoaded] = useFonts({
     "Poppins-Bold": require("../../assets/fonts/Poppins-Bold.ttf"),
     "Poppins-Regular": require("../../assets/fonts/Poppins-Regular.ttf"),
   });
+
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      const docRef = doc(db, "users", user.uid);
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        setStatusMessage(data.statusMessage || "");
+      }
+    };
+    fetchUserProfile();
+  }, [user]);
+
+  const handleSave = async () => {
+    try {
+      await updateProfile(user, {
+        displayName: name,
+        photoURL: profilePicture,
+      });
+      await updateEmail(user, email);
+      await setDoc(doc(db, "users", user.uid), {
+        statusMessage: statusMessage,
+      });
+      Alert.alert("Profile Updated Successfully");
+    } catch (error) {
+      Alert.alert(error.message);
+    }
+  };
+
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      setProfilePicture(result.assets[0].uri);
+    }
+  };
 
   if (!fontsLoaded) {
     return (
@@ -30,86 +76,37 @@ const UserProfile = () => {
     );
   }
 
-  const pickImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [4, 4],
-      quality: 1,
-    });
-
-    if (!result.canceled) {
-      setProfilePicture(result.uri);
-    }
-  };
-
-  const handleSubmit = () => {
-    console.log("Profile updated:", {
-      name,
-      statusMessage,
-      email,
-      phoneNumber,
-      profilePicture,
-    });
-  };
-
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Edit Profile</Text>
 
       <TouchableOpacity onPress={pickImage}>
-        {profilePicture ? (
-          <Image
-            source={{ uri: profilePicture }}
-            style={styles.profilePicture}
-          />
-        ) : (
-          <View style={styles.profilePicturePlaceholder}>
-            <Text style={styles.profilePicturePlaceholderText}>
-              Add Profile Picture
-            </Text>
-          </View>
-        )}
+        <Image source={{ uri: profilePicture }} style={styles.profilePicture} />
       </TouchableOpacity>
 
-      <View style={styles.profileContainer}>
-        <View style={styles.inputContainer}>
-          <Text style={styles.label}>Display Name</Text>
-          <TextInput style={styles.input} value={name} onChangeText={setName} />
-        </View>
-
-        <View style={styles.inputContainer}>
-          <Text style={styles.label}>Email Address</Text>
-          <TextInput
-            style={styles.input}
-            value={email}
-            onChangeText={setEmail}
-            keyboardType="email-address"
-          />
-        </View>
-
-        <View style={styles.inputContainer}>
-          <Text style={styles.label}>Status</Text>
-          <TextInput
-            style={styles.input}
-            value={statusMessage}
-            onChangeText={setStatusMessage}
-          />
-        </View>
-
-        <View style={styles.inputContainer}>
-          <Text style={styles.label}>Phone Number</Text>
-          <TextInput
-            style={styles.input}
-            value={phoneNumber}
-            onChangeText={setPhoneNumber}
-            keyboardType="phone-pad"
-          />
-        </View>
+      <View style={styles.inputContainer}>
+        <Text style={styles.label}>Name</Text>
+        <TextInput style={styles.input} value={name} onChangeText={setName} />
       </View>
-
-      <TouchableOpacity style={styles.button} onPress={handleSubmit}>
-        <Text style={styles.buttonText}>Save</Text>
+      <View style={styles.inputContainer}>
+        <Text style={styles.label}>Email</Text>
+        <TextInput
+          style={styles.input}
+          value={email}
+          onChangeText={setEmail}
+          keyboardType="email-address"
+        />
+      </View>
+      <View style={styles.inputContainer}>
+        <Text style={styles.label}>Status Message</Text>
+        <TextInput
+          style={styles.input}
+          value={statusMessage}
+          onChangeText={setStatusMessage}
+        />
+      </View>
+      <TouchableOpacity style={styles.button} onPress={handleSave}>
+        <Text style={styles.buttonText}>Save Changes</Text>
       </TouchableOpacity>
     </View>
   );
@@ -122,16 +119,16 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   title: {
+    textAlign: "center",
     fontFamily: "Poppins-Bold",
     fontSize: 24,
-    textAlign: "center",
     marginBottom: 16,
   },
-  profileContainer: {
-    backgroundColor: "#FFF",
-    width: "100%",
-    borderRadius: 10,
-    padding: 16,
+  profilePicture: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    alignSelf: "center",
     marginBottom: 16,
   },
   inputContainer: {
@@ -144,43 +141,23 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   input: {
-    borderColor: "#CDD1D0",
     borderBottomWidth: 1,
-    padding: 8,
-    borderRadius: 4,
-  },
-  profilePicture: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    alignSelf: "center",
-    marginBottom: 16,
-  },
-  profilePicturePlaceholder: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    backgroundColor: "#CDD1D0",
-    justifyContent: "center",
-    alignItems: "center",
-    alignSelf: "center",
-    marginBottom: 16,
-  },
-  profilePicturePlaceholderText: {
+    borderBottomColor: "#24786D",
+    paddingBottom: 8,
     fontFamily: "Poppins-Regular",
-    color: "#FFF",
+    fontSize: 16,
+  },
+  buttonText: {
+    fontFamily: "Poppins-Bold",
+    fontSize: 16,
+    textAlign: "center",
+    color: "#FFFFFF",
   },
   button: {
     backgroundColor: "#24786D",
     padding: 12,
     borderRadius: 20,
     marginTop: 16,
-  },
-  buttonText: {
-    color: "white",
-    fontFamily: "Poppins-Bold",
-    fontSize: 16,
-    textAlign: "center",
   },
 });
 

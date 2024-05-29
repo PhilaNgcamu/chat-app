@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import { useFonts } from "expo-font";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import auth from "../../backend/firebaseConfig";
+import { auth } from "../../backend/firebaseConfig";
 
 const UserSignup = ({ navigation }) => {
   const [name, setName] = useState("");
@@ -32,6 +32,7 @@ const UserSignup = ({ navigation }) => {
       await createUserWithEmailAndPassword(auth, email, password);
       navigation.navigate("Home");
     } catch (error) {
+      console.log(error);
       setError(error.message);
     }
   };
