@@ -8,7 +8,6 @@ import {
   Image,
   Button,
 } from "react-native";
-import { Card, Avatar } from "react-native-elements";
 
 const stories = [
   { id: "1", name: "John Doe", image: "https://via.placeholder.com/100" },
@@ -38,13 +37,6 @@ const conversations = [
 ];
 
 const Home = ({ navigation }) => {
-  const renderStory = ({ item }) => (
-    <TouchableOpacity style={styles.storyContainer}>
-      <Image source={{ uri: item.image }} style={styles.storyImage} />
-      <Text style={styles.storyName}>{item.name}</Text>
-    </TouchableOpacity>
-  );
-
   const renderConversation = ({ item }) => (
     <TouchableOpacity
       style={styles.conversationContainer}
@@ -55,34 +47,22 @@ const Home = ({ navigation }) => {
         })
       }
     >
-      <Card containerStyle={styles.card}>
-        <View style={styles.conversationContent}>
-          <Avatar
-            rounded
-            size="medium"
-            source={{ uri: "https://via.placeholder.com/100" }}
-            title={item.name.charAt(0)}
-            containerStyle={styles.avatar}
-          />
-          <View style={styles.textContainer}>
-            <Text style={styles.name}>{item.name}</Text>
-            <Text style={styles.message}>{item.lastMessage}</Text>
+      <View style={styles.conversationContent}>
+        <TouchableOpacity onPress={() => navigation.navigate("UserProfile")}>
+          <View style={styles.avatar}>
+            <Text style={styles.avatarText}>{item.name.charAt(0)}</Text>
           </View>
+        </TouchableOpacity>
+        <View style={styles.textContainer}>
+          <Text style={styles.name}>{item.name}</Text>
+          <Text style={styles.message}>{item.lastMessage}</Text>
         </View>
-      </Card>
+      </View>
     </TouchableOpacity>
   );
 
   return (
     <View style={styles.container}>
-      <FlatList
-        data={stories}
-        keyExtractor={(item) => item.id}
-        renderItem={renderStory}
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        style={styles.storiesList}
-      />
       <FlatList
         data={conversations}
         keyExtractor={(item) => item.id}
@@ -105,10 +85,11 @@ const styles = StyleSheet.create({
   },
   storiesList: {
     marginBottom: 20,
+    marginRight: -10,
   },
   storyContainer: {
     alignItems: "center",
-    marginRight: 15,
+    marginRight: 5,
   },
   storyImage: {
     width: 80,
@@ -125,10 +106,12 @@ const styles = StyleSheet.create({
   },
   conversationContainer: {
     marginBottom: 15,
-  },
-  card: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    backgroundColor: "#fff",
     borderRadius: 10,
-    padding: 10,
     elevation: 2,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
@@ -141,6 +124,16 @@ const styles = StyleSheet.create({
   },
   avatar: {
     backgroundColor: "#4CAF50",
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  avatarText: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#fff",
   },
   textContainer: {
     marginLeft: 15,
