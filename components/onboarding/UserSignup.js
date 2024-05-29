@@ -105,6 +105,15 @@ const UserSignup = ({ navigation }) => {
       <TouchableOpacity style={styles.button} onPress={handleSignup}>
         <Text style={styles.buttonText}>Create an account</Text>
       </TouchableOpacity>
+
+      <TouchableOpacity
+        style={styles.loginButton}
+        onPress={() => navigation.navigate("UserLogin")}
+      >
+        <Text style={styles.loginButtonText}>
+          Already have an account? Log in
+        </Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -178,6 +187,18 @@ const styles = StyleSheet.create({
     padding: 12,
     borderRadius: 20,
     marginTop: 16,
+  },
+  loginButton: {
+    backgroundColor: "transparent",
+    padding: 12,
+    borderRadius: 20,
+    marginTop: 16,
+  },
+  loginButtonText: {
+    fontFamily: "Poppins-Bold",
+    fontSize: 16,
+    textAlign: "center",
+    color: "#24786D",
   },
   error: {
     color: "red",

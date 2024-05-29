@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import { useFonts } from "expo-font";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import auth from "../../backend/firebaseConfig";
+import { auth } from "../../backend/firebaseConfig";
 
 const UserLogin = ({ navigation }) => {
   const [email, setEmail] = useState("");
