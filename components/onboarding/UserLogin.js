@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -9,14 +9,8 @@ import {
   Alert,
 } from "react-native";
 import { useFonts } from "expo-font";
-import {
-  signInWithEmailAndPassword,
-  GoogleAuthProvider,
-  FacebookAuthProvider,
-  signInWithCredential,
-} from "firebase/auth";
-import * as Google from "expo-auth-session/providers/google";
-import * as Facebook from "expo-auth-session/providers/facebook";
+import { signInWithEmailAndPassword } from "firebase/auth";
+
 import * as WebBrowser from "expo-web-browser";
 import { FIREBASE_AUTH } from "../../backend/FirebaseConfig";
 
@@ -36,47 +30,7 @@ const UserLogin = ({ navigation }) => {
     "Poppins-Regular": require("../../assets/fonts/Poppins-Regular.ttf"),
   });
 
-  const [request, response, promptAsync] = Google.useIdTokenAuthRequest({
-    clientId:
-      "137259105751-5uidm3aj8hlhiqmhinm0nitu6t7f3hnc.apps.googleusercontent.com",
-  });
-
-  const [facebookRequest, facebookResponse, facebookPromptAsync] =
-    Facebook.useAuthRequest({
-      clientId: "3843000872603631",
-    });
-
   const auth = FIREBASE_AUTH;
-
-  useEffect(() => {
-    if (response?.type === "success") {
-      const { id_token } = response.params;
-      const credential = GoogleAuthProvider.credential(id_token);
-      signInWithCredential(auth, credential)
-        .then(() => {
-          Alert.alert("Google Login Successful");
-          navigation.navigate("Home");
-        })
-        .catch((error) => {
-          Alert.alert(error.message);
-        });
-    }
-  }, [response]);
-
-  useEffect(() => {
-    if (facebookResponse?.type === "success") {
-      const { access_token } = facebookResponse.params;
-      const credential = FacebookAuthProvider.credential(access_token);
-      signInWithCredential(auth, credential)
-        .then(() => {
-          Alert.alert("Facebook Login Successful");
-          navigation.navigate("Home");
-        })
-        .catch((error) => {
-          Alert.alert(error.message);
-        });
-    }
-  }, [facebookResponse]);
 
   const handleLogin = async () => {
     setLoading(true);
@@ -124,18 +78,6 @@ const UserLogin = ({ navigation }) => {
       <Text style={styles.subtitle}>
         Welcome back! Sign in using your social account or email to continue
       </Text>
-
-      <View style={styles.logoContainer}>
-        <TouchableOpacity onPress={handleFacebookLogin}>
-          <Image source={facebookLogo} style={styles.logo} />
-        </TouchableOpacity>
-        <TouchableOpacity disabled={!request} onPress={handleGoogleLogin}>
-          <Image source={googleLogo} style={styles.logo} />
-        </TouchableOpacity>
-        <TouchableOpacity onPress={handleAppleLogin}>
-          <Image source={appleLogo} style={styles.logo} />
-        </TouchableOpacity>
-      </View>
 
       <View style={styles.inputContainer}>
         <Text style={styles.label}>Your email</Text>
@@ -187,12 +129,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginBottom: 16,
   },
-  logoContainer: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-    marginBottom: 16,
-  },
+
   logo: {
     width: 50,
     height: 50,
