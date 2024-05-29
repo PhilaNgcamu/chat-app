@@ -1,37 +1,36 @@
 import React from "react";
 import {
-  StyleSheet,
-  Text,
   View,
+  Text,
   FlatList,
+  StyleSheet,
   TouchableOpacity,
 } from "react-native";
 
-const users = [
-  { id: "1", name: "John Doe" },
-  { id: "2", name: "Jane Smith" },
-  { id: "3", name: "Alice Johnson" },
-  { id: "4", name: "Bob Brown" },
-  // Add more users as needed
+const conversations = [
+  { id: "1", name: "John Doe", lastMessage: "Hey, how are you?" },
+  { id: "2", name: "Jane Smith", lastMessage: "Let's catch up tomorrow!" },
+  { id: "3", name: "Alice Johnson", lastMessage: "Got the files, thanks!" },
+  // Add more conversations as needed
 ];
 
 const Home = ({ navigation }) => {
-  const renderItem = ({ item }) => (
+  const renderConversation = ({ item }) => (
     <TouchableOpacity
-      style={styles.userItem}
+      style={styles.conversation}
       onPress={() => navigation.navigate("Chat", { userName: item.name })}
     >
-      <Text style={styles.userName}>{item.name}</Text>
+      <Text style={styles.name}>{item.name}</Text>
+      <Text style={styles.message}>{item.lastMessage}</Text>
     </TouchableOpacity>
   );
 
   return (
     <View style={styles.container}>
-      <Text style={styles.headerText}>People to Talk To</Text>
       <FlatList
-        data={users}
-        renderItem={renderItem}
+        data={conversations}
         keyExtractor={(item) => item.id}
+        renderItem={renderConversation}
       />
     </View>
   );
@@ -40,21 +39,20 @@ const Home = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
+    backgroundColor: "#fff",
   },
-  headerText: {
-    fontSize: 24,
-    fontWeight: "bold",
-    textAlign: "center",
-    marginBottom: 16,
-  },
-  userItem: {
+  conversation: {
     padding: 16,
     borderBottomWidth: 1,
-    borderBottomColor: "#ddd",
+    borderBottomColor: "#ccc",
   },
-  userName: {
+  name: {
     fontSize: 18,
+    fontWeight: "bold",
+  },
+  message: {
+    fontSize: 14,
+    color: "#555",
   },
 });
 
