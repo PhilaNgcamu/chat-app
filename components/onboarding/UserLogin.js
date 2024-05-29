@@ -9,11 +9,7 @@ import {
 } from "react-native";
 import { useFonts } from "expo-font";
 import { signInWithEmailAndPassword } from "firebase/auth";
-
-import * as WebBrowser from "expo-web-browser";
-import { FIREBASE_AUTH } from "../../backend/firebaseConfig";
-
-WebBrowser.maybeCompleteAuthSession();
+import auth from "../../backend/firebaseConfig";
 
 const UserLogin = ({ navigation }) => {
   const [email, setEmail] = useState("");
@@ -24,8 +20,6 @@ const UserLogin = ({ navigation }) => {
     "Poppins-Bold": require("../../assets/fonts/Poppins-Bold.ttf"),
     "Poppins-Regular": require("../../assets/fonts/Poppins-Regular.ttf"),
   });
-
-  const auth = FIREBASE_AUTH;
 
   const handleLogin = async () => {
     setLoading(true);
@@ -112,7 +106,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginBottom: 16,
   },
-
   logo: {
     width: 50,
     height: 50,
