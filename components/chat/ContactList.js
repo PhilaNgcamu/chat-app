@@ -8,7 +8,7 @@ import {
   Image,
 } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, query, where, addDoc } from "firebase/firestore";
 import { auth, db } from "../../backend/firebaseConfig";
 
 const ContactList = ({ navigation }) => {
@@ -27,7 +27,6 @@ const ContactList = ({ navigation }) => {
   }, []);
 
   const handleContactPress = async (contact) => {
-    // Create a new chat or find an existing one
     const chatId = await findOrCreateChat(contact.uid);
     navigation.navigate("ChatScreen", {
       chatId,
@@ -36,7 +35,6 @@ const ContactList = ({ navigation }) => {
   };
 
   const findOrCreateChat = async (contactUid) => {
-    // Check if a chat exists between the current user and the contact
     const chatQuery = query(
       collection(db, "chats"),
       where("users", "array-contains", auth.currentUser.uid)
@@ -50,7 +48,6 @@ const ContactList = ({ navigation }) => {
       }
     }
 
-    // If no chat exists, create a new one
     const chatDoc = await addDoc(collection(db, "chats"), {
       users: [auth.currentUser.uid, contactUid],
       name: `${auth.currentUser.displayName}, ${contact.name}`,
@@ -91,6 +88,12 @@ const ContactList = ({ navigation }) => {
           keyExtractor={(item) => item.id}
         />
       )}
+      <TouchableOpacity
+        style={styles.fab}
+        onPress={() => navigation.navigate("ChatList")}
+      >
+        <MaterialIcons name="add" size={24} color="#fff" />
+      </TouchableOpacity>
     </View>
   );
 };
@@ -133,6 +136,18 @@ const styles = StyleSheet.create({
   contactName: {
     fontSize: 18,
     fontWeight: "bold",
+  },
+  fab: {
+    position: "absolute",
+    right: 20,
+    bottom: 20,
+    backgroundColor: "#24786D",
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    justifyContent: "center",
+    alignItems: "center",
+    elevation: 5,
   },
 });
 

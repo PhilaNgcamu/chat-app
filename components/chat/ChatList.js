@@ -6,7 +6,6 @@ import {
   TouchableOpacity,
   StyleSheet,
   Image,
-  Button,
 } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { collection, query, where, getDocs } from "firebase/firestore";
@@ -70,10 +69,12 @@ const ChatList = ({ navigation }) => {
           keyExtractor={(item) => item.id}
         />
       )}
-      <Button
-        title="Start a New Chat"
+      <TouchableOpacity
+        style={styles.fab}
         onPress={() => navigation.navigate("Contact List")}
-      />
+      >
+        <MaterialIcons name="add" size={24} color="#fff" />
+      </TouchableOpacity>
     </View>
   );
 };
@@ -121,6 +122,18 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: "#888",
     marginTop: 4,
+  },
+  fab: {
+    position: "absolute",
+    right: 20,
+    bottom: 20,
+    backgroundColor: "#24786D",
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    justifyContent: "center",
+    alignItems: "center",
+    elevation: 5,
   },
 });
 
