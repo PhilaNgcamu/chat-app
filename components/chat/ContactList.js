@@ -1,60 +1,28 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
   FlatList,
   TouchableOpacity,
   StyleSheet,
-  Image,
 } from "react-native";
-import { MaterialIcons } from "@expo/vector-icons";
-import { collection, getDocs, query, where, addDoc } from "firebase/firestore";
-import { auth, db } from "../../backend/firebaseConfig";
+
+const mockContacts = [
+  { id: "1", name: "John Doe" },
+  { id: "2", name: "Jane Smith" },
+  { id: "3", name: "Alice Johnson" },
+];
 
 const ContactList = ({ navigation }) => {
-  const [contacts, setContacts] = useState([]);
+  const [contacts] = useState(mockContacts);
 
-  useEffect(() => {
-    const fetchContacts = async () => {
-      const querySnapshot = await getDocs(collection(db, "contacts"));
-      const contactList = querySnapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-      setContacts(contactList);
-    };
-    fetchContacts();
-  }, []);
-
-  const handleContactPress = async (contact) => {
-    const chatId = await findOrCreateChat(contact.uid);
+  const handleContactPress = (contact) => {
+    // Implement findOrCreateChat logic here
+    const chatId = contact.id; // Using contact ID as chat ID for mock data
     navigation.navigate("ChatScreen", {
       chatId,
       chatName: contact.name,
     });
-  };
-
-  const findOrCreateChat = async (contactUid) => {
-    const chatQuery = query(
-      collection(db, "chats"),
-      where("users", "array-contains", auth.currentUser.uid)
-    );
-    const chatSnapshot = await getDocs(chatQuery);
-
-    for (const doc of chatSnapshot.docs) {
-      const chatData = doc.data();
-      if (chatData.users.includes(contactUid)) {
-        return doc.id;
-      }
-    }
-
-    const chatDoc = await addDoc(collection(db, "chats"), {
-      users: [auth.currentUser.uid, contactUid],
-      name: `${auth.currentUser.displayName}, ${contact.name}`,
-      lastMessage: "",
-      avatar: contact.avatar || "",
-    });
-    return chatDoc.id;
   };
 
   const renderItem = ({ item }) => (
@@ -63,13 +31,7 @@ const ContactList = ({ navigation }) => {
       onPress={() => handleContactPress(item)}
     >
       <View style={styles.contactInfo}>
-        <Image
-          source={{ uri: item.avatar || "https://via.placeholder.com/150" }}
-          style={styles.avatar}
-        />
-        <View style={styles.contactDetails}>
-          <Text style={styles.contactName}>{item.name}</Text>
-        </View>
+        <Text style={styles.contactName}>{item.name}</Text>
       </View>
     </TouchableOpacity>
   );
@@ -78,7 +40,6 @@ const ContactList = ({ navigation }) => {
     <View style={styles.container}>
       {contacts.length === 0 ? (
         <View style={styles.emptyStateContainer}>
-          <MaterialIcons name="contact-page" size={80} color="#ddd" />
           <Text style={styles.emptyStateText}>No contacts available</Text>
         </View>
       ) : (
@@ -88,12 +49,6 @@ const ContactList = ({ navigation }) => {
           keyExtractor={(item) => item.id}
         />
       )}
-      <TouchableOpacity
-        style={styles.fab}
-        onPress={() => navigation.navigate("ChatList")}
-      >
-        <MaterialIcons name="add" size={24} color="#fff" />
-      </TouchableOpacity>
     </View>
   );
 };
@@ -117,37 +72,14 @@ const styles = StyleSheet.create({
     padding: 16,
     borderBottomWidth: 1,
     borderBottomColor: "#ddd",
-    flexDirection: "row",
-    alignItems: "center",
   },
   contactInfo: {
     flexDirection: "row",
     alignItems: "center",
   },
-  avatar: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    marginRight: 16,
-  },
-  contactDetails: {
-    flex: 1,
-  },
   contactName: {
     fontSize: 18,
     fontWeight: "bold",
-  },
-  fab: {
-    position: "absolute",
-    right: 20,
-    bottom: 20,
-    backgroundColor: "#24786D",
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    justifyContent: "center",
-    alignItems: "center",
-    elevation: 5,
   },
 });
 

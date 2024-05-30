@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   View,
   Text,
@@ -6,180 +6,267 @@ import {
   TouchableOpacity,
   FlatList,
   StyleSheet,
-  Image,
+  KeyboardAvoidingView,
+  Platform,
 } from "react-native";
-import { useRoute } from "@react-navigation/native";
 import {
   collection,
   addDoc,
-  onSnapshot,
+  getDocs,
   query,
+  where,
   orderBy,
+  onSnapshot,
   serverTimestamp,
+  updateDoc,
+  doc,
 } from "firebase/firestore";
 import { auth, db } from "../../backend/firebaseConfig";
+import { MaterialIcons } from "@expo/vector-icons";
+import { format } from "date-fns";
 
-const ChatScreen = () => {
-  const [message, setMessage] = useState("");
-  const [messages, setMessages] = useState([]);
-  const route = useRoute();
+const ChatScreen = ({ route }) => {
   const { chatId, chatName } = route.params;
+  const [messages, setMessages] = useState([]);
+  const [newMessage, setNewMessage] = useState("");
+  const [isTyping, setIsTyping] = useState(false);
+  const [otherUserTyping, setOtherUserTyping] = useState(false);
+  const inputRef = useRef(null);
 
   useEffect(() => {
-    const messagesRef = collection(db, "chats", chatId, "messages");
-    const q = query(messagesRef, orderBy("timestamp", "asc"));
-
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-      setMessages(
-        snapshot.docs.map((doc) => ({
-          id: doc.id,
-          data: doc.data(),
-        }))
+    const fetchMessages = () => {
+      const q = query(
+        collection(db, "chats", chatId, "messages"),
+        orderBy("createdAt", "asc")
       );
-    });
+      const unsubscribe = onSnapshot(q, (querySnapshot) => {
+        const messageList = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setMessages(messageList);
+        markMessagesAsRead(messageList);
+      });
 
-    return unsubscribe;
+      return unsubscribe;
+    };
+
+    const fetchTypingStatus = () => {
+      const typingDocRef = doc(
+        db,
+        "chats",
+        chatId,
+        "typingStatus",
+        auth.currentUser.uid
+      );
+      const unsubscribe = onSnapshot(typingDocRef, (doc) => {
+        if (doc.exists()) {
+          setOtherUserTyping(doc.data().isTyping);
+        }
+      });
+
+      return unsubscribe;
+    };
+
+    const unsubscribeMessages = fetchMessages();
+    const unsubscribeTyping = fetchTypingStatus();
+
+    return () => {
+      unsubscribeMessages();
+      unsubscribeTyping();
+    };
   }, [chatId]);
 
-  const sendMessage = async () => {
-    if (message.trim()) {
-      try {
-        await addDoc(collection(db, "chats", chatId, "messages"), {
-          message,
-          timestamp: serverTimestamp(),
-          uid: auth.currentUser.uid,
-          displayName: auth.currentUser.displayName,
-          avatar:
-            auth.currentUser.photoURL || "https://via.placeholder.com/150",
-        });
-        setMessage("");
-      } catch (error) {
-        console.error("Error sending message: ", error);
-      }
+  const markMessagesAsRead = async (messages) => {
+    const unreadMessages = messages.filter(
+      (message) => !message.read && message.userId !== auth.currentUser.uid
+    );
+
+    unreadMessages.forEach(async (message) => {
+      const messageRef = doc(db, "chats", chatId, "messages", message.id);
+      await updateDoc(messageRef, { read: true });
+    });
+  };
+
+  const handleSend = async () => {
+    if (newMessage.trim() === "") return;
+    await addDoc(collection(db, "chats", chatId, "messages"), {
+      text: newMessage,
+      createdAt: serverTimestamp(),
+      userId: auth.currentUser.uid,
+      read: false,
+    });
+    setNewMessage("");
+    setIsTyping(false);
+    await updateTypingStatus(false);
+  };
+
+  const updateTypingStatus = async (status) => {
+    const typingDocRef = doc(
+      db,
+      "chats",
+      chatId,
+      "typingStatus",
+      auth.currentUser.uid
+    );
+    await updateDoc(typingDocRef, { isTyping: status });
+  };
+
+  const handleTyping = (text) => {
+    setNewMessage(text);
+    if (text.trim() !== "" && !isTyping) {
+      setIsTyping(true);
+      updateTypingStatus(true);
+    } else if (text.trim() === "" && isTyping) {
+      setIsTyping(false);
+      updateTypingStatus(false);
     }
   };
 
   const renderItem = ({ item }) => (
     <View
       style={[
-        styles.messageContainer,
-        item.data.uid === auth.currentUser.uid
-          ? styles.myMessage
-          : styles.theirMessage,
+        styles.messageItem,
+        item.userId === auth.currentUser.uid && styles.myMessage,
       ]}
     >
-      <Image source={{ uri: item.data.avatar }} style={styles.avatar} />
-      <View style={styles.messageContent}>
-        <Text style={styles.displayName}>{item.data.displayName}</Text>
-        <Text style={styles.messageText}>{item.data.message}</Text>
-        <Text style={styles.timestamp}>
-          {item.data.timestamp?.toDate().toLocaleTimeString()}
+      <Text style={styles.messageText}>{item.text}</Text>
+      <View style={styles.messageMeta}>
+        <Text style={styles.messageTimestamp}>
+          {format(item.createdAt.toDate(), "HH:mm")}
         </Text>
+        {item.read && item.userId === auth.currentUser.uid && (
+          <MaterialIcons name="done-all" size={16} color="#4CAF50" />
+        )}
       </View>
     </View>
   );
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.chatTitle}>{chatName}</Text>
+    <KeyboardAvoidingView
+      style={styles.container}
+      behavior={Platform.OS === "ios" ? "padding" : undefined}
+    >
+      <View style={styles.header}>
+        <Text style={styles.chatName}>{chatName}</Text>
+      </View>
       <FlatList
         data={messages}
         renderItem={renderItem}
         keyExtractor={(item) => item.id}
-        style={styles.messagesList}
-        inverted
+        style={styles.messageList}
+        ref={inputRef}
+        onContentSizeChange={() =>
+          inputRef.current.scrollToEnd({ animated: true })
+        }
       />
+      {otherUserTyping && (
+        <Text style={styles.typingIndicator}>The other user is typing...</Text>
+      )}
       <View style={styles.inputContainer}>
         <TextInput
           style={styles.input}
-          value={message}
-          onChangeText={setMessage}
-          placeholder="Type a message..."
+          value={newMessage}
+          onChangeText={handleTyping}
+          placeholder="Type a message"
+          placeholderTextColor="#888"
+          onSubmitEditing={handleSend}
         />
-        <TouchableOpacity style={styles.button} onPress={sendMessage}>
-          <Text style={styles.buttonText}>Send</Text>
+        <TouchableOpacity onPress={handleSend} style={styles.sendButton}>
+          <MaterialIcons name="send" size={24} color="#fff" />
         </TouchableOpacity>
       </View>
-    </View>
+    </KeyboardAvoidingView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "#f4f4f4",
   },
-  chatTitle: {
+  header: {
+    padding: 16,
+    backgroundColor: "#24786D",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  chatName: {
     fontSize: 20,
     fontWeight: "bold",
-    textAlign: "center",
-    padding: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: "#ddd",
+    color: "#fff",
   },
-  messagesList: {
+  messageList: {
     flex: 1,
-    padding: 16,
   },
-  messageContainer: {
-    flexDirection: "row",
-    alignItems: "flex-end",
+  messageItem: {
+    padding: 12,
+    backgroundColor: "#fff",
+    borderRadius: 8,
     marginVertical: 4,
-    padding: 10,
-    borderRadius: 10,
+    marginHorizontal: 16,
+    alignSelf: "flex-start",
     maxWidth: "75%",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.22,
+    shadowRadius: 2.22,
+    elevation: 3,
   },
   myMessage: {
-    backgroundColor: "#DCF8C6",
+    backgroundColor: "#dcf8c6",
     alignSelf: "flex-end",
-  },
-  theirMessage: {
-    backgroundColor: "#ECECEC",
-    alignSelf: "flex-start",
-  },
-  messageContent: {
-    marginLeft: 10,
-  },
-  avatar: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-  },
-  displayName: {
-    fontSize: 12,
-    fontWeight: "bold",
-    color: "#333",
   },
   messageText: {
     fontSize: 16,
+    color: "#333",
   },
-  timestamp: {
-    fontSize: 12,
-    color: "#999",
+  messageMeta: {
+    flexDirection: "row",
+    alignItems: "center",
     marginTop: 4,
+  },
+  messageTimestamp: {
+    fontSize: 12,
+    color: "#888",
+    marginRight: 4,
   },
   inputContainer: {
     flexDirection: "row",
-    padding: 10,
+    padding: 16,
     borderTopWidth: 1,
-    borderColor: "#ddd",
+    borderTopColor: "#ddd",
+    backgroundColor: "#fff",
+    alignItems: "center",
   },
   input: {
     flex: 1,
-    padding: 10,
     borderWidth: 1,
     borderColor: "#ddd",
     borderRadius: 20,
-    marginRight: 10,
-  },
-  button: {
-    backgroundColor: "#24786D",
     padding: 10,
-    borderRadius: 20,
-  },
-  buttonText: {
-    color: "#fff",
+    paddingLeft: 16,
     fontSize: 16,
+    color: "#333",
+    backgroundColor: "#f9f9f9",
+  },
+  sendButton: {
+    backgroundColor: "#24786D",
+    borderRadius: 20,
+    padding: 10,
+    marginLeft: 10,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  typingIndicator: {
+    paddingHorizontal: 16,
+    color: "#888",
+    fontStyle: "italic",
+    marginBottom: 5,
+    textAlign: "center",
   },
 });
 
