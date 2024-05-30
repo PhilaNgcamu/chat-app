@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   StyleSheet,
   Image,
+  Button,
 } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { collection, query, where, getDocs } from "firebase/firestore";
@@ -69,6 +70,10 @@ const ChatList = ({ navigation }) => {
           keyExtractor={(item) => item.id}
         />
       )}
+      <Button
+        title="Start a New Chat"
+        onPress={() => navigation.navigate("Contact List")}
+      />
     </View>
   );
 };

@@ -21,6 +21,12 @@ const Home = () => {
       <Text style={styles.title}>Welcome to Chatbox</Text>
       <TouchableOpacity
         style={styles.button}
+        onPress={() => navigation.navigate("Contact List")}
+      >
+        <Text style={styles.buttonText}>New Chat</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.button}
         onPress={() => navigation.navigate("UserProfile")}
       >
         <Text style={styles.buttonText}>Profile</Text>
@@ -44,11 +50,13 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     padding: 16,
+    backgroundColor: "#fff",
   },
   title: {
     fontSize: 24,
     fontFamily: "Poppins-Bold",
     marginBottom: 32,
+    color: "#24786D",
   },
   button: {
     backgroundColor: "#24786D",
