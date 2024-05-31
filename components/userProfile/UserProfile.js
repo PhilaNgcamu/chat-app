@@ -13,10 +13,12 @@ import { getAuth, updateProfile, updateEmail } from "firebase/auth";
 import { getFirestore, doc, setDoc, getDoc } from "firebase/firestore";
 import { db } from "../../backend/firebaseConfig";
 import * as ImagePicker from "expo-image-picker";
+import { useNavigation } from "@react-navigation/native";
 
 const UserProfile = () => {
   const auth = getAuth();
   const user = auth.currentUser;
+  const navigation = useNavigation();
   const [name, setName] = useState(user.displayName || "");
   const [email, setEmail] = useState(user.email || "");
   const [statusMessage, setStatusMessage] = useState("");
@@ -45,11 +47,16 @@ const UserProfile = () => {
         displayName: name,
         photoURL: profilePicture,
       });
+
       await updateEmail(user, email);
+      console.log("ggg");
+
       await setDoc(doc(db, "users", user.uid), {
         statusMessage: statusMessage,
       });
+
       Alert.alert("Profile Updated Successfully");
+      navigation.navigate("ChatList"); // Navigate to the chats screen after saving changes
     } catch (error) {
       Alert.alert(error.message);
     }

@@ -17,8 +17,7 @@ const ContactList = ({ navigation }) => {
   const [contacts] = useState(mockContacts);
 
   const handleContactPress = (contact) => {
-    // Implement findOrCreateChat logic here
-    const chatId = contact.id; // Using contact ID as chat ID for mock data
+    const chatId = contact.id;
     navigation.navigate("ChatScreen", {
       chatId,
       chatName: contact.name,

@@ -8,26 +8,27 @@ import {
   Image,
 } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
-import { collection, query, where, getDocs } from "firebase/firestore";
-import { auth, db } from "../../backend/firebaseConfig";
+import { getDatabase, ref, onValue } from "firebase/database";
+import { auth } from "../../backend/firebaseConfig";
 
 const ChatList = ({ navigation }) => {
   const [chats, setChats] = useState([]);
 
   useEffect(() => {
-    const fetchChats = async () => {
-      const q = query(
-        collection(db, "chats"),
-        where("users", "array-contains", auth.currentUser.uid)
-      );
-      const querySnapshot = await getDocs(q);
-      const chatList = querySnapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
+    const db = getDatabase();
+    const chatsRef = ref(db, "chats");
+    const unsubscribe = onValue(chatsRef, (snapshot) => {
+      const chatList = [];
+      snapshot.forEach((childSnapshot) => {
+        const chatData = childSnapshot.val();
+        if (chatData.users && chatData.users[auth.currentUser.uid]) {
+          chatList.push({ id: childSnapshot.key, ...chatData });
+        }
+      });
       setChats(chatList);
-    };
-    fetchChats();
+    });
+
+    return () => unsubscribe();
   }, []);
 
   const renderItem = ({ item }) => (
@@ -71,9 +72,9 @@ const ChatList = ({ navigation }) => {
       )}
       <TouchableOpacity
         style={styles.fab}
-        onPress={() => navigation.navigate("Contact List")}
+        onPress={() => navigation.navigate("CreateGroupChat")}
       >
-        <MaterialIcons name="add" size={24} color="#fff" />
+        <MaterialIcons name="group-add" size={24} color="#fff" />
       </TouchableOpacity>
     </View>
   );
@@ -128,9 +129,9 @@ const styles = StyleSheet.create({
     right: 20,
     bottom: 20,
     backgroundColor: "#24786D",
-    width: 60,
-    height: 60,
-    borderRadius: 30,
+    borderRadius: 25,
+    width: 50,
+    height: 50,
     justifyContent: "center",
     alignItems: "center",
     elevation: 5,
