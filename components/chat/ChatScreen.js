@@ -99,6 +99,7 @@ const ChatScreen = ({ route }) => {
       createdAt: serverTimestamp(),
       userId: auth.currentUser.uid,
       read: false,
+      senderName: auth.currentUser.displayName,
     });
     setNewMessage("");
     setIsTyping(false);
@@ -135,6 +136,7 @@ const ChatScreen = ({ route }) => {
     >
       <Text style={styles.messageText}>{item.text}</Text>
       <View style={styles.messageMeta}>
+        <Text style={styles.senderName}>{item.senderName}</Text>
         <Text style={styles.messageTimestamp}>
           {format(item.createdAt, "HH:mm")}
         </Text>
