@@ -7,7 +7,7 @@ import {
   FlatList,
   StyleSheet,
 } from "react-native";
-import { getDatabase, ref, push, get, update } from "firebase/database";
+import { getDatabase, ref, push, get } from "firebase/database";
 import { auth } from "../../backend/firebaseConfig";
 import { MaterialIcons } from "@expo/vector-icons";
 
@@ -29,6 +29,8 @@ const CreateGroupChat = ({ navigation }) => {
           })
         );
         setContacts(contactsList);
+      } else {
+        setContacts([]);
       }
     };
     fetchContacts();
@@ -84,14 +86,35 @@ const CreateGroupChat = ({ navigation }) => {
         onChangeText={setGroupName}
         placeholder="Group Name"
       />
-      <FlatList
-        data={contacts}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.id}
-        style={styles.contactList}
-      />
-      <TouchableOpacity style={styles.createButton} onPress={handleCreateGroup}>
+      {contacts.length === 0 ? (
+        <View style={styles.noContactsContainer}>
+          <MaterialIcons name="error-outline" size={50} color="#888" />
+          <Text style={styles.noContactsText}>No contacts available</Text>
+        </View>
+      ) : (
+        <FlatList
+          data={contacts}
+          renderItem={renderItem}
+          keyExtractor={(item) => item.id}
+          style={styles.contactList}
+        />
+      )}
+      <TouchableOpacity
+        style={[
+          styles.createButton,
+          (groupName.trim() === "" || selectedContacts.length === 0) &&
+            styles.createButtonDisabled,
+        ]}
+        onPress={handleCreateGroup}
+        disabled={groupName.trim() === "" || selectedContacts.length === 0}
+      >
         <Text style={styles.createButtonText}>Create Group</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.addContactButton}
+        onPress={() => navigation.navigate("AddContact")}
+      >
+        <Text style={styles.addContactButtonText}>Add New Contact</Text>
       </TouchableOpacity>
     </View>
   );
@@ -120,6 +143,16 @@ const styles = StyleSheet.create({
   contactList: {
     flex: 1,
   },
+  noContactsContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  noContactsText: {
+    fontSize: 18,
+    color: "#888",
+    marginTop: 10,
+  },
   contactItem: {
     padding: 15,
     backgroundColor: "#fff",
@@ -139,7 +172,22 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: 20,
   },
+  createButtonDisabled: {
+    backgroundColor: "#b2d8d8",
+  },
   createButtonText: {
+    color: "#fff",
+    fontSize: 18,
+    fontWeight: "bold",
+  },
+  addContactButton: {
+    backgroundColor: "#3498db",
+    padding: 15,
+    borderRadius: 8,
+    alignItems: "center",
+    marginTop: 10,
+  },
+  addContactButtonText: {
     color: "#fff",
     fontSize: 18,
     fontWeight: "bold",

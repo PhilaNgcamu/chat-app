@@ -8,6 +8,7 @@ import ChatScreen from "../chat/ChatScreen";
 import Home from "./Home";
 import ContactList from "../chat/ContactList";
 import CreateGroupChat from "../chat/CreateGroupChat";
+import AddContact from "../chat/AddContact";
 
 const Stack = createNativeStackNavigator();
 
@@ -23,6 +24,7 @@ export default function NavigationScreens() {
         <Stack.Screen name="Home" component={Home} />
         <Stack.Screen name="Contact List" component={ContactList} />
         <Stack.Screen name="CreateGroupChat" component={CreateGroupChat} />
+        <Stack.Screen name="AddContact" component={AddContact} />
       </Stack.Navigator>
     </NavigationContainer>
   );
