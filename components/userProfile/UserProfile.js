@@ -10,8 +10,8 @@ import {
 } from "react-native";
 import { useFonts } from "expo-font";
 import { getAuth, updateProfile, updateEmail } from "firebase/auth";
-import { getFirestore, doc, setDoc, getDoc } from "firebase/firestore";
-import { db } from "../../backend/firebaseConfig";
+import { getDatabase, ref, set } from "firebase/database";
+
 import * as ImagePicker from "expo-image-picker";
 import { useNavigation } from "@react-navigation/native";
 
@@ -31,11 +31,12 @@ const UserProfile = () => {
 
   useEffect(() => {
     const fetchUserProfile = async () => {
-      const docRef = doc(db, "users", user.uid);
-      const docSnap = await getDoc(docRef);
-      if (docSnap.exists()) {
-        const data = docSnap.data();
-        setStatusMessage(data.statusMessage || "");
+      const db = getDatabase();
+      const userRef = ref(db, "users/" + user.uid);
+      const snapshot = await get(userRef);
+      if (snapshot.exists()) {
+        const userData = snapshot.val();
+        setStatusMessage(userData.statusMessage || "");
       }
     };
     fetchUserProfile();
@@ -49,14 +50,17 @@ const UserProfile = () => {
       });
 
       await updateEmail(user, email);
-      console.log("ggg");
 
-      await setDoc(doc(db, "users", user.uid), {
+      // Update user profile in Realtime Database
+      const db = getDatabase();
+      await set(ref(db, "users/" + user.uid), {
+        name: name,
+        email: email,
         statusMessage: statusMessage,
       });
 
       Alert.alert("Profile Updated Successfully");
-      navigation.navigate("ChatList"); // Navigate to the chats screen after saving changes
+      navigation.navigate("ChatList");
     } catch (error) {
       Alert.alert(error.message);
     }
