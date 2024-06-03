@@ -7,7 +7,7 @@ import {
   FlatList,
   StyleSheet,
 } from "react-native";
-import { getDatabase, ref, push, get } from "firebase/database";
+import { getDatabase, ref, push, get, set } from "firebase/database";
 import { auth } from "../../backend/firebaseConfig";
 import { MaterialIcons } from "@expo/vector-icons";
 
@@ -40,7 +40,7 @@ const CreateGroupChat = ({ navigation }) => {
     if (groupName.trim() === "" || selectedContacts.length === 0) return;
     const db = getDatabase();
     const newGroupChatRef = push(ref(db, "chats"));
-    await newGroupChatRef.set({
+    await set(newGroupChatRef, {
       name: groupName,
       users: selectedContacts.reduce(
         (acc, contact) => {
@@ -58,7 +58,7 @@ const CreateGroupChat = ({ navigation }) => {
   };
 
   const toggleContactSelection = (contact) => {
-    if (selectedContacts.includes(contact)) {
+    if (selectedContacts.some((c) => c.id === contact.id)) {
       setSelectedContacts(selectedContacts.filter((c) => c.id !== contact.id));
     } else {
       setSelectedContacts([...selectedContacts, contact]);
@@ -69,7 +69,8 @@ const CreateGroupChat = ({ navigation }) => {
     <TouchableOpacity
       style={[
         styles.contactItem,
-        selectedContacts.includes(item) && styles.selectedContactItem,
+        selectedContacts.some((c) => c.id === item.id) &&
+          styles.selectedContactItem,
       ]}
       onPress={() => toggleContactSelection(item)}
     >
