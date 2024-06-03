@@ -2,7 +2,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import UserLogin from "../onboarding/UserLogin";
 import UserSignup from "../onboarding/UserSignup";
-import UserProfile from "../userProfile/userProfile";
+import UserProfile from "../user_profile/UserProfile";
 import ChatList from "../chat/ChatList";
 import ChatScreen from "../chat/ChatScreen";
 import Home from "./Home";
