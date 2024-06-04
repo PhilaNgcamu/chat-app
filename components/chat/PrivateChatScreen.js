@@ -29,6 +29,7 @@ const PrivateChatScreen = ({ route }) => {
   const [isTyping, setIsTyping] = useState(false);
   const [otherUserTyping, setOtherUserTyping] = useState(false);
   const [otherUserName, setOtherUserName] = useState("");
+  const [isOnline, setIsOnline] = useState(false);
   const inputRef = useRef(null);
 
   useEffect(() => {
@@ -54,15 +55,19 @@ const PrivateChatScreen = ({ route }) => {
       }
     });
 
-    get(userRef).then((snapshot) => {
+    const unsubscribeUser = onValue(userRef, (snapshot) => {
       if (snapshot.exists()) {
-        setOtherUserName(snapshot.val().name);
+        const userData = snapshot.val();
+        console.log(userData);
+        setOtherUserName(userData.name);
+        setIsOnline(userData.online);
       }
     });
 
     return () => {
       unsubscribeMessages();
       unsubscribeTyping();
+      unsubscribeUser();
     };
   }, [contactId]);
 
@@ -145,7 +150,12 @@ const PrivateChatScreen = ({ route }) => {
       behavior={Platform.OS === "ios" ? "padding" : undefined}
     >
       <View style={styles.header}>
-        <Text style={styles.chatName}>{contactName}</Text>
+        <View style={styles.headerContent}>
+          <Text style={styles.chatName}>{contactName}</Text>
+          <Text style={styles.statusText}>
+            {isOnline ? "Active Now" : "Offline"}
+          </Text>
+        </View>
       </View>
       <FlatList
         data={messages}
@@ -184,13 +194,22 @@ const styles = StyleSheet.create({
   },
   header: {
     padding: 16,
-    backgroundColor: "#24786D",
+    backgroundColor: "#075E54",
     justifyContent: "center",
+    alignItems: "center",
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  headerContent: {
     alignItems: "center",
   },
   chatName: {
     fontSize: 20,
     fontWeight: "bold",
+    color: "#fff",
+  },
+  statusText: {
+    fontSize: 14,
     color: "#fff",
   },
   messageList: {
@@ -255,7 +274,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#f9f9f9",
   },
   sendButton: {
-    backgroundColor: "#24786D",
+    backgroundColor: "#075E54",
     borderRadius: 20,
     padding: 10,
     marginLeft: 10,

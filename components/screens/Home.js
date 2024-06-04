@@ -2,13 +2,24 @@ import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { signOut } from "firebase/auth";
+import { getDatabase, ref, update, serverTimestamp } from "firebase/database";
 import { auth } from "../../backend/firebaseConfig";
 
 const Home = () => {
   const navigation = useNavigation();
 
   const handleLogout = async () => {
+    const db = getDatabase();
+    const userId = auth.currentUser.uid;
+    const userStatusDatabaseRef = ref(db, `users/${userId}`);
+
+    const isOfflineForDatabase = {
+      online: false,
+      lastChanged: serverTimestamp(),
+    };
+
     try {
+      await update(userStatusDatabaseRef, isOfflineForDatabase);
       await signOut(auth);
       navigation.navigate("UserLogin");
     } catch (error) {

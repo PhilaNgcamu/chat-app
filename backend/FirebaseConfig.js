@@ -1,9 +1,16 @@
 import { initializeApp } from "firebase/app";
-import { getDatabase } from "firebase/database";
+import {
+  getDatabase,
+  ref,
+  onDisconnect,
+  onValue,
+  serverTimestamp,
+  update,
+} from "firebase/database";
 import {
   initializeAuth,
-  getAuth,
   getReactNativePersistence,
+  onAuthStateChanged,
 } from "firebase/auth";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -21,3 +28,36 @@ export const auth = initializeAuth(app, {
   persistence: getReactNativePersistence(AsyncStorage),
 });
 export const db = getDatabase(app);
+
+const setUserOnlineStatus = () => {
+  const userId = auth.currentUser.uid;
+  const userStatusDatabaseRef = ref(db, `users/${userId}`);
+
+  const isOfflineForDatabase = {
+    online: false,
+    lastChanged: serverTimestamp(),
+  };
+
+  const isOnlineForDatabase = {
+    online: true,
+    lastChanged: serverTimestamp(),
+  };
+
+  onValue(ref(db, ".info/connected"), (snapshot) => {
+    if (snapshot.val() === false) {
+      return;
+    }
+
+    onDisconnect(userStatusDatabaseRef)
+      .update(isOfflineForDatabase)
+      .then(() => {
+        update(userStatusDatabaseRef, isOnlineForDatabase);
+      });
+  });
+};
+
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    setUserOnlineStatus();
+  }
+});
