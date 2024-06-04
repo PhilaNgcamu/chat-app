@@ -16,25 +16,28 @@ import {
   onValue,
   update,
   serverTimestamp,
+  get,
 } from "firebase/database";
 import { auth } from "../../backend/firebaseConfig";
 import { MaterialIcons } from "@expo/vector-icons";
 import { format } from "date-fns";
 
 const ChatScreen = ({ route }) => {
-  const { chatId, chatName } = route.params;
+  const { contactId, contactName } = route.params;
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
-  const [participants, setParticipants] = useState([]);
   const [isTyping, setIsTyping] = useState(false);
-  const [typingUser, setTypingUser] = useState(null);
+  const [otherUserTyping, setOtherUserTyping] = useState(false);
+  const [otherUserName, setOtherUserName] = useState("");
   const inputRef = useRef(null);
 
   useEffect(() => {
     const db = getDatabase();
+    const userId = auth.currentUser.uid;
+    const chatId = [userId, contactId].sort().join("_");
     const messagesRef = ref(db, `chats/${chatId}/messages`);
-    const typingRef = ref(db, `chats/${chatId}/typingStatus`);
-    const participantsRef = ref(db, `chats/${chatId}/users`);
+    const typingRef = ref(db, `chats/${chatId}/typingStatus/${contactId}`);
+    const userRef = ref(db, `users/${contactId}`);
 
     const unsubscribeMessages = onValue(messagesRef, (snapshot) => {
       const messageList = [];
@@ -42,53 +45,28 @@ const ChatScreen = ({ route }) => {
         messageList.push({ id: childSnapshot.key, ...childSnapshot.val() });
       });
       setMessages(messageList);
-      markMessagesAsRead(messageList);
+      markMessagesAsRead(messageList, chatId);
     });
 
     const unsubscribeTyping = onValue(typingRef, (snapshot) => {
-      const typingStatus = snapshot.val();
-      const typingUsers = Object.keys(typingStatus).filter(
-        (userId) =>
-          typingStatus[userId].isTyping && userId !== auth.currentUser.uid
-      );
-      console.log(typingUsers[0]);
-      if (typingUsers.length > 0) {
-        const typingUser = typingUsers
-          .map((userId) => typingStatus[userId].name)
-          .join(", ");
-        setTypingUser(typingUser);
-      } else {
-        setTypingUser(null);
+      if (snapshot.exists()) {
+        setOtherUserTyping(snapshot.val().isTyping);
       }
     });
 
-    const unsubscribeParticipants = onValue(
-      participantsRef,
-      async (snapshot) => {
-        const usersList = [];
-        snapshot.forEach((childSnapshot) => {
-          usersList.push(childSnapshot.key);
-        });
-
-        const usersData = await Promise.all(
-          usersList.map(async (userId) => {
-            const userSnapshot = await get(ref(db, `users/${userId}`));
-            return { id: userId, ...userSnapshot.val() };
-          })
-        );
-
-        setParticipants(usersData);
+    get(userRef).then((snapshot) => {
+      if (snapshot.exists()) {
+        setOtherUserName(snapshot.val().name);
       }
-    );
+    });
 
     return () => {
       unsubscribeMessages();
       unsubscribeTyping();
-      unsubscribeParticipants();
     };
-  }, [chatId]);
+  }, [contactId]);
 
-  const markMessagesAsRead = async (messages) => {
+  const markMessagesAsRead = async (messages, chatId) => {
     const db = getDatabase();
     const updates = {};
     messages.forEach((message) => {
@@ -102,38 +80,40 @@ const ChatScreen = ({ route }) => {
   const handleSend = async () => {
     if (newMessage.trim() === "") return;
     const db = getDatabase();
+    const userId = auth.currentUser.uid;
+    const chatId = [userId, contactId].sort().join("_");
     await push(ref(db, `chats/${chatId}/messages`), {
       text: newMessage,
       createdAt: serverTimestamp(),
-      userId: auth.currentUser.uid,
+      userId,
       read: false,
       senderName: auth.currentUser.displayName,
     });
     setNewMessage("");
     setIsTyping(false);
-    await updateTypingStatus(false);
+    await updateTypingStatus(false, chatId);
   };
 
-  const updateTypingStatus = async (status) => {
+  const updateTypingStatus = async (status, chatId) => {
     const db = getDatabase();
-    console.log(auth.currentUser.displayName);
     await update(
       ref(db, `chats/${chatId}/typingStatus/${auth.currentUser.uid}`),
       {
         isTyping: status,
-        name: auth.currentUser.displayName,
       }
     );
   };
 
   const handleTyping = (text) => {
+    const userId = auth.currentUser.uid;
+    const chatId = [userId, contactId].sort().join("_");
     setNewMessage(text);
     if (text.trim() !== "" && !isTyping) {
       setIsTyping(true);
-      updateTypingStatus(true);
+      updateTypingStatus(true, chatId);
     } else if (text.trim() === "" && isTyping) {
       setIsTyping(false);
-      updateTypingStatus(false);
+      updateTypingStatus(false, chatId);
     }
   };
 
@@ -146,7 +126,9 @@ const ChatScreen = ({ route }) => {
     >
       <Text style={styles.messageText}>{item.text}</Text>
       <View style={styles.messageMeta}>
-        <Text style={styles.senderName}>{item.senderName}</Text>
+        <Text style={styles.senderName}>
+          {item.userId === auth.currentUser.uid ? "You" : item.senderName}
+        </Text>
         <Text style={styles.messageTimestamp}>
           {format(new Date(item.createdAt), "HH:mm")}
         </Text>
@@ -157,32 +139,13 @@ const ChatScreen = ({ route }) => {
     </View>
   );
 
-  const renderParticipantItem = ({ item }) => (
-    <TouchableOpacity
-      onPress={() =>
-        navigation.navigate("PrivateChat", {
-          userId: item.id,
-          userName: item.name,
-        })
-      }
-    >
-      <Text style={styles.participantName}>{item.name}</Text>
-    </TouchableOpacity>
-  );
-
   return (
     <KeyboardAvoidingView
       style={styles.container}
       behavior={Platform.OS === "ios" ? "padding" : undefined}
     >
       <View style={styles.header}>
-        <Text style={styles.chatName}>{chatName}</Text>
-        <FlatList
-          data={participants}
-          horizontal
-          renderItem={renderParticipantItem}
-          keyExtractor={(item) => item.id}
-        />
+        <Text style={styles.chatName}>{contactName}</Text>
       </View>
       <FlatList
         data={messages}
@@ -194,10 +157,8 @@ const ChatScreen = ({ route }) => {
           inputRef.current.scrollToEnd({ animated: true })
         }
       />
-      {typingUser && (
-        <Text style={styles.typingIndicator}>{`${typingUser} ${
-          typingUser.split(",").length > 1 ? "are" : "is"
-        } typing...`}</Text>
+      {otherUserTyping && (
+        <Text style={styles.typingIndicator}>{otherUserName} is typing...</Text>
       )}
       <View style={styles.inputContainer}>
         <TextInput
@@ -231,11 +192,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
     color: "#fff",
-  },
-  participantName: {
-    fontSize: 14,
-    color: "#fff",
-    marginHorizontal: 8,
   },
   messageList: {
     flex: 1,

@@ -15,8 +15,7 @@ const ContactList = ({ navigation }) => {
   useEffect(() => {
     const fetchContacts = async () => {
       const db = getDatabase();
-      const userId = auth.currentUser.uid;
-      const contactsRef = ref(db, `users`);
+      const contactsRef = ref(db, "users");
 
       const snapshot = await get(contactsRef);
       if (snapshot.exists()) {
@@ -36,10 +35,9 @@ const ContactList = ({ navigation }) => {
   }, []);
 
   const handleContactPress = (contact) => {
-    const chatId = contact.id;
     navigation.navigate("ChatScreen", {
-      chatId,
-      chatName: contact.name,
+      contactId: contact.id,
+      contactName: contact.name,
     });
   };
 
