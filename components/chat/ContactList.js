@@ -19,13 +19,19 @@ const ContactList = ({ navigation }) => {
 
       const snapshot = await get(contactsRef);
       if (snapshot.exists()) {
+        const currentUserID = auth.currentUser.uid;
+
         const contactsList = Object.entries(snapshot.val()).map(
           ([id, data]) => ({
             id,
             ...data,
           })
         );
-        setContacts(contactsList);
+        const filteredContacts = contactsList.filter(
+          (contact) => contact.id !== currentUserID
+        );
+
+        setContacts(filteredContacts);
       } else {
         setContacts([]);
       }
