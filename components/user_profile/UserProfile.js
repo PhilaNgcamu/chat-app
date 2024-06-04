@@ -18,7 +18,7 @@ import { getDatabase, ref, set, get } from "firebase/database";
 import * as ImagePicker from "expo-image-picker";
 import { useNavigation } from "@react-navigation/native";
 import { MaterialIcons } from "@expo/vector-icons";
-import { verticalScale } from "../../util/scale";
+import { moderateScale, verticalScale } from "../../util/scale";
 
 const UserProfile = () => {
   const auth = getAuth();
@@ -183,6 +183,7 @@ const UserProfile = () => {
 const styles = StyleSheet.create({
   scrollContainer: {
     flexGrow: 1,
+    backgroundColor: "#000",
   },
   container: {
     flex: 1,
@@ -193,9 +194,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   headerContainer: {
+    position: "relative",
     alignItems: "center",
-    marginTop: 25,
-    marginBottom: 30,
+    top: verticalScale(100),
   },
   profilePicture: {
     width: 100,
@@ -214,8 +215,8 @@ const styles = StyleSheet.create({
     width: "100%",
     bottom: 0,
     backgroundColor: "#FFFFFF",
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
     height: verticalScale(500),
   },
   dragger: {

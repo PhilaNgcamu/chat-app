@@ -19,7 +19,11 @@ export default function NavigationScreens() {
       <Stack.Navigator initialRouteName="UserSignup">
         <Stack.Screen name="UserSignup" component={UserSignup} />
         <Stack.Screen name="UserLogin" component={UserLogin} />
-        <Stack.Screen name="UserProfile" component={UserProfile} />
+        <Stack.Screen
+          name="UserProfile"
+          component={UserProfile}
+          options={{ headerShown: false }}
+        />
         <Stack.Screen name="ChatList" component={ChatList} />
         <Stack.Screen name="Chat Screen" component={ChatScreen} />
         <Stack.Screen name="Home" component={Home} />
