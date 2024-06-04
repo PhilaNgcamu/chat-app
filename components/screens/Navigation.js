@@ -17,20 +17,52 @@ export default function NavigationScreens() {
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="UserSignup">
-        <Stack.Screen name="UserSignup" component={UserSignup} />
-        <Stack.Screen name="UserLogin" component={UserLogin} />
+        <Stack.Screen
+          name="UserSignup"
+          component={UserSignup}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="UserLogin"
+          component={UserLogin}
+          options={{ headerShown: false }}
+        />
         <Stack.Screen
           name="UserProfile"
           component={UserProfile}
           options={{ headerShown: false }}
         />
-        <Stack.Screen name="ChatList" component={ChatList} />
-        <Stack.Screen name="Chat Screen" component={ChatScreen} />
+        <Stack.Screen
+          name="ChatList"
+          component={ChatList}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Chat Screen"
+          component={ChatScreen}
+          options={{ headerShown: false }}
+        />
         <Stack.Screen name="Home" component={Home} />
-        <Stack.Screen name="Contact List" component={ContactList} />
-        <Stack.Screen name="CreateGroupChat" component={CreateGroupChat} />
-        <Stack.Screen name="AddContact" component={AddContact} />
-        <Stack.Screen name="PrivateChat" component={PrivateChatScreen} />
+        <Stack.Screen
+          name="Contact List"
+          component={ContactList}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="CreateGroupChat"
+          component={CreateGroupChat}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="AddContact"
+          component={AddContact}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="PrivateChat"
+          component={PrivateChatScreen}
+          options={{ headerShown: false }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
