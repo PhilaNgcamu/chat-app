@@ -10,10 +10,11 @@ import {
 } from "react-native";
 import { useFonts } from "expo-font";
 import { getAuth, updateProfile, updateEmail } from "firebase/auth";
-import { getDatabase, ref, set } from "firebase/database";
+import { getDatabase, ref, set, get } from "firebase/database";
 
 import * as ImagePicker from "expo-image-picker";
 import { useNavigation } from "@react-navigation/native";
+import { MaterialIcons } from "@expo/vector-icons";
 
 const UserProfile = () => {
   const auth = getAuth();
@@ -23,6 +24,8 @@ const UserProfile = () => {
   const [email, setEmail] = useState(user.email || "");
   const [statusMessage, setStatusMessage] = useState("");
   const [profilePicture, setProfilePicture] = useState(user.photoURL || "");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [mediaShared, setMediaShared] = useState(0);
 
   const [fontsLoaded] = useFonts({
     "Poppins-Bold": require("../../assets/fonts/Poppins-Bold.ttf"),
@@ -37,6 +40,8 @@ const UserProfile = () => {
       if (snapshot.exists()) {
         const userData = snapshot.val();
         setStatusMessage(userData.statusMessage || "");
+        setPhoneNumber(userData.phoneNumber || "");
+        setMediaShared(userData.mediaShared || 0);
       }
     };
     fetchUserProfile();
@@ -57,6 +62,8 @@ const UserProfile = () => {
         name: name,
         email: email,
         statusMessage: statusMessage,
+        phoneNumber: phoneNumber,
+        mediaShared: mediaShared,
       });
 
       Alert.alert("Profile Updated Successfully");
@@ -95,6 +102,21 @@ const UserProfile = () => {
         <Image source={{ uri: profilePicture }} style={styles.profilePicture} />
       </TouchableOpacity>
 
+      <View style={styles.iconContainer}>
+        <TouchableOpacity>
+          <MaterialIcons name="message" size={24} color="#24786D" />
+        </TouchableOpacity>
+        <TouchableOpacity>
+          <MaterialIcons name="videocam" size={24} color="#24786D" />
+        </TouchableOpacity>
+        <TouchableOpacity>
+          <MaterialIcons name="call" size={24} color="#24786D" />
+        </TouchableOpacity>
+        <TouchableOpacity>
+          <MaterialIcons name="more-vert" size={24} color="#24786D" />
+        </TouchableOpacity>
+      </View>
+
       <View style={styles.inputContainer}>
         <Text style={styles.label}>Name</Text>
         <TextInput style={styles.input} value={name} onChangeText={setName} />
@@ -115,6 +137,19 @@ const UserProfile = () => {
           value={statusMessage}
           onChangeText={setStatusMessage}
         />
+      </View>
+      <View style={styles.inputContainer}>
+        <Text style={styles.label}>Phone Number</Text>
+        <TextInput
+          style={styles.input}
+          value={phoneNumber}
+          onChangeText={setPhoneNumber}
+          keyboardType="phone-pad"
+        />
+      </View>
+      <View style={styles.inputContainer}>
+        <Text style={styles.label}>Media Shared</Text>
+        <Text style={styles.input}>{mediaShared}</Text>
       </View>
       <TouchableOpacity style={styles.button} onPress={handleSave}>
         <Text style={styles.buttonText}>Save Changes</Text>
@@ -140,6 +175,11 @@ const styles = StyleSheet.create({
     height: 100,
     borderRadius: 50,
     alignSelf: "center",
+    marginBottom: 16,
+  },
+  iconContainer: {
+    flexDirection: "row",
+    justifyContent: "space-around",
     marginBottom: 16,
   },
   inputContainer: {
