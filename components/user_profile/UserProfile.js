@@ -33,8 +33,6 @@ const UserProfile = () => {
 
   const { height } = useWindowDimensions();
 
-  const infoContainerHeight = height * 0.7;
-
   const [fontsLoaded] = useFonts({
     "Poppins-Bold": require("../../assets/fonts/Poppins-Bold.ttf"),
     "Poppins-Regular": require("../../assets/fonts/Poppins-Regular.ttf"),
@@ -215,16 +213,16 @@ const styles = StyleSheet.create({
     width: "100%",
     bottom: 0,
     backgroundColor: "#FFFFFF",
-    borderTopLeftRadius: 30,
-    borderTopRightRadius: 30,
+    borderTopLeftRadius: 40,
+    borderTopRightRadius: 40,
     height: verticalScale(500),
   },
   dragger: {
     alignSelf: "center",
     backgroundColor: "#D3D3D3",
-    width: 40,
-    height: 5,
-    borderRadius: 5,
+    width: 30,
+    height: 3,
+    borderRadius: 100,
     marginTop: 10,
     marginBottom: 10,
   },
@@ -236,7 +234,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   label: {
-    fontFamily: "Poppins-Regular",
+    fontFamily: "Poppins-Bold",
     fontSize: 14,
     color: "#24786D",
     marginBottom: 4,
