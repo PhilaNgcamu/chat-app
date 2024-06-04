@@ -110,7 +110,8 @@ const UserProfile = () => {
               style={styles.profilePicture}
             />
           </TouchableOpacity>
-
+          <Text style={styles.profileName}>{name}</Text>
+          <Text style={styles.hashtag}>@{name}</Text>
           <View style={styles.iconContainer}>
             <TouchableOpacity>
               <MaterialIcons name="message" size={24} color="#24786D" />
@@ -194,7 +195,17 @@ const styles = StyleSheet.create({
   headerContainer: {
     position: "relative",
     alignItems: "center",
-    top: verticalScale(100),
+    top: verticalScale(70),
+  },
+  profileName: {
+    fontFamily: "Poppins-Bold",
+    fontSize: 24,
+    color: "#FFFFFF",
+  },
+  hashtag: {
+    fontFamily: "Poppins-Regular",
+    fontSize: 14,
+    color: "#FFFFFF",
   },
   profilePicture: {
     width: 100,
@@ -206,7 +217,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-around",
     width: "100%",
-    marginBottom: 16,
+    marginTop: 10,
   },
   infoContainer: {
     position: "absolute",
