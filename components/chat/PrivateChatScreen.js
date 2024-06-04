@@ -8,6 +8,7 @@ import {
   StyleSheet,
   KeyboardAvoidingView,
   Platform,
+  Image,
 } from "react-native";
 import {
   getDatabase,
@@ -16,11 +17,17 @@ import {
   onValue,
   update,
   serverTimestamp,
-  get,
 } from "firebase/database";
+import {
+  getStorage,
+  ref as storageRef,
+  uploadBytes,
+  getDownloadURL,
+} from "firebase/storage";
 import { auth } from "../../backend/firebaseConfig";
 import { MaterialIcons } from "@expo/vector-icons";
 import { format } from "date-fns";
+import * as ImagePicker from "expo-image-picker";
 
 const PrivateChatScreen = ({ route }) => {
   const { contactId, contactName } = route.params;
@@ -30,6 +37,7 @@ const PrivateChatScreen = ({ route }) => {
   const [otherUserTyping, setOtherUserTyping] = useState(false);
   const [otherUserName, setOtherUserName] = useState("");
   const [isOnline, setIsOnline] = useState(false);
+  const [image, setImage] = useState(null); // State to store selected image
   const inputRef = useRef(null);
 
   useEffect(() => {
@@ -58,7 +66,6 @@ const PrivateChatScreen = ({ route }) => {
     const unsubscribeUser = onValue(userRef, (snapshot) => {
       if (snapshot.exists()) {
         const userData = snapshot.val();
-        console.log(userData);
         setOtherUserName(userData.name);
         setIsOnline(userData.online);
       }
@@ -83,20 +90,66 @@ const PrivateChatScreen = ({ route }) => {
   };
 
   const handleSend = async () => {
-    if (newMessage.trim() === "") return;
+    if (newMessage.trim() === "" && !image) {
+      return;
+    }
+
     const db = getDatabase();
     const userId = auth.currentUser.uid;
     const chatId = [userId, contactId].sort().join("_");
-    await push(ref(db, `chats/${chatId}/messages`), {
-      text: newMessage,
-      createdAt: serverTimestamp(),
-      userId,
-      read: false,
-      senderName: auth.currentUser.displayName,
-    });
-    setNewMessage("");
+
+    // Sending text message
+    if (newMessage.trim() !== "") {
+      await push(ref(db, `chats/${chatId}/messages`), {
+        text: newMessage,
+        createdAt: serverTimestamp(),
+        userId,
+        read: false,
+        senderName: auth.currentUser.displayName,
+      });
+      setNewMessage("");
+    }
+
+    // Sending image message
+    if (image) {
+      const storage = getStorage();
+      const imageRef = storageRef(
+        storage,
+        `chatImages/${chatId}/${Date.now()}`
+      );
+      const response = await fetch(image);
+      const blob = await response.blob();
+
+      await uploadBytes(imageRef, blob);
+      const imageUrl = await getDownloadURL(imageRef);
+
+      await push(ref(db, `chats/${chatId}/messages`), {
+        imageUrl,
+        createdAt: serverTimestamp(),
+        userId,
+        read: false,
+        senderName: auth.currentUser.displayName,
+      });
+      setImage(null);
+    }
+
     setIsTyping(false);
     await updateTypingStatus(false, chatId);
+  };
+
+  const pickImage = async () => {
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    console.log(result);
+
+    if (!result.canceled) {
+      setImage(result.assets[0].uri);
+    }
   };
 
   const updateTypingStatus = async (status, chatId) => {
@@ -129,7 +182,10 @@ const PrivateChatScreen = ({ route }) => {
         item.userId === auth.currentUser.uid && styles.myMessage,
       ]}
     >
-      <Text style={styles.messageText}>{item.text}</Text>
+      {item.text && <Text style={styles.messageText}>{item.text}</Text>}
+      {item.imageUrl && (
+        <Image source={{ uri: item.imageUrl }} style={styles.image} />
+      )}
       <View style={styles.messageMeta}>
         <Text style={styles.senderName}>
           {item.userId === auth.currentUser.uid ? "You" : item.senderName}
@@ -171,6 +227,9 @@ const PrivateChatScreen = ({ route }) => {
         <Text style={styles.typingIndicator}>{otherUserName} is typing...</Text>
       )}
       <View style={styles.inputContainer}>
+        <TouchableOpacity onPress={pickImage} style={styles.imagePickerButton}>
+          <MaterialIcons name="photo" size={24} color="#075E54" />
+        </TouchableOpacity>
         <TextInput
           style={styles.input}
           value={newMessage}
@@ -183,6 +242,7 @@ const PrivateChatScreen = ({ route }) => {
           <MaterialIcons name="send" size={24} color="#fff" />
         </TouchableOpacity>
       </View>
+      {image && <Image source={{ uri: image }} style={styles.selectedImage} />}
     </KeyboardAvoidingView>
   );
 };
@@ -240,6 +300,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#333",
   },
+  image: {
+    width: 200,
+    height: 200,
+    borderRadius: 8,
+  },
   messageMeta: {
     flexDirection: "row",
     alignItems: "center",
@@ -281,12 +346,21 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
+  imagePickerButton: {
+    marginRight: 10,
+  },
   typingIndicator: {
     paddingHorizontal: 16,
     color: "#888",
     fontStyle: "italic",
     marginBottom: 5,
     textAlign: "center",
+  },
+  selectedImage: {
+    width: 200,
+    height: 200,
+    margin: 16,
+    alignSelf: "center",
   },
 });
 
