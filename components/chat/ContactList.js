@@ -41,7 +41,7 @@ const ContactList = ({ navigation }) => {
   }, []);
 
   const handleContactPress = (contact) => {
-    navigation.navigate("ChatScreen", {
+    navigation.navigate("PrivateChat", {
       contactId: contact.id,
       contactName: contact.name,
     });

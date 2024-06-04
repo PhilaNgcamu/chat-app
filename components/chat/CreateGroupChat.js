@@ -5,6 +5,7 @@ import {
   TextInput,
   TouchableOpacity,
   FlatList,
+  Image,
   StyleSheet,
 } from "react-native";
 import { getDatabase, ref, push, get, set } from "firebase/database";
@@ -59,7 +60,7 @@ const CreateGroupChat = ({ navigation }) => {
       ),
       type: "group",
     });
-    navigation.navigate("ChatScreen", {
+    navigation.navigate("Chat Screen", {
       chatId: newGroupChatRef.key,
       chatName: groupName,
     });
@@ -72,7 +73,6 @@ const CreateGroupChat = ({ navigation }) => {
       setSelectedContacts([...selectedContacts, contact]);
     }
   };
-
   const renderItem = ({ item }) => (
     <TouchableOpacity
       style={[
@@ -82,6 +82,7 @@ const CreateGroupChat = ({ navigation }) => {
       ]}
       onPress={() => toggleContactSelection(item)}
     >
+      <Image source={{ uri: item.avatar }} style={styles.contactAvatar} />
       <Text style={styles.contactName}>{item.name}</Text>
     </TouchableOpacity>
   );

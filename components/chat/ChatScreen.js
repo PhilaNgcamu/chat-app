@@ -23,21 +23,17 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { format } from "date-fns";
 
 const ChatScreen = ({ route }) => {
-  const { contactId, contactName } = route.params;
+  const { chatId, chatName } = route.params;
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [isTyping, setIsTyping] = useState(false);
-  const [otherUserTyping, setOtherUserTyping] = useState(false);
-  const [otherUserName, setOtherUserName] = useState("");
+  const [otherUserTyping, setOtherUserTyping] = useState([]);
   const inputRef = useRef(null);
 
   useEffect(() => {
     const db = getDatabase();
-    const userId = auth.currentUser.uid;
-    const chatId = [userId, contactId].sort().join("_");
-    const messagesRef = ref(db, `chats/${chatId}/messages`);
-    const typingRef = ref(db, `chats/${chatId}/typingStatus/${contactId}`);
-    const userRef = ref(db, `users/${contactId}`);
+    const messagesRef = ref(db, `groups/${chatId}/messages`);
+    const typingRef = ref(db, `groups/${chatId}/typingStatus`);
 
     const unsubscribeMessages = onValue(messagesRef, (snapshot) => {
       const messageList = [];
@@ -45,18 +41,18 @@ const ChatScreen = ({ route }) => {
         messageList.push({ id: childSnapshot.key, ...childSnapshot.val() });
       });
       setMessages(messageList);
-      markMessagesAsRead(messageList, chatId);
+      markMessagesAsRead(messageList);
     });
 
     const unsubscribeTyping = onValue(typingRef, (snapshot) => {
       if (snapshot.exists()) {
-        setOtherUserTyping(snapshot.val().isTyping);
-      }
-    });
-
-    get(userRef).then((snapshot) => {
-      if (snapshot.exists()) {
-        setOtherUserName(snapshot.val().name);
+        const typingUsers = [];
+        snapshot.forEach((childSnapshot) => {
+          if (childSnapshot.val().isTyping) {
+            typingUsers.push(childSnapshot.key);
+          }
+        });
+        setOtherUserTyping(typingUsers);
       }
     });
 
@@ -64,14 +60,19 @@ const ChatScreen = ({ route }) => {
       unsubscribeMessages();
       unsubscribeTyping();
     };
-  }, [contactId]);
+  }, [chatId]);
 
-  const markMessagesAsRead = async (messages, chatId) => {
+  console.log(chatId);
+
+  const markMessagesAsRead = async (messages) => {
     const db = getDatabase();
+    const userId = auth.currentUser.uid;
     const updates = {};
     messages.forEach((message) => {
-      if (!message.read && message.userId !== auth.currentUser.uid) {
-        updates[`chats/${chatId}/messages/${message.id}/read`] = true;
+      if (!message.readBy?.[userId] && message.userId !== userId) {
+        updates[
+          `groups/${chatId}/messages/${message.id}/readBy/${userId}`
+        ] = true;
       }
     });
     await update(ref(db), updates);
@@ -81,39 +82,34 @@ const ChatScreen = ({ route }) => {
     if (newMessage.trim() === "") return;
     const db = getDatabase();
     const userId = auth.currentUser.uid;
-    const chatId = [userId, contactId].sort().join("_");
-    await push(ref(db, `chats/${chatId}/messages`), {
+    await push(ref(db, `groups/${chatId}/messages`), {
       text: newMessage,
       createdAt: serverTimestamp(),
       userId,
-      read: false,
+      readBy: { [userId]: true },
       senderName: auth.currentUser.displayName,
     });
     setNewMessage("");
     setIsTyping(false);
-    await updateTypingStatus(false, chatId);
+    await updateTypingStatus(false);
   };
 
-  const updateTypingStatus = async (status, chatId) => {
+  const updateTypingStatus = async (status) => {
     const db = getDatabase();
-    await update(
-      ref(db, `chats/${chatId}/typingStatus/${auth.currentUser.uid}`),
-      {
-        isTyping: status,
-      }
-    );
+    const userId = auth.currentUser.uid;
+    await update(ref(db, `groups/${chatId}/typingStatus/${userId}`), {
+      isTyping: status,
+    });
   };
 
   const handleTyping = (text) => {
-    const userId = auth.currentUser.uid;
-    const chatId = [userId, contactId].sort().join("_");
     setNewMessage(text);
     if (text.trim() !== "" && !isTyping) {
       setIsTyping(true);
-      updateTypingStatus(true, chatId);
+      updateTypingStatus(true);
     } else if (text.trim() === "" && isTyping) {
       setIsTyping(false);
-      updateTypingStatus(false, chatId);
+      updateTypingStatus(false);
     }
   };
 
@@ -132,9 +128,10 @@ const ChatScreen = ({ route }) => {
         <Text style={styles.messageTimestamp}>
           {format(new Date(item.createdAt), "HH:mm")}
         </Text>
-        {item.read && item.userId === auth.currentUser.uid && (
-          <MaterialIcons name="done-all" size={16} color="#4CAF50" />
-        )}
+        {item.readBy?.[auth.currentUser.uid] &&
+          item.userId === auth.currentUser.uid && (
+            <MaterialIcons name="done-all" size={16} color="#4CAF50" />
+          )}
       </View>
     </View>
   );
@@ -145,7 +142,7 @@ const ChatScreen = ({ route }) => {
       behavior={Platform.OS === "ios" ? "padding" : undefined}
     >
       <View style={styles.header}>
-        <Text style={styles.chatName}>{contactName}</Text>
+        <Text style={styles.chatName}>{chatName}</Text>
       </View>
       <FlatList
         data={messages}
@@ -157,8 +154,11 @@ const ChatScreen = ({ route }) => {
           inputRef.current.scrollToEnd({ animated: true })
         }
       />
-      {otherUserTyping && (
-        <Text style={styles.typingIndicator}>{otherUserName} is typing...</Text>
+      {otherUserTyping.length > 0 && (
+        <Text style={styles.typingIndicator}>
+          {otherUserTyping.join(", ")}{" "}
+          {otherUserTyping.length === 1 ? "is" : "are"} typing...
+        </Text>
       )}
       <View style={styles.inputContainer}>
         <TextInput

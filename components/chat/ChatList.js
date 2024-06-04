@@ -35,7 +35,7 @@ const ChatList = ({ navigation }) => {
     <TouchableOpacity
       style={styles.chatItem}
       onPress={() =>
-        navigation.navigate("ChatScreen", {
+        navigation.navigate("Chat Screen", {
           chatId: item.id,
           chatName: item.name,
           chatLastMessage: item.lastMessage,

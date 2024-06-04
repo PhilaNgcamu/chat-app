@@ -16,27 +16,28 @@ import {
   onValue,
   update,
   serverTimestamp,
+  get,
 } from "firebase/database";
 import { auth } from "../../backend/firebaseConfig";
 import { MaterialIcons } from "@expo/vector-icons";
 import { format } from "date-fns";
 
 const PrivateChatScreen = ({ route }) => {
-  const { userId, userName } = route.params;
+  const { contactId, contactName } = route.params;
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const [otherUserTyping, setOtherUserTyping] = useState(false);
+  const [otherUserName, setOtherUserName] = useState("");
   const inputRef = useRef(null);
 
   useEffect(() => {
     const db = getDatabase();
-    const privateChatId = [auth.currentUser.uid, userId].sort().join("_");
-    const messagesRef = ref(db, `privateChats/${privateChatId}/messages`);
-    const typingRef = ref(
-      db,
-      `privateChats/${privateChatId}/typingStatus/${auth.currentUser.uid}`
-    );
+    const userId = auth.currentUser.uid;
+    const chatId = [userId, contactId].sort().join("_");
+    const messagesRef = ref(db, `chats/${chatId}/messages`);
+    const typingRef = ref(db, `chats/${chatId}/typingStatus/${contactId}`);
+    const userRef = ref(db, `users/${contactId}`);
 
     const unsubscribeMessages = onValue(messagesRef, (snapshot) => {
       const messageList = [];
@@ -44,6 +45,7 @@ const PrivateChatScreen = ({ route }) => {
         messageList.push({ id: childSnapshot.key, ...childSnapshot.val() });
       });
       setMessages(messageList);
+      markMessagesAsRead(messageList, chatId);
     });
 
     const unsubscribeTyping = onValue(typingRef, (snapshot) => {
@@ -52,35 +54,50 @@ const PrivateChatScreen = ({ route }) => {
       }
     });
 
+    get(userRef).then((snapshot) => {
+      if (snapshot.exists()) {
+        setOtherUserName(snapshot.val().name);
+      }
+    });
+
     return () => {
       unsubscribeMessages();
       unsubscribeTyping();
     };
-  }, [userId]);
+  }, [contactId]);
+
+  const markMessagesAsRead = async (messages, chatId) => {
+    const db = getDatabase();
+    const updates = {};
+    messages.forEach((message) => {
+      if (!message.read && message.userId !== auth.currentUser.uid) {
+        updates[`chats/${chatId}/messages/${message.id}/read`] = true;
+      }
+    });
+    await update(ref(db), updates);
+  };
 
   const handleSend = async () => {
     if (newMessage.trim() === "") return;
     const db = getDatabase();
-    const privateChatId = [auth.currentUser.uid, userId].sort().join("_");
-    await push(ref(db, `privateChats/${privateChatId}/messages`), {
+    const userId = auth.currentUser.uid;
+    const chatId = [userId, contactId].sort().join("_");
+    await push(ref(db, `chats/${chatId}/messages`), {
       text: newMessage,
       createdAt: serverTimestamp(),
-      userId: auth.currentUser.uid,
+      userId,
+      read: false,
       senderName: auth.currentUser.displayName,
     });
     setNewMessage("");
     setIsTyping(false);
-    await updateTypingStatus(false);
+    await updateTypingStatus(false, chatId);
   };
 
-  const updateTypingStatus = async (status) => {
+  const updateTypingStatus = async (status, chatId) => {
     const db = getDatabase();
-    const privateChatId = [auth.currentUser.uid, userId].sort().join("_");
     await update(
-      ref(
-        db,
-        `privateChats/${privateChatId}/typingStatus/${auth.currentUser.uid}`
-      ),
+      ref(db, `chats/${chatId}/typingStatus/${auth.currentUser.uid}`),
       {
         isTyping: status,
       }
@@ -88,13 +105,15 @@ const PrivateChatScreen = ({ route }) => {
   };
 
   const handleTyping = (text) => {
+    const userId = auth.currentUser.uid;
+    const chatId = [userId, contactId].sort().join("_");
     setNewMessage(text);
     if (text.trim() !== "" && !isTyping) {
       setIsTyping(true);
-      updateTypingStatus(true);
+      updateTypingStatus(true, chatId);
     } else if (text.trim() === "" && isTyping) {
       setIsTyping(false);
-      updateTypingStatus(false);
+      updateTypingStatus(false, chatId);
     }
   };
 
@@ -107,10 +126,15 @@ const PrivateChatScreen = ({ route }) => {
     >
       <Text style={styles.messageText}>{item.text}</Text>
       <View style={styles.messageMeta}>
-        <Text style={styles.senderName}>{item.senderName}</Text>
+        <Text style={styles.senderName}>
+          {item.userId === auth.currentUser.uid ? "You" : item.senderName}
+        </Text>
         <Text style={styles.messageTimestamp}>
           {format(new Date(item.createdAt), "HH:mm")}
         </Text>
+        {item.read && item.userId === auth.currentUser.uid && (
+          <MaterialIcons name="done-all" size={16} color="#4CAF50" />
+        )}
       </View>
     </View>
   );
@@ -121,7 +145,7 @@ const PrivateChatScreen = ({ route }) => {
       behavior={Platform.OS === "ios" ? "padding" : undefined}
     >
       <View style={styles.header}>
-        <Text style={styles.chatName}>{userName}</Text>
+        <Text style={styles.chatName}>{contactName}</Text>
       </View>
       <FlatList
         data={messages}
@@ -134,7 +158,7 @@ const PrivateChatScreen = ({ route }) => {
         }
       />
       {otherUserTyping && (
-        <Text style={styles.typingIndicator}>Someone is typing...</Text>
+        <Text style={styles.typingIndicator}>{otherUserName} is typing...</Text>
       )}
       <View style={styles.inputContainer}>
         <TextInput
