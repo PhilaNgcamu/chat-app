@@ -38,6 +38,7 @@ const ChatList = ({ navigation }) => {
         navigation.navigate("ChatScreen", {
           chatId: item.id,
           chatName: item.name,
+          chatLastMessage: item.lastMessage,
         })
       }
     >

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -6,15 +6,34 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from "react-native";
-
-const mockContacts = [
-  { id: "1", name: "John Doe" },
-  { id: "2", name: "Jane Smith" },
-  { id: "3", name: "Alice Johnson" },
-];
+import { getDatabase, ref, get } from "firebase/database";
+import { auth } from "../../backend/firebaseConfig";
 
 const ContactList = ({ navigation }) => {
-  const [contacts] = useState(mockContacts);
+  const [contacts, setContacts] = useState([]);
+
+  useEffect(() => {
+    const fetchContacts = async () => {
+      const db = getDatabase();
+      const userId = auth.currentUser.uid;
+      const contactsRef = ref(db, `users`);
+
+      const snapshot = await get(contactsRef);
+      if (snapshot.exists()) {
+        const contactsList = Object.entries(snapshot.val()).map(
+          ([id, data]) => ({
+            id,
+            ...data,
+          })
+        );
+        setContacts(contactsList);
+      } else {
+        setContacts([]);
+      }
+    };
+
+    fetchContacts();
+  }, []);
 
   const handleContactPress = (contact) => {
     const chatId = contact.id;

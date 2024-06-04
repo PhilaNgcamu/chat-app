@@ -27,16 +27,13 @@ const ChatScreen = ({ route }) => {
   const [newMessage, setNewMessage] = useState("");
   const [participants, setParticipants] = useState([]);
   const [isTyping, setIsTyping] = useState(false);
-  const [otherUserTyping, setOtherUserTyping] = useState(false);
+  const [typingUser, setTypingUser] = useState(null);
   const inputRef = useRef(null);
 
   useEffect(() => {
     const db = getDatabase();
     const messagesRef = ref(db, `chats/${chatId}/messages`);
-    const typingRef = ref(
-      db,
-      `chats/${chatId}/typingStatus/${auth.currentUser.uid}`
-    );
+    const typingRef = ref(db, `chats/${chatId}/typingStatus`);
     const participantsRef = ref(db, `chats/${chatId}/users`);
 
     const unsubscribeMessages = onValue(messagesRef, (snapshot) => {
@@ -49,8 +46,19 @@ const ChatScreen = ({ route }) => {
     });
 
     const unsubscribeTyping = onValue(typingRef, (snapshot) => {
-      if (snapshot.exists()) {
-        setOtherUserTyping(snapshot.val().isTyping);
+      const typingStatus = snapshot.val();
+      const typingUsers = Object.keys(typingStatus).filter(
+        (userId) =>
+          typingStatus[userId].isTyping && userId !== auth.currentUser.uid
+      );
+      console.log(typingUsers[0]);
+      if (typingUsers.length > 0) {
+        const typingUser = typingUsers
+          .map((userId) => typingStatus[userId].name)
+          .join(", ");
+        setTypingUser(typingUser);
+      } else {
+        setTypingUser(null);
       }
     });
 
@@ -108,10 +116,12 @@ const ChatScreen = ({ route }) => {
 
   const updateTypingStatus = async (status) => {
     const db = getDatabase();
+    console.log(auth.currentUser.displayName);
     await update(
       ref(db, `chats/${chatId}/typingStatus/${auth.currentUser.uid}`),
       {
         isTyping: status,
+        name: auth.currentUser.displayName,
       }
     );
   };
@@ -184,8 +194,10 @@ const ChatScreen = ({ route }) => {
           inputRef.current.scrollToEnd({ animated: true })
         }
       />
-      {otherUserTyping && (
-        <Text style={styles.typingIndicator}>Someone is typing...</Text>
+      {typingUser && (
+        <Text style={styles.typingIndicator}>{`${typingUser} ${
+          typingUser.split(",").length > 1 ? "are" : "is"
+        } typing...`}</Text>
       )}
       <View style={styles.inputContainer}>
         <TextInput
