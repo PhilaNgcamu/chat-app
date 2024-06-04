@@ -19,20 +19,28 @@ const CreateGroupChat = ({ navigation }) => {
   useEffect(() => {
     const fetchContacts = async () => {
       const db = getDatabase();
-      const usersRef = ref(db, "users");
-      const snapshot = await get(usersRef);
+      const contactsRef = ref(db, "users");
+
+      const snapshot = await get(contactsRef);
       if (snapshot.exists()) {
+        const currentUserID = auth.currentUser.uid;
+
         const contactsList = Object.entries(snapshot.val()).map(
           ([id, data]) => ({
             id,
             ...data,
           })
         );
-        setContacts(contactsList);
+        const filteredContacts = contactsList.filter(
+          (contact) => contact.id !== currentUserID
+        );
+
+        setContacts(filteredContacts);
       } else {
         setContacts([]);
       }
     };
+
     fetchContacts();
   }, []);
 
