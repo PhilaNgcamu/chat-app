@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import {
   View,
   Text,
@@ -28,6 +28,8 @@ import { auth } from "../../backend/firebaseConfig";
 import { MaterialIcons } from "@expo/vector-icons";
 import { format } from "date-fns";
 import * as ImagePicker from "expo-image-picker";
+import { useTabBarVisibility } from "../screens/useTabBarVisibilityContext";
+import { useFocusEffect } from "@react-navigation/native";
 
 const PrivateChatScreen = ({ route }) => {
   const { contactId, contactName } = route.params;
@@ -39,6 +41,15 @@ const PrivateChatScreen = ({ route }) => {
   const [isOnline, setIsOnline] = useState(false);
   const [image, setImage] = useState(null); // State to store selected image
   const inputRef = useRef(null);
+
+  const { setTabBarVisible } = useTabBarVisibility();
+
+  useFocusEffect(
+    useCallback(() => {
+      setTabBarVisible(false);
+      return () => setTabBarVisible(true);
+    }, [])
+  );
 
   useEffect(() => {
     const db = getDatabase();

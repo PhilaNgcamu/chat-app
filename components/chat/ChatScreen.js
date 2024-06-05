@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import {
   View,
   Text,
@@ -21,6 +21,7 @@ import {
 import { auth } from "../../backend/firebaseConfig";
 import { MaterialIcons } from "@expo/vector-icons";
 import { format } from "date-fns";
+import { useTabBarVisibility } from "../screens/useTabBarVisibilityContext";
 
 const ChatScreen = ({ route }) => {
   const { chatId, chatName } = route.params;
@@ -29,6 +30,15 @@ const ChatScreen = ({ route }) => {
   const [isTyping, setIsTyping] = useState(false);
   const [otherUserTyping, setOtherUserTyping] = useState([]);
   const inputRef = useRef(null);
+
+  const { setTabBarVisible } = useTabBarVisibility();
+
+  useFocusEffect(
+    useCallback(() => {
+      setTabBarVisible(false);
+      return () => setTabBarVisible(true);
+    }, [])
+  );
 
   useEffect(() => {
     const db = getDatabase();

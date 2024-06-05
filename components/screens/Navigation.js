@@ -2,16 +2,13 @@ import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import {
-  MaterialIcons,
-  FontAwesome,
-  Ionicons,
-  AntDesign,
-  Feather,
-} from "@expo/vector-icons";
-import { View, Text, StyleSheet } from "react-native";
+import { AntDesign, Feather, FontAwesome } from "@expo/vector-icons";
+import { StyleSheet } from "react-native";
 
-// Import your screen components
+import {
+  TabBarVisibilityProvider,
+  useTabBarVisibility,
+} from "./useTabBarVisibilityContext";
 import UserLogin from "../onboarding/UserLogin";
 import UserSignup from "../onboarding/UserSignup";
 import UserProfile from "../user_profile/UserProfile";
@@ -23,14 +20,12 @@ import CreateGroupChat from "../chat/CreateGroupChat";
 import AddContact from "../chat/AddContact";
 import PrivateChatScreen from "../chat/PrivateChatScreen";
 
-// Create stack navigators for each tab
 const Stack = createNativeStackNavigator();
 const MessagesStack = createNativeStackNavigator();
 const CallsStack = createNativeStackNavigator();
 const GroupStack = createNativeStackNavigator();
 const SettingsStack = createNativeStackNavigator();
 
-// Messages Stack Navigator
 function MessagesStackNavigator() {
   return (
     <MessagesStack.Navigator>
@@ -40,7 +35,7 @@ function MessagesStackNavigator() {
         options={{ headerShown: false }}
       />
       <MessagesStack.Screen
-        name="Chat Screen"
+        name="ChatScreen"
         component={ChatScreen}
         options={{ headerShown: false }}
       />
@@ -63,11 +58,9 @@ function MessagesStackNavigator() {
   );
 }
 
-// Calls Stack Navigator
 function CallsStackNavigator() {
   return (
     <CallsStack.Navigator>
-      {/* Add your Calls screens here */}
       <CallsStack.Screen
         name="Home"
         component={Home}
@@ -77,13 +70,11 @@ function CallsStackNavigator() {
   );
 }
 
-// Group Stack Navigator
 function GroupStackNavigator() {
   return (
     <GroupStack.Navigator>
-      {/* Add your Group screens here */}
       <GroupStack.Screen
-        name="Home"
+        name="CreateGroupChat"
         component={CreateGroupChat}
         options={{ headerShown: false }}
       />
@@ -91,7 +82,6 @@ function GroupStackNavigator() {
   );
 }
 
-// Settings Stack Navigator
 function SettingsStackNavigator() {
   return (
     <SettingsStack.Navigator>
@@ -104,15 +94,19 @@ function SettingsStackNavigator() {
   );
 }
 
-// Bottom Tab Navigator
 const Tab = createBottomTabNavigator();
 
 function BottomTabNavigator() {
+  const { isTabBarVisible } = useTabBarVisibility();
+
   return (
     <Tab.Navigator
       screenOptions={{
         tabBarShowLabel: true,
-        tabBarStyle: styles.tabBar,
+        tabBarStyle: [
+          styles.tabBar,
+          { display: isTabBarVisible ? "flex" : "none" },
+        ],
         tabBarActiveTintColor: "#24786D",
         tabBarInactiveTintColor: "#888",
         tabBarLabelStyle: styles.tabBarLabel,
@@ -162,43 +156,41 @@ function BottomTabNavigator() {
   );
 }
 
-// Main App Navigator
 export default function NavigationScreens() {
   return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName="UserSignup">
-        <Stack.Screen
-          name="UserSignup"
-          component={UserSignup}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="UserLogin"
-          component={UserLogin}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="UserProfile"
-          component={UserProfile}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="Home"
-          component={BottomTabNavigator}
-          options={{ headerShown: false }}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <TabBarVisibilityProvider>
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName="UserSignup">
+          <Stack.Screen
+            name="UserSignup"
+            component={UserSignup}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="UserLogin"
+            component={UserLogin}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="UserProfile"
+            component={UserProfile}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Home"
+            component={BottomTabNavigator}
+            options={{ headerShown: false }}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </TabBarVisibilityProvider>
   );
 }
 
-// Styles
 const styles = StyleSheet.create({
   tabBar: {
     backgroundColor: "#fff",
     borderTopWidth: 0,
-    elevation: 10, // Shadow for Android
-    shadowColor: "#000", // Shadow for iOS
     shadowOpacity: 0.1,
     shadowRadius: 10,
     shadowOffset: { width: 0, height: 10 },
