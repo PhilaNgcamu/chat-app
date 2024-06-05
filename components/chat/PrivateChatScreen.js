@@ -25,21 +25,21 @@ import {
   getDownloadURL,
 } from "firebase/storage";
 import { auth } from "../../backend/firebaseConfig";
-import { MaterialIcons } from "@expo/vector-icons";
+import { MaterialIcons, Ionicons, FontAwesome } from "@expo/vector-icons";
 import { format } from "date-fns";
 import * as ImagePicker from "expo-image-picker";
 import { useTabBarVisibility } from "../screens/useTabBarVisibilityContext";
 import { useFocusEffect } from "@react-navigation/native";
 
-const PrivateChatScreen = ({ route }) => {
-  const { contactId, contactName } = route.params;
+const PrivateChatScreen = ({ route, navigation }) => {
+  const { contactId, contactName, contactAvatar } = route.params;
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const [otherUserTyping, setOtherUserTyping] = useState(false);
   const [otherUserName, setOtherUserName] = useState("");
   const [isOnline, setIsOnline] = useState(false);
-  const [image, setImage] = useState(null); // State to store selected image
+  const [image, setImage] = useState(null);
   const inputRef = useRef(null);
 
   const { setTabBarVisible } = useTabBarVisibility();
@@ -217,11 +217,23 @@ const PrivateChatScreen = ({ route }) => {
       behavior={Platform.OS === "ios" ? "padding" : undefined}
     >
       <View style={styles.header}>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <Ionicons name="arrow-back" size={24} color="#fff" />
+        </TouchableOpacity>
+        <Image source={{ uri: contactAvatar }} style={styles.avatar} />
         <View style={styles.headerContent}>
           <Text style={styles.chatName}>{contactName}</Text>
           <Text style={styles.statusText}>
             {isOnline ? "Active Now" : "Offline"}
           </Text>
+        </View>
+        <View style={styles.headerIcons}>
+          <TouchableOpacity style={styles.headerIcon}>
+            <FontAwesome name="phone" size={24} color="#fff" />
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.headerIcon}>
+            <FontAwesome name="video-camera" size={24} color="#fff" />
+          </TouchableOpacity>
         </View>
       </View>
       <FlatList
@@ -266,13 +278,18 @@ const styles = StyleSheet.create({
   header: {
     padding: 16,
     backgroundColor: "#075E54",
-    justifyContent: "center",
-    alignItems: "center",
     flexDirection: "row",
-    justifyContent: "space-between",
+    alignItems: "center",
   },
   headerContent: {
-    alignItems: "center",
+    flex: 1,
+    alignItems: "flex-start",
+    marginLeft: 10,
+  },
+  avatar: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
   },
   chatName: {
     fontSize: 20,
@@ -282,6 +299,12 @@ const styles = StyleSheet.create({
   statusText: {
     fontSize: 14,
     color: "#fff",
+  },
+  headerIcons: {
+    flexDirection: "row",
+  },
+  headerIcon: {
+    marginLeft: 15,
   },
   messageList: {
     flex: 1,
