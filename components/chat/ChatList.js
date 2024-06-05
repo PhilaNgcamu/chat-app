@@ -49,7 +49,7 @@ const CombinedChatList = ({ navigation }) => {
 
       const combinedList = [...chatList, ...contactsList];
       setItems(combinedList);
-      setStatuses(contactsList); // Assuming statuses are derived from contacts
+      setStatuses(contactsList);
     };
 
     fetchItems();
@@ -101,11 +101,17 @@ const CombinedChatList = ({ navigation }) => {
     <View style={styles.container}>
       <View style={styles.header}>
         <TouchableOpacity style={styles.iconWrapper}>
-          <AntDesign name="search1" size={24} color="black" />
+          <AntDesign name="search1" size={24} color="#fff" />
         </TouchableOpacity>
         <Text style={styles.headerText}>Home</Text>
-        <TouchableOpacity style={styles.iconWrapper}>
-          <FontAwesome name="user-circle" size={24} color="black" />
+        <TouchableOpacity>
+          <Image
+            source={{
+              uri:
+                auth.currentUser.photoURL || "https://via.placeholder.com/150",
+            }}
+            style={styles.userProfile}
+          />
         </TouchableOpacity>
       </View>
 
@@ -168,9 +174,16 @@ const styles = StyleSheet.create({
     backgroundColor: "#000",
   },
   iconWrapper: {
-    backgroundColor: "#ddd",
-    padding: 8,
+    backgroundColor: "#000",
+    padding: 12,
     borderRadius: 50,
+    borderWidth: 1,
+    borderColor: "#fff",
+  },
+  userProfile: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
   },
   headerText: {
     fontSize: 20,
