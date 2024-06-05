@@ -133,6 +133,7 @@ const CombinedChatList = ({ navigation }) => {
       </View>
 
       <View style={styles.listContainer}>
+        <View style={styles.dragger}></View>
         {items.length === 0 ? (
           <View style={styles.emptyStateContainer}>
             <MaterialIcons name="chat-bubble-outline" size={80} color="#ddd" />
@@ -146,6 +147,7 @@ const CombinedChatList = ({ navigation }) => {
             renderItem={renderItem}
             keyExtractor={(item) => item.id}
             style={styles.list}
+            showsVerticalScrollIndicator={true}
           />
         )}
       </View>
@@ -233,8 +235,18 @@ const styles = StyleSheet.create({
     flex: 1,
     width: "100%",
     backgroundColor: "#f9f9f9",
-    borderRadius: 15,
+    borderTopLeftRadius: 40,
+    borderTopRightRadius: 40,
     overflow: "hidden",
+  },
+  dragger: {
+    alignSelf: "center",
+    backgroundColor: "#D3D3D3",
+    width: 30,
+    height: 3,
+    borderRadius: 100,
+    marginTop: 10,
+    marginBottom: 10,
   },
   list: {
     flex: 1,
