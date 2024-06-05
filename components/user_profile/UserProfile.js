@@ -200,7 +200,7 @@ const styles = StyleSheet.create({
   headerContainer: {
     position: "relative",
     alignItems: "center",
-    top: verticalScale(40),
+    top: verticalScale(25),
   },
   backButton: {
     position: "absolute",
@@ -236,7 +236,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFFFFF",
     borderTopLeftRadius: 40,
     borderTopRightRadius: 40,
-    height: verticalScale(500),
+    height: verticalScale(490),
   },
   dragger: {
     alignSelf: "center",
