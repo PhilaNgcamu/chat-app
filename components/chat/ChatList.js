@@ -6,15 +6,19 @@ import {
   TouchableOpacity,
   StyleSheet,
   Image,
+  TextInput,
+  Alert,
 } from "react-native";
 import { MaterialIcons, AntDesign, FontAwesome } from "@expo/vector-icons";
 import { getDatabase, ref, get } from "firebase/database";
 import { auth } from "../../backend/firebaseConfig";
 import { StatusBar } from "expo-status-bar";
+import { Notifications } from "expo";
 
 const CombinedChatList = ({ navigation }) => {
   const [items, setItems] = useState([]);
   const [statuses, setStatuses] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     const db = getDatabase();
@@ -50,14 +54,21 @@ const CombinedChatList = ({ navigation }) => {
       const combinedList = [...chatList, ...contactsList];
       setItems(combinedList);
       setStatuses(contactsList);
+
+      // Setup notification listener
+      Notifications.addListener(handleNotification);
     };
 
     fetchItems();
   }, []);
 
+  const handleNotification = (notification) => {
+    Alert.alert("New Message", notification.data.message);
+  };
+
   const handleItemPress = (item) => {
     if (item.chatLastMessage) {
-      navigation.navigate("Chat Screen", {
+      navigation.navigate("ChatScreen", {
         chatId: item.id,
         chatName: item.name,
         chatLastMessage: item.lastMessage,
@@ -98,14 +109,25 @@ const CombinedChatList = ({ navigation }) => {
     </TouchableOpacity>
   );
 
+  const filteredItems = items.filter((item) =>
+    item.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
     <View style={styles.container}>
       <StatusBar style="light" />
       <View style={styles.header}>
-        <TouchableOpacity style={styles.iconWrapper}>
+        <View style={styles.searchContainer}>
           <AntDesign name="search1" size={24} color="#fff" />
-        </TouchableOpacity>
-        <Text style={styles.headerText}>Home</Text>
+          <TextInput
+            style={styles.searchInput}
+            placeholder="Search"
+            placeholderTextColor="#aaa"
+            value={searchQuery}
+            onChangeText={setSearchQuery}
+          />
+        </View>
+
         <TouchableOpacity onPress={() => navigation.navigate("UserProfile")}>
           <Image
             source={{
@@ -142,7 +164,7 @@ const CombinedChatList = ({ navigation }) => {
 
       <View style={styles.listContainer}>
         <View style={styles.dragger}></View>
-        {items.length === 0 ? (
+        {filteredItems.length === 0 ? (
           <View style={styles.emptyStateContainer}>
             <MaterialIcons name="chat-bubble-outline" size={80} color="#ddd" />
             <Text style={styles.emptyStateText}>
@@ -151,7 +173,7 @@ const CombinedChatList = ({ navigation }) => {
           </View>
         ) : (
           <FlatList
-            data={items}
+            data={filteredItems}
             renderItem={renderItem}
             keyExtractor={(item) => item.id}
             style={styles.list}
@@ -176,12 +198,20 @@ const styles = StyleSheet.create({
     marginTop: 16,
     backgroundColor: "#000",
   },
-  iconWrapper: {
-    backgroundColor: "#000",
-    padding: 12,
-    borderRadius: 50,
-    borderWidth: 1,
-    borderColor: "#fff",
+  searchContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#333",
+    paddingVertical: 8,
+    paddingHorizontal: 8,
+    borderRadius: 8,
+    flex: 1,
+    marginRight: 16,
+  },
+  searchInput: {
+    flex: 1,
+    color: "#fff",
+    marginLeft: 8,
   },
   userProfile: {
     width: 50,

@@ -386,7 +386,7 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     padding: 10,
     paddingLeft: 16,
-    fontFamily: "Poppins-Bold",
+    fontFamily: "Poppins-Regular",
     color: "#333",
     backgroundColor: "#f9f9f9",
     marginRight: 8,
