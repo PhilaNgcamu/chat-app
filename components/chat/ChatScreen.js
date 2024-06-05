@@ -11,6 +11,12 @@ import {
   Image,
 } from "react-native";
 import {
+  getStorage,
+  ref as storageRef,
+  uploadBytes,
+  getDownloadURL,
+} from "firebase/storage";
+import {
   getDatabase,
   ref,
   push,
@@ -19,6 +25,7 @@ import {
   serverTimestamp,
 } from "firebase/database";
 import * as ImagePicker from "expo-image-picker";
+import { useNavigation } from "@react-navigation/native";
 
 import { auth } from "../../backend/firebaseConfig";
 import {
@@ -40,6 +47,7 @@ const ChatScreen = ({ route }) => {
   const [otherUserTyping, setOtherUserTyping] = useState([]);
   const [image, setImage] = useState(null);
   const inputRef = useRef(null);
+  const navigation = useNavigation();
 
   const { setTabBarVisible } = useTabBarVisibility();
 
@@ -114,18 +122,46 @@ const ChatScreen = ({ route }) => {
   };
 
   const handleSend = async () => {
-    if (newMessage.trim() === "") return;
+    if (newMessage.trim() === "" && !image) return;
     const db = getDatabase();
     const userId = auth.currentUser.uid;
-    await push(ref(db, `groups/${chatId}/messages`), {
-      text: newMessage,
-      createdAt: serverTimestamp(),
-      userId,
-      readBy: { [userId]: true },
-      senderName: auth.currentUser.displayName,
-    });
-    setImage(null);
-    setNewMessage("");
+
+    // Sending text message
+    if (newMessage.trim() !== "") {
+      await push(ref(db, `groups/${chatId}/messages`), {
+        text: newMessage,
+        createdAt: serverTimestamp(),
+        userId,
+        readBy: { [userId]: true },
+        senderName: auth.currentUser.displayName,
+      });
+      setNewMessage("");
+    }
+    setIsTyping(false);
+    await updateTypingStatus(false);
+    if (image) {
+      const storage = getStorage();
+      const imageRef = storageRef(
+        storage,
+        `chatImages/${chatId}/${Date.now()}`
+      );
+      const response = await fetch(image);
+      const blob = await response.blob();
+
+      await uploadBytes(imageRef, blob);
+      const downloadURL = await getDownloadURL(imageRef);
+
+      await push(ref(db, `groups/${chatId}/messages`), {
+        imageUrl: downloadURL,
+        createdAt: serverTimestamp(),
+        userId,
+        readBy: { [userId]: true },
+        senderName: auth.currentUser.displayName,
+      });
+
+      setImage(null);
+    }
+
     setIsTyping(false);
     await updateTypingStatus(false);
   };
@@ -156,7 +192,10 @@ const ChatScreen = ({ route }) => {
         item.userId === auth.currentUser.uid && styles.myMessage,
       ]}
     >
-      <Text style={styles.messageText}>{item.text}</Text>
+      {item.text && <Text style={styles.messageText}>{item.text}</Text>}
+      {item.imageUrl && (
+        <Image source={{ uri: item.imageUrl }} style={styles.image} />
+      )}
       <View style={styles.messageMeta}>
         <Text style={styles.senderName}>
           {item.userId === auth.currentUser.uid ? "You" : item.senderName}
@@ -179,7 +218,20 @@ const ChatScreen = ({ route }) => {
     >
       <StatusBar style="dark" />
       <View style={styles.header}>
-        <Text style={styles.chatName}>{chatName}</Text>
+        <TouchableOpacity
+          onPress={() => navigation.goBack()}
+          style={styles.backButton}
+        >
+          <Ionicons name="arrow-back" size={24} color="#000" />
+        </TouchableOpacity>
+        <Image
+          source={{ uri: "https://via.placeholder.com/150" }} // Replace with actual image URL or state variable
+          style={styles.headerImage}
+        />
+        <View style={styles.headerContent}>
+          <Text style={styles.chatName}>{chatName}</Text>
+          {/* Add any additional status text or components here */}
+        </View>
       </View>
       <FlatList
         data={messages}
@@ -210,8 +262,8 @@ const ChatScreen = ({ route }) => {
           onSubmitEditing={handleSend}
           returnKeyType="send"
         />
-        <TouchableOpacity style={styles.iconButton}>
-          <Ionicons name="documents-outline" size={24} color="#666" />
+        <TouchableOpacity onPress={handleSend} style={styles.iconButton}>
+          <Ionicons name="send" size={24} color="#666" />
         </TouchableOpacity>
         <TouchableOpacity style={styles.iconButton}>
           <Feather name="camera" size={24} color="#666" />
@@ -237,15 +289,19 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
   },
+  backButton: {
+    marginRight: 10,
+  },
+  headerImage: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    marginRight: 10,
+  },
   headerContent: {
     flex: 1,
     alignItems: "flex-start",
     marginLeft: 10,
-  },
-  avatar: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
   },
   chatName: {
     fontSize: 20,

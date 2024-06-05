@@ -115,7 +115,6 @@ const PrivateChatScreen = ({ route, navigation }) => {
     const userId = auth.currentUser.uid;
     const chatId = [userId, contactId].sort().join("_");
 
-    // Sending text message
     if (newMessage.trim() !== "") {
       await push(ref(db, `chats/${chatId}/messages`), {
         text: newMessage,
@@ -127,7 +126,6 @@ const PrivateChatScreen = ({ route, navigation }) => {
       setNewMessage("");
     }
 
-    // Sending image message
     if (image) {
       const storage = getStorage();
       const imageRef = storageRef(
@@ -272,8 +270,8 @@ const PrivateChatScreen = ({ route, navigation }) => {
           onSubmitEditing={handleSend}
           returnKeyType="send"
         />
-        <TouchableOpacity style={styles.iconButton}>
-          <Ionicons name="documents-outline" size={24} color="#666" />
+        <TouchableOpacity onPress={handleSend} style={styles.iconButton}>
+          <Ionicons name="send" size={24} color="#666" />
         </TouchableOpacity>
         <TouchableOpacity style={styles.iconButton}>
           <Feather name="camera" size={24} color="#666" />
