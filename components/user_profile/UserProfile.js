@@ -17,6 +17,7 @@ import * as ImagePicker from "expo-image-picker";
 import { useNavigation } from "@react-navigation/native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { verticalScale } from "../../util/scale";
+import { StatusBar } from "expo-status-bar";
 
 const UserProfile = () => {
   const auth = getAuth();
@@ -103,6 +104,7 @@ const UserProfile = () => {
 
   return (
     <View style={styles.container}>
+      <StatusBar style="light" />
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={styles.headerContainer}>
           <TouchableOpacity
@@ -204,7 +206,7 @@ const styles = StyleSheet.create({
   headerContainer: {
     position: "relative",
     alignItems: "center",
-    top: verticalScale(25),
+    top: verticalScale(30),
   },
   backButton: {
     position: "absolute",
@@ -240,7 +242,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFFFFF",
     borderTopLeftRadius: 40,
     borderTopRightRadius: 40,
-    height: verticalScale(490),
+    height: verticalScale(500),
   },
   dragger: {
     alignSelf: "center",

@@ -4,6 +4,7 @@ import { useNavigation } from "@react-navigation/native";
 import { signOut } from "firebase/auth";
 import { getDatabase, ref, update, serverTimestamp } from "firebase/database";
 import { auth } from "../../backend/firebaseConfig";
+import { StatusBar } from "expo-status-bar";
 
 const Home = () => {
   const navigation = useNavigation();
@@ -29,25 +30,9 @@ const Home = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Welcome to Chatbox</Text>
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => navigation.navigate("Contact List")}
-      >
-        <Text style={styles.buttonText}>New Chat</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => navigation.navigate("UserProfile")}
-      >
-        <Text style={styles.buttonText}>Profile</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => navigation.navigate("ChatList")}
-      >
-        <Text style={styles.buttonText}>Chats</Text>
-      </TouchableOpacity>
+      <StatusBar style="auto" />
+      <Text style={styles.title}>Chatbox</Text>
+
       <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
         <Text style={styles.buttonText}>Logout</Text>
       </TouchableOpacity>
@@ -64,31 +49,45 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
   },
   title: {
-    fontSize: 24,
+    fontSize: 32,
     fontFamily: "Poppins-Bold",
-    marginBottom: 32,
+    marginBottom: 40,
     color: "#24786D",
   },
   button: {
     backgroundColor: "#24786D",
-    padding: 16,
-    borderRadius: 10,
-    marginVertical: 8,
+    paddingVertical: 16,
+    paddingHorizontal: 32,
+    borderRadius: 25,
+    marginVertical: 12,
     width: "80%",
     alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
   logoutButton: {
     backgroundColor: "#FF5A5F",
-    padding: 16,
-    borderRadius: 10,
-    marginVertical: 8,
+    paddingVertical: 16,
+    paddingHorizontal: 32,
+    borderRadius: 25,
+    marginVertical: 12,
     width: "80%",
     alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
   buttonText: {
     color: "#FFFFFF",
     fontFamily: "Poppins-Bold",
-    fontSize: 16,
+    fontSize: 18,
+    textTransform: "uppercase",
+    letterSpacing: 1,
   },
 });
 

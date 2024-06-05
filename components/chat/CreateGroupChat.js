@@ -12,6 +12,7 @@ import { getDatabase, ref, push, get, set } from "firebase/database";
 import { auth } from "../../backend/firebaseConfig";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
+import { StatusBar } from "expo-status-bar";
 
 const CreateGroupChat = () => {
   const [groupName, setGroupName] = useState("");
@@ -92,6 +93,7 @@ const CreateGroupChat = () => {
 
   return (
     <View style={styles.container}>
+      <StatusBar style="dark" />
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <MaterialIcons name="arrow-back" size={24} color="#000" />
@@ -129,12 +131,6 @@ const CreateGroupChat = () => {
       >
         <Text style={styles.createButtonText}>Create Group</Text>
       </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.addContactButton}
-        onPress={() => navigation.navigate("AddContact")}
-      >
-        <Text style={styles.addContactButtonText}>Add New Contact</Text>
-      </TouchableOpacity>
     </View>
   );
 };
@@ -144,6 +140,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 20,
     backgroundColor: "#f4f4f4",
+    marginTop: 20,
   },
   header: {
     flexDirection: "row",

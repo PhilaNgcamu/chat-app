@@ -22,6 +22,7 @@ import { auth } from "../../backend/firebaseConfig";
 import { MaterialIcons } from "@expo/vector-icons";
 import { format } from "date-fns";
 import { useTabBarVisibility } from "../screens/useTabBarVisibilityContext";
+import { StatusBar } from "expo-status-bar";
 
 const ChatScreen = ({ route }) => {
   const { chatId, chatName } = route.params;
@@ -151,6 +152,7 @@ const ChatScreen = ({ route }) => {
       style={styles.container}
       behavior={Platform.OS === "ios" ? "padding" : undefined}
     >
+      <StatusBar style="dark" />
       <View style={styles.header}>
         <Text style={styles.chatName}>{chatName}</Text>
       </View>

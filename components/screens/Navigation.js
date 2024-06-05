@@ -15,7 +15,6 @@ import UserProfile from "../user_profile/UserProfile";
 import ChatList from "../chat/ChatList";
 import ChatScreen from "../chat/ChatScreen";
 import Home from "./Home";
-import ContactList from "../chat/ContactList";
 import CreateGroupChat from "../chat/CreateGroupChat";
 import PrivateChatScreen from "../chat/PrivateChatScreen";
 import CombinedChatList from "../chat/ChatList";
@@ -55,12 +54,12 @@ function MessagesStackNavigator() {
   );
 }
 
-function CallsStackNavigator() {
+function ProfileStackNavigator() {
   return (
     <CallsStack.Navigator>
       <CallsStack.Screen
-        name="Home"
-        component={Home}
+        name="UserProfile"
+        component={UserProfile}
         options={{ headerShown: false }}
       />
     </CallsStack.Navigator>
@@ -83,8 +82,8 @@ function SettingsStackNavigator() {
   return (
     <SettingsStack.Navigator>
       <SettingsStack.Screen
-        name="UserProfile"
-        component={UserProfile}
+        name="Home"
+        component={Home}
         options={{ headerShown: false }}
       />
     </SettingsStack.Navigator>
@@ -120,11 +119,11 @@ function BottomTabNavigator() {
         }}
       />
       <Tab.Screen
-        name="Calls"
-        component={CallsStackNavigator}
+        name="Profile"
+        component={ProfileStackNavigator}
         options={{
           tabBarIcon: ({ color, size }) => (
-            <Feather name="phone-call" color={color} size={size} />
+            <Feather name="user" color={color} size={size} />
           ),
           headerShown: false,
         }}
@@ -157,7 +156,6 @@ export default function NavigationScreens() {
   return (
     <TabBarVisibilityProvider>
       <NavigationContainer>
-        <StatusBar style="light" />
         <Stack.Navigator initialRouteName="UserSignup">
           <Stack.Screen
             name="UserSignup"
@@ -184,11 +182,7 @@ export default function NavigationScreens() {
             component={CombinedChatList}
             options={{ headerShown: false }}
           />
-          <Stack.Screen
-            name="Contact List"
-            component={ContactList}
-            options={{ headerShown: false }}
-          />
+
           <Stack.Screen
             name="ChatScreen"
             component={ChatScreen}
