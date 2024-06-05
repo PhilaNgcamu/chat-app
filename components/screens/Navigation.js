@@ -184,7 +184,7 @@ export default function NavigationScreens() {
           />
 
           <Stack.Screen
-            name="ChatScreen"
+            name="Chat Screen"
             component={ChatScreen}
             options={{ headerShown: false }}
           />

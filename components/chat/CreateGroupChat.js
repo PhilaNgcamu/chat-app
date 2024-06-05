@@ -63,7 +63,7 @@ const CreateGroupChat = () => {
       ),
       type: "group",
     });
-    navigation.navigate("Chat Screen", {
+    navigation.navigate("ChatScreen", {
       chatId: newGroupChatRef.key,
       chatName: groupName,
     });

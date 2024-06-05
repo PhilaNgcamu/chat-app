@@ -16,13 +16,13 @@ import {
   onValue,
   update,
   serverTimestamp,
-  get,
 } from "firebase/database";
 import { auth } from "../../backend/firebaseConfig";
 import { MaterialIcons } from "@expo/vector-icons";
 import { format } from "date-fns";
 import { useTabBarVisibility } from "../screens/useTabBarVisibilityContext";
 import { StatusBar } from "expo-status-bar";
+import { useFocusEffect } from "@react-navigation/native";
 
 const ChatScreen = ({ route }) => {
   const { chatId, chatName } = route.params;
