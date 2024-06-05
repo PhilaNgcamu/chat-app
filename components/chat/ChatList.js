@@ -132,21 +132,23 @@ const CombinedChatList = ({ navigation }) => {
         />
       </View>
 
-      {items.length === 0 ? (
-        <View style={styles.emptyStateContainer}>
-          <MaterialIcons name="chat-bubble-outline" size={80} color="#ddd" />
-          <Text style={styles.emptyStateText}>
-            No chats or contacts available
-          </Text>
-        </View>
-      ) : (
-        <FlatList
-          data={items}
-          renderItem={renderItem}
-          keyExtractor={(item) => item.id}
-          style={styles.list}
-        />
-      )}
+      <View style={styles.listContainer}>
+        {items.length === 0 ? (
+          <View style={styles.emptyStateContainer}>
+            <MaterialIcons name="chat-bubble-outline" size={80} color="#ddd" />
+            <Text style={styles.emptyStateText}>
+              No chats or contacts available
+            </Text>
+          </View>
+        ) : (
+          <FlatList
+            data={items}
+            renderItem={renderItem}
+            keyExtractor={(item) => item.id}
+            style={styles.list}
+          />
+        )}
+      </View>
 
       <TouchableOpacity
         style={styles.fab}
@@ -161,15 +163,14 @@ const CombinedChatList = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "#000",
   },
   header: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
     padding: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: "#ddd",
+    backgroundColor: "#000",
   },
   iconWrapper: {
     backgroundColor: "#ddd",
@@ -179,13 +180,12 @@ const styles = StyleSheet.create({
   headerText: {
     fontSize: 20,
     fontWeight: "bold",
+    color: "#fff",
   },
   statusContainer: {
     flexDirection: "row",
     alignItems: "center",
     padding: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: "#ddd",
   },
   addStatusContainer: {
     position: "relative",
@@ -211,6 +211,7 @@ const styles = StyleSheet.create({
   myStatusText: {
     marginTop: 4,
     fontSize: 12,
+    color: "#fff",
   },
   statusItem: {
     alignItems: "center",
@@ -220,10 +221,20 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     borderRadius: 25,
+    borderWidth: 2,
+    borderColor: "#24786D",
   },
   statusName: {
     fontSize: 12,
     marginTop: 4,
+    color: "#fff",
+  },
+  listContainer: {
+    flex: 1,
+    width: "100%",
+    backgroundColor: "#f9f9f9",
+    borderRadius: 15,
+    overflow: "hidden",
   },
   list: {
     flex: 1,
