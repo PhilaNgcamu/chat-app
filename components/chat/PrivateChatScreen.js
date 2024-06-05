@@ -25,11 +25,18 @@ import {
   getDownloadURL,
 } from "firebase/storage";
 import { auth } from "../../backend/firebaseConfig";
-import { MaterialIcons, Ionicons, FontAwesome } from "@expo/vector-icons";
+import {
+  MaterialIcons,
+  Ionicons,
+  FontAwesome,
+  Feather,
+  AntDesign,
+} from "@expo/vector-icons";
 import { format } from "date-fns";
 import * as ImagePicker from "expo-image-picker";
 import { useTabBarVisibility } from "../screens/useTabBarVisibilityContext";
 import { useFocusEffect } from "@react-navigation/native";
+import { StatusBar } from "expo-status-bar";
 
 const PrivateChatScreen = ({ route, navigation }) => {
   const { contactId, contactName, contactAvatar } = route.params;
@@ -216,9 +223,10 @@ const PrivateChatScreen = ({ route, navigation }) => {
       style={styles.container}
       behavior={Platform.OS === "ios" ? "padding" : undefined}
     >
+      <StatusBar style="dark-content" />
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Ionicons name="arrow-back" size={24} color="#fff" />
+          <Ionicons name="arrow-back" size={24} color="#000" />
         </TouchableOpacity>
         <Image source={{ uri: contactAvatar }} style={styles.avatar} />
         <View style={styles.headerContent}>
@@ -229,10 +237,10 @@ const PrivateChatScreen = ({ route, navigation }) => {
         </View>
         <View style={styles.headerIcons}>
           <TouchableOpacity style={styles.headerIcon}>
-            <FontAwesome name="phone" size={24} color="#fff" />
+            <Feather name="phone" size={24} color="#000" />
           </TouchableOpacity>
           <TouchableOpacity style={styles.headerIcon}>
-            <FontAwesome name="video-camera" size={24} color="#fff" />
+            <Feather name="video" size={24} color="#000" />
           </TouchableOpacity>
         </View>
       </View>
@@ -276,8 +284,9 @@ const styles = StyleSheet.create({
     backgroundColor: "#f4f4f4",
   },
   header: {
+    backgroundColor: "#fff",
+    marginTop: 30,
     padding: 16,
-    backgroundColor: "#075E54",
     flexDirection: "row",
     alignItems: "center",
   },
@@ -294,11 +303,11 @@ const styles = StyleSheet.create({
   chatName: {
     fontSize: 20,
     fontWeight: "bold",
-    color: "#fff",
+    color: "#000",
   },
   statusText: {
     fontSize: 14,
-    color: "#fff",
+    color: "#000",
   },
   headerIcons: {
     flexDirection: "row",
