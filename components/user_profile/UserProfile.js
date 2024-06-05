@@ -8,7 +8,6 @@ import {
   Image,
   Alert,
   ScrollView,
-  useWindowDimensions,
 } from "react-native";
 import { useFonts } from "expo-font";
 import { getAuth, updateProfile, updateEmail } from "firebase/auth";
@@ -17,7 +16,7 @@ import { getDatabase, ref, set, get } from "firebase/database";
 import * as ImagePicker from "expo-image-picker";
 import { useNavigation } from "@react-navigation/native";
 import { MaterialIcons } from "@expo/vector-icons";
-import { moderateScale, verticalScale } from "../../util/scale";
+import { verticalScale } from "../../util/scale";
 
 const UserProfile = () => {
   const auth = getAuth();
@@ -29,8 +28,6 @@ const UserProfile = () => {
   const [profilePicture, setProfilePicture] = useState(user.photoURL || "");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [mediaShared, setMediaShared] = useState(0);
-
-  const { height } = useWindowDimensions();
 
   const [fontsLoaded] = useFonts({
     "Poppins-Bold": require("../../assets/fonts/Poppins-Bold.ttf"),
@@ -53,6 +50,11 @@ const UserProfile = () => {
   }, [user]);
 
   const handleSave = async () => {
+    if (!name || !email || !statusMessage || !phoneNumber) {
+      Alert.alert("Oops!", "Please fill in all fields before saving.");
+      return;
+    }
+
     try {
       await updateProfile(user, {
         displayName: name,
@@ -61,9 +63,9 @@ const UserProfile = () => {
 
       await updateEmail(user, email);
 
-      // Update user profile in Realtime Database
       const db = getDatabase();
       await set(ref(db, "users/" + user.uid), {
+        photoUrl: profilePicture,
         name: name,
         email: email,
         statusMessage: statusMessage,
@@ -74,7 +76,7 @@ const UserProfile = () => {
       Alert.alert("Profile Updated Successfully");
       navigation.navigate("ChatList");
     } catch (error) {
-      Alert.alert(error.message);
+      Alert.alert("Error", error.message);
     }
   };
 
@@ -116,7 +118,9 @@ const UserProfile = () => {
             />
           </TouchableOpacity>
           <Text style={styles.profileName}>{name}</Text>
-          <Text style={styles.hashtag}>@{name}</Text>
+          <Text style={styles.hashtag}>
+            {name && `@${name.toLowerCase().replace(/\s/g, "")}`}
+          </Text>
           <View style={styles.iconContainer}>
             <TouchableOpacity>
               <MaterialIcons name="message" size={24} color="#24786D" />

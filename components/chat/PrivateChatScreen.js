@@ -28,7 +28,6 @@ import { auth } from "../../backend/firebaseConfig";
 import {
   MaterialIcons,
   Ionicons,
-  FontAwesome,
   Feather,
   AntDesign,
 } from "@expo/vector-icons";
@@ -202,7 +201,10 @@ const PrivateChatScreen = ({ route, navigation }) => {
     >
       {item.text && <Text style={styles.messageText}>{item.text}</Text>}
       {item.imageUrl && (
-        <Image source={{ uri: item.imageUrl }} style={styles.image} />
+        <Image
+          source={{ uri: item.imageUrl || "https://via.placeholder.com/150" }}
+          style={styles.image}
+        />
       )}
       <View style={styles.messageMeta}>
         <Text style={styles.senderName}>
@@ -387,7 +389,7 @@ const styles = StyleSheet.create({
     fontFamily: "Poppins-Bold",
     color: "#333",
     backgroundColor: "#f9f9f9",
-    marginRight: 5,
+    marginRight: 8,
   },
   iconButton: {
     padding: 8,

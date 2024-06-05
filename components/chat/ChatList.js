@@ -18,7 +18,6 @@ const CombinedChatList = ({ navigation }) => {
   useEffect(() => {
     const db = getDatabase();
 
-    // Fetching chats and contacts
     const fetchItems = async () => {
       const chatsRef = ref(db, "chats");
       const contactsRef = ref(db, "users");
@@ -66,12 +65,13 @@ const CombinedChatList = ({ navigation }) => {
       navigation.navigate("PrivateChat", {
         contactId: item.id,
         contactName: item.name,
+        contactAvatar: item.photoURL || "https://via.placeholder.com/150",
       });
     }
   };
 
   const renderStatusItem = ({ item }) => (
-    <TouchableOpacity onPress={() => {}} style={styles.statusItem}>
+    <TouchableOpacity style={styles.statusItem}>
       <Image
         source={{ uri: item.photoURL || "https://via.placeholder.com/150" }}
         style={styles.statusImage}
@@ -171,6 +171,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     padding: 16,
+    marginTop: 16,
     backgroundColor: "#000",
   },
   iconWrapper: {

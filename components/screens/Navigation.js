@@ -17,8 +17,9 @@ import ChatScreen from "../chat/ChatScreen";
 import Home from "./Home";
 import ContactList from "../chat/ContactList";
 import CreateGroupChat from "../chat/CreateGroupChat";
-import AddContact from "../chat/AddContact";
 import PrivateChatScreen from "../chat/PrivateChatScreen";
+import CombinedChatList from "../chat/ChatList";
+import { StatusBar } from "expo-status-bar";
 
 const Stack = createNativeStackNavigator();
 const MessagesStack = createNativeStackNavigator();
@@ -44,11 +45,7 @@ function MessagesStackNavigator() {
         component={CreateGroupChat}
         options={{ headerShown: false }}
       />
-      <MessagesStack.Screen
-        name="AddContact"
-        component={AddContact}
-        options={{ headerShown: false }}
-      />
+
       <MessagesStack.Screen
         name="PrivateChat"
         component={PrivateChatScreen}
@@ -160,6 +157,7 @@ export default function NavigationScreens() {
   return (
     <TabBarVisibilityProvider>
       <NavigationContainer>
+        <StatusBar style="light" />
         <Stack.Navigator initialRouteName="UserSignup">
           <Stack.Screen
             name="UserSignup"
@@ -179,6 +177,31 @@ export default function NavigationScreens() {
           <Stack.Screen
             name="Home"
             component={BottomTabNavigator}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="ChatList"
+            component={CombinedChatList}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Contact List"
+            component={ContactList}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="ChatScreen"
+            component={ChatScreen}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="CreateGroupChat"
+            component={CreateGroupChat}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="PrivateChat"
+            component={PrivateChatScreen}
             options={{ headerShown: false }}
           />
         </Stack.Navigator>
