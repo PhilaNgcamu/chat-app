@@ -258,19 +258,26 @@ const PrivateChatScreen = ({ route, navigation }) => {
         <Text style={styles.typingIndicator}>{otherUserName} is typing...</Text>
       )}
       <View style={styles.inputContainer}>
-        <TouchableOpacity onPress={pickImage} style={styles.imagePickerButton}>
-          <MaterialIcons name="photo" size={24} color="#075E54" />
+        <TouchableOpacity onPress={pickImage} style={styles.iconButton}>
+          <Feather name="paperclip" size={24} color="#666" />
         </TouchableOpacity>
         <TextInput
           style={styles.input}
           value={newMessage}
           onChangeText={handleTyping}
-          placeholder="Type a message"
+          placeholder="Write your message"
           placeholderTextColor="#888"
           onSubmitEditing={handleSend}
+          returnKeyType="send"
         />
-        <TouchableOpacity onPress={handleSend} style={styles.sendButton}>
-          <MaterialIcons name="send" size={24} color="#fff" />
+        <TouchableOpacity style={styles.iconButton}>
+          <Ionicons name="documents-outline" size={24} color="#666" />
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.iconButton}>
+          <Feather name="camera" size={24} color="#666" />
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.iconButton}>
+          <AntDesign name="sound" size={24} color="#666" />
         </TouchableOpacity>
       </View>
       {image && <Image source={{ uri: image }} style={styles.selectedImage} />}
@@ -374,23 +381,19 @@ const styles = StyleSheet.create({
     flex: 1,
     borderWidth: 1,
     borderColor: "#ddd",
-    borderRadius: 20,
+    borderRadius: 25,
     padding: 10,
     paddingLeft: 16,
     fontSize: 16,
     color: "#333",
     backgroundColor: "#f9f9f9",
+    marginRight: 8,
   },
-  sendButton: {
-    backgroundColor: "#075E54",
-    borderRadius: 20,
-    padding: 10,
-    marginLeft: 10,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  imagePickerButton: {
-    marginRight: 10,
+  iconButton: {
+    padding: 8,
+    borderRadius: 16,
+    backgroundColor: "#f0f0f0",
+    marginHorizontal: 4,
   },
   typingIndicator: {
     paddingHorizontal: 16,
