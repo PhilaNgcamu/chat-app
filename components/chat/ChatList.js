@@ -57,7 +57,7 @@ const CombinedChatList = ({ navigation }) => {
 
   const handleItemPress = (item) => {
     if (item.chatLastMessage) {
-      navigation.navigate("ChatScreen", {
+      navigation.navigate("Chat Screen", {
         chatId: item.id,
         chatName: item.name,
         chatLastMessage: item.lastMessage,
@@ -106,7 +106,7 @@ const CombinedChatList = ({ navigation }) => {
           <AntDesign name="search1" size={24} color="#fff" />
         </TouchableOpacity>
         <Text style={styles.headerText}>Home</Text>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate("UserProfile")}>
           <Image
             source={{
               uri:
