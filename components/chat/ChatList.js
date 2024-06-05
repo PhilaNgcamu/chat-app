@@ -7,7 +7,7 @@ import {
   StyleSheet,
   Image,
 } from "react-native";
-import { MaterialIcons, Ionicons, FontAwesome } from "@expo/vector-icons";
+import { MaterialIcons, AntDesign, FontAwesome } from "@expo/vector-icons";
 import { getDatabase, ref, get } from "firebase/database";
 import { auth } from "../../backend/firebaseConfig";
 
@@ -101,7 +101,7 @@ const CombinedChatList = ({ navigation }) => {
     <View style={styles.container}>
       <View style={styles.header}>
         <TouchableOpacity style={styles.iconWrapper}>
-          <Ionicons name="ios-search" size={24} color="black" />
+          <AntDesign name="search1" size={24} color="black" />
         </TouchableOpacity>
         <Text style={styles.headerText}>Home</Text>
         <TouchableOpacity style={styles.iconWrapper}>
