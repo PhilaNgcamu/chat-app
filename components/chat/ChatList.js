@@ -151,13 +151,6 @@ const CombinedChatList = ({ navigation }) => {
           />
         )}
       </View>
-
-      <TouchableOpacity
-        style={styles.fab}
-        onPress={() => navigation.navigate("CreateGroupChat")}
-      >
-        <MaterialIcons name="group-add" size={24} color="#fff" />
-      </TouchableOpacity>
     </View>
   );
 };
