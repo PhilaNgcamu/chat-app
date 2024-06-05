@@ -8,6 +8,7 @@ import {
   StyleSheet,
   KeyboardAvoidingView,
   Platform,
+  Image,
 } from "react-native";
 import {
   getDatabase,
@@ -17,8 +18,15 @@ import {
   update,
   serverTimestamp,
 } from "firebase/database";
+import * as ImagePicker from "expo-image-picker";
+
 import { auth } from "../../backend/firebaseConfig";
-import { MaterialIcons } from "@expo/vector-icons";
+import {
+  MaterialIcons,
+  Ionicons,
+  Feather,
+  AntDesign,
+} from "@expo/vector-icons";
 import { format } from "date-fns";
 import { useTabBarVisibility } from "../screens/useTabBarVisibilityContext";
 import { StatusBar } from "expo-status-bar";
@@ -30,6 +38,7 @@ const ChatScreen = ({ route }) => {
   const [newMessage, setNewMessage] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const [otherUserTyping, setOtherUserTyping] = useState([]);
+  const [image, setImage] = useState(null);
   const inputRef = useRef(null);
 
   const { setTabBarVisible } = useTabBarVisibility();
@@ -89,6 +98,21 @@ const ChatScreen = ({ route }) => {
     await update(ref(db), updates);
   };
 
+  const pickImage = async () => {
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    console.log(result);
+
+    if (!result.canceled) {
+      setImage(result.assets[0].uri);
+    }
+  };
+
   const handleSend = async () => {
     if (newMessage.trim() === "") return;
     const db = getDatabase();
@@ -100,6 +124,7 @@ const ChatScreen = ({ route }) => {
       readBy: { [userId]: true },
       senderName: auth.currentUser.displayName,
     });
+    setImage(null);
     setNewMessage("");
     setIsTyping(false);
     await updateTypingStatus(false);
@@ -173,18 +198,29 @@ const ChatScreen = ({ route }) => {
         </Text>
       )}
       <View style={styles.inputContainer}>
+        <TouchableOpacity onPress={pickImage} style={styles.iconButton}>
+          <Feather name="paperclip" size={24} color="#666" />
+        </TouchableOpacity>
         <TextInput
           style={styles.input}
           value={newMessage}
           onChangeText={handleTyping}
-          placeholder="Type a message"
+          placeholder="Write your message"
           placeholderTextColor="#888"
           onSubmitEditing={handleSend}
+          returnKeyType="send"
         />
-        <TouchableOpacity onPress={handleSend} style={styles.sendButton}>
-          <MaterialIcons name="send" size={24} color="#fff" />
+        <TouchableOpacity style={styles.iconButton}>
+          <Ionicons name="documents-outline" size={24} color="#666" />
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.iconButton}>
+          <Feather name="camera" size={24} color="#666" />
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.iconButton}>
+          <AntDesign name="sound" size={24} color="#666" />
         </TouchableOpacity>
       </View>
+      {image && <Image source={{ uri: image }} style={styles.selectedImage} />}
     </KeyboardAvoidingView>
   );
 };
@@ -195,15 +231,36 @@ const styles = StyleSheet.create({
     backgroundColor: "#f4f4f4",
   },
   header: {
+    backgroundColor: "#fff",
+    marginTop: 30,
     padding: 16,
-    backgroundColor: "#24786D",
-    justifyContent: "center",
+    flexDirection: "row",
     alignItems: "center",
+  },
+  headerContent: {
+    flex: 1,
+    alignItems: "flex-start",
+    marginLeft: 10,
+  },
+  avatar: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
   },
   chatName: {
     fontSize: 20,
     fontWeight: "bold",
-    color: "#fff",
+    color: "#000",
+  },
+  statusText: {
+    fontSize: 14,
+    color: "#000",
+  },
+  headerIcons: {
+    flexDirection: "row",
+  },
+  headerIcon: {
+    marginLeft: 15,
   },
   messageList: {
     flex: 1,
@@ -233,6 +290,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#333",
   },
+  image: {
+    width: 200,
+    height: 200,
+    borderRadius: 8,
+  },
   messageMeta: {
     flexDirection: "row",
     alignItems: "center",
@@ -259,20 +321,19 @@ const styles = StyleSheet.create({
     flex: 1,
     borderWidth: 1,
     borderColor: "#ddd",
-    borderRadius: 20,
+    borderRadius: 25,
     padding: 10,
     paddingLeft: 16,
-    fontSize: 16,
+    fontFamily: "Poppins-Regular",
     color: "#333",
     backgroundColor: "#f9f9f9",
+    marginRight: 8,
   },
-  sendButton: {
-    backgroundColor: "#24786D",
-    borderRadius: 20,
-    padding: 10,
-    marginLeft: 10,
-    justifyContent: "center",
-    alignItems: "center",
+  iconButton: {
+    padding: 8,
+    borderRadius: 16,
+    backgroundColor: "#f0f0f0",
+    marginHorizontal: 4,
   },
   typingIndicator: {
     paddingHorizontal: 16,
@@ -280,6 +341,12 @@ const styles = StyleSheet.create({
     fontStyle: "italic",
     marginBottom: 5,
     textAlign: "center",
+  },
+  selectedImage: {
+    width: 200,
+    height: 200,
+    margin: 16,
+    alignSelf: "center",
   },
 });
 

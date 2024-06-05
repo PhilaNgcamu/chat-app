@@ -9,7 +9,7 @@ import {
   TextInput,
   Alert,
 } from "react-native";
-import { MaterialIcons, AntDesign, FontAwesome } from "@expo/vector-icons";
+import { MaterialIcons, AntDesign } from "@expo/vector-icons";
 import { getDatabase, ref, get } from "firebase/database";
 import { auth } from "../../backend/firebaseConfig";
 import { StatusBar } from "expo-status-bar";
@@ -67,7 +67,8 @@ const CombinedChatList = ({ navigation }) => {
   };
 
   const handleItemPress = (item) => {
-    if (item.chatLastMessage) {
+    console.log(item);
+    if (item.type === "group") {
       navigation.navigate("ChatScreen", {
         chatId: item.id,
         chatName: item.name,
@@ -77,7 +78,7 @@ const CombinedChatList = ({ navigation }) => {
       navigation.navigate("PrivateChat", {
         contactId: item.id,
         contactName: item.name,
-        contactAvatar: item.photoURL || "https://via.placeholder.com/150",
+        contactAvatar: item.photoUrl || "https://via.placeholder.com/150",
       });
     }
   };
