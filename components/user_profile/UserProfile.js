@@ -7,7 +7,6 @@ import {
   TouchableOpacity,
   Image,
   Alert,
-  Dimensions,
   ScrollView,
   useWindowDimensions,
 } from "react-native";
@@ -104,6 +103,12 @@ const UserProfile = () => {
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={styles.headerContainer}>
+          <TouchableOpacity
+            onPress={() => navigation.goBack()}
+            style={styles.backButton}
+          >
+            <MaterialIcons name="arrow-back" size={24} color="#FFFFFF" />
+          </TouchableOpacity>
           <TouchableOpacity onPress={pickImage}>
             <Image
               source={{ uri: profilePicture }}
@@ -195,7 +200,12 @@ const styles = StyleSheet.create({
   headerContainer: {
     position: "relative",
     alignItems: "center",
-    top: verticalScale(70),
+    top: verticalScale(40),
+  },
+  backButton: {
+    position: "absolute",
+    left: 20,
+    top: 0,
   },
   profileName: {
     fontFamily: "Poppins-Bold",

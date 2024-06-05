@@ -104,7 +104,7 @@ const CombinedChatList = ({ navigation }) => {
           <AntDesign name="search1" size={24} color="#fff" />
         </TouchableOpacity>
         <Text style={styles.headerText}>Home</Text>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate("UserProfile")}>
           <Image
             source={{
               uri:
