@@ -28,7 +28,10 @@ const UserLogin = ({ navigation }) => {
       Alert.alert("Login Successful");
       navigation.navigate("Home");
     } catch (error) {
-      Alert.alert(error.message);
+      Alert.alert(
+        "Oops!",
+        "Please enter the correct email address or password"
+      );
     } finally {
       setLoading(false);
     }
