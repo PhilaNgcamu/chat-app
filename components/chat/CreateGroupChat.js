@@ -11,11 +11,13 @@ import {
 import { getDatabase, ref, push, get, set } from "firebase/database";
 import { auth } from "../../backend/firebaseConfig";
 import { MaterialIcons } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
 
-const CreateGroupChat = ({ navigation }) => {
+const CreateGroupChat = () => {
   const [groupName, setGroupName] = useState("");
   const [contacts, setContacts] = useState([]);
   const [selectedContacts, setSelectedContacts] = useState([]);
+  const navigation = useNavigation();
 
   useEffect(() => {
     const fetchContacts = async () => {
@@ -73,6 +75,7 @@ const CreateGroupChat = ({ navigation }) => {
       setSelectedContacts([...selectedContacts, contact]);
     }
   };
+
   const renderItem = ({ item }) => (
     <TouchableOpacity
       style={[
@@ -89,12 +92,18 @@ const CreateGroupChat = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Create Group Chat</Text>
+      <View style={styles.header}>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <MaterialIcons name="arrow-back" size={24} color="#000" />
+        </TouchableOpacity>
+        <Text style={styles.title}>Create Group Chat</Text>
+      </View>
       <TextInput
         style={styles.input}
         value={groupName}
         onChangeText={setGroupName}
         placeholder="Group Name"
+        placeholderTextColor="#888"
       />
       {contacts.length === 0 ? (
         <View style={styles.noContactsContainer}>
@@ -136,10 +145,16 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: "#f4f4f4",
   },
+  header: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 20,
+  },
   title: {
     fontSize: 24,
     fontWeight: "bold",
-    marginBottom: 20,
+    marginLeft: 10,
+    color: "#24786D",
   },
   input: {
     height: 40,
@@ -149,9 +164,11 @@ const styles = StyleSheet.create({
     padding: 10,
     marginBottom: 20,
     backgroundColor: "#fff",
+    color: "#333",
   },
   contactList: {
     flex: 1,
+    marginTop: 10,
   },
   noContactsContainer: {
     flex: 1,
@@ -164,23 +181,42 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   contactItem: {
+    flexDirection: "row",
+    alignItems: "center",
     padding: 15,
     backgroundColor: "#fff",
     borderBottomWidth: 1,
     borderBottomColor: "#ddd",
+    borderRadius: 8,
+    marginBottom: 10,
   },
   selectedContactItem: {
     backgroundColor: "#dcf8c6",
   },
+  contactAvatar: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    marginRight: 10,
+  },
   contactName: {
     fontSize: 18,
+    color: "#333",
   },
   createButton: {
     backgroundColor: "#24786D",
     padding: 15,
-    borderRadius: 8,
+    borderRadius: 25,
     alignItems: "center",
     marginTop: 20,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
   createButtonDisabled: {
     backgroundColor: "#b2d8d8",
@@ -193,9 +229,17 @@ const styles = StyleSheet.create({
   addContactButton: {
     backgroundColor: "#3498db",
     padding: 15,
-    borderRadius: 8,
+    borderRadius: 25,
     alignItems: "center",
     marginTop: 10,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
   addContactButtonText: {
     color: "#fff",
