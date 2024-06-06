@@ -126,15 +126,12 @@ const CombinedChatList = ({ navigation }) => {
           />
         </View>
 
-        <TouchableOpacity onPress={() => navigation.navigate("UserProfile")}>
-          <Image
-            source={{
-              uri:
-                auth.currentUser.photoURL || "https://via.placeholder.com/150",
-            }}
-            style={styles.userProfile}
-          />
-        </TouchableOpacity>
+        <Image
+          source={{
+            uri: auth.currentUser.photoURL || "https://via.placeholder.com/150",
+          }}
+          style={styles.userProfile}
+        />
       </View>
 
       <View style={styles.statusContainer}>
