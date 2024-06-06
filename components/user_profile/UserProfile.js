@@ -22,7 +22,7 @@ import { verticalScale } from "../../util/scale";
 import { StatusBar } from "expo-status-bar";
 import placeholderImage from "../../assets/insert-image.png";
 
-const UserProfile = ({ route }) => {
+const UserProfile = () => {
   const auth = getAuth();
   const user = auth.currentUser;
   const navigation = useNavigation();
