@@ -63,10 +63,7 @@ const CreateGroupChat = () => {
       ),
       type: "group",
     });
-    navigation.navigate("ChatScreen", {
-      chatId: newGroupChatRef.key,
-      chatName: groupName,
-    });
+    navigation.goBack();
   };
 
   const toggleContactSelection = (contact) => {
