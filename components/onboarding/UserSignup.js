@@ -46,7 +46,6 @@ const UserSignup = ({ navigation }) => {
 
       navigation.navigate("UserProfile", {
         userId: user.uid,
-        signup: "SignUp",
       });
     } catch (error) {
       console.error(error);

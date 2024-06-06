@@ -82,15 +82,20 @@ const CombinedChatList = ({ navigation }) => {
     }
   };
 
-  const renderStatusItem = ({ item }) => (
-    <TouchableOpacity style={styles.statusItem}>
-      <Image
-        source={{ uri: item.photoURL || "https://via.placeholder.com/150" }}
-        style={styles.statusImage}
-      />
-      <Text style={styles.statusName}>{item.name}</Text>
-    </TouchableOpacity>
-  );
+  const renderStatusItem = ({ item }) => {
+    if (item.lastChanged) {
+      return null;
+    }
+    return (
+      <TouchableOpacity style={styles.statusItem}>
+        <Image
+          source={{ uri: item.photoURL || "https://via.placeholder.com/150" }}
+          style={styles.statusImage}
+        />
+        <Text style={styles.statusName}>{item.name}</Text>
+      </TouchableOpacity>
+    );
+  };
 
   const renderItem = ({ item }) => (
     <TouchableOpacity style={styles.item} onPress={() => handleItemPress(item)}>
