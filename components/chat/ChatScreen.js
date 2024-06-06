@@ -212,7 +212,7 @@ const ChatScreen = ({ route }) => {
       )}
       <View style={styles.messageMeta}>
         <Text style={styles.senderName}>
-          {item.userId === auth.currentUser.uid ? "" : item.senderName}
+          {item.userId !== auth.currentUser.uid && item.senderName}
         </Text>
         <Text
           style={[
@@ -222,7 +222,7 @@ const ChatScreen = ({ route }) => {
               : styles.otherMessageTimestamp,
           ]}
         >
-          {format(new Date(item.createdAt), "HH:mm")}
+          {format(new Date(item.createdAt), "HH:mm")}{" "}
         </Text>
         {item.readBy?.[auth.currentUser.uid] &&
           item.userId === auth.currentUser.uid && (
@@ -243,7 +243,7 @@ const ChatScreen = ({ route }) => {
           onPress={() => navigation.goBack()}
           style={styles.backButton}
         >
-          <Ionicons name="arrow-back" size={24} color="#000" />
+          <Ionicons name="arrow-back" size={24} color="#000E08" />
         </TouchableOpacity>
         <Image
           source={{ uri: "https://via.placeholder.com/150" }}
@@ -251,6 +251,14 @@ const ChatScreen = ({ route }) => {
         />
         <View style={styles.headerContent}>
           <Text style={styles.chatName}>{chatName}</Text>
+        </View>
+        <View style={styles.headerIcons}>
+          <TouchableOpacity style={styles.headerIcon}>
+            <Feather name="phone" size={24} color="#000E08" />
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.headerIcon}>
+            <Feather name="video" size={24} color="#000E08" />
+          </TouchableOpacity>
         </View>
       </View>
       <FlatList
@@ -271,7 +279,7 @@ const ChatScreen = ({ route }) => {
       )}
       <View style={styles.inputContainer}>
         <TouchableOpacity onPress={pickImage} style={styles.iconButton}>
-          <Feather name="paperclip" size={24} color="#666" />
+          <Feather name="paperclip" size={24} color="#000E08" />
         </TouchableOpacity>
         <TextInput
           style={styles.input}
@@ -283,15 +291,16 @@ const ChatScreen = ({ route }) => {
           returnKeyType="send"
         />
         <TouchableOpacity onPress={handleSend} style={styles.iconButton}>
-          <Ionicons name="send" size={24} color="#666" />
+          <Ionicons name="send" size={24} color="#000E08" />
         </TouchableOpacity>
         <TouchableOpacity style={styles.iconButton}>
-          <Feather name="camera" size={24} color="#666" />
+          <Feather name="camera" size={24} color="#000E08" />
         </TouchableOpacity>
-        {image && (
-          <Image source={{ uri: image }} style={styles.selectedImage} />
-        )}
+        <TouchableOpacity style={styles.iconButton}>
+          <MaterialIcons name="keyboard-voice" size={24} color="#000E08" />
+        </TouchableOpacity>
       </View>
+      {image && <Image source={{ uri: image }} style={styles.selectedImage} />}
     </KeyboardAvoidingView>
   );
 };

@@ -274,7 +274,7 @@ const PrivateChatScreen = ({ route, navigation }) => {
       )}
       <View style={styles.inputContainer}>
         <TouchableOpacity onPress={pickImage} style={styles.iconButton}>
-          <Feather name="paperclip" size={24} color="#666" />
+          <Feather name="paperclip" size={24} color="##000E08" />
         </TouchableOpacity>
         <TextInput
           style={styles.input}
@@ -286,13 +286,13 @@ const PrivateChatScreen = ({ route, navigation }) => {
           returnKeyType="send"
         />
         <TouchableOpacity onPress={handleSend} style={styles.iconButton}>
-          <Ionicons name="send" size={24} color="#666" />
+          <Ionicons name="send" size={24} color="##000E08" />
         </TouchableOpacity>
         <TouchableOpacity style={styles.iconButton}>
-          <Feather name="camera" size={24} color="#666" />
+          <Feather name="camera" size={24} color="##000E08" />
         </TouchableOpacity>
         <TouchableOpacity style={styles.iconButton}>
-          <AntDesign name="sound" size={24} color="#666" />
+          <MaterialIcons name="keyboard-voice" size={24} color="##000E08" />
         </TouchableOpacity>
       </View>
       {image && <Image source={{ uri: image }} style={styles.selectedImage} />}
