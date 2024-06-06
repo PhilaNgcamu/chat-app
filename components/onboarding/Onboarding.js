@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
   subtitle: {
     position: "absolute",
     top: verticalScale(180),
-    left: horizontalScale(40),
+    left: horizontalScale(30),
     width: horizontalScale(338),
     marginBottom: verticalScale(20),
   },
@@ -143,7 +143,7 @@ const styles = StyleSheet.create({
   description: {
     fontSize: moderateScale(16),
     lineHeight: moderateScale(24),
-    marginLeft: horizontalScale(20),
+    marginLeft: horizontalScale(10),
     color: "#FFF",
   },
   socialLogos: {
