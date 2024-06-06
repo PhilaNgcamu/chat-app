@@ -8,6 +8,8 @@ import {
   Image,
   Alert,
   ScrollView,
+  KeyboardAvoidingView,
+  Platform,
 } from "react-native";
 import { useFonts } from "expo-font";
 import { getAuth, updateProfile, updateEmail } from "firebase/auth";
@@ -18,6 +20,7 @@ import { useNavigation } from "@react-navigation/native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { verticalScale } from "../../util/scale";
 import { StatusBar } from "expo-status-bar";
+import placeholderImage from "../../assets/insert-image.png";
 
 const UserProfile = () => {
   const auth = getAuth();
@@ -28,7 +31,6 @@ const UserProfile = () => {
   const [statusMessage, setStatusMessage] = useState("");
   const [profilePicture, setProfilePicture] = useState(user.photoURL || "");
   const [phoneNumber, setPhoneNumber] = useState("");
-  const [mediaShared, setMediaShared] = useState(0);
 
   const [fontsLoaded] = useFonts({
     "Poppins-Bold": require("../../assets/fonts/Poppins-Bold.ttf"),
@@ -44,15 +46,29 @@ const UserProfile = () => {
         const userData = snapshot.val();
         setStatusMessage(userData.statusMessage || "");
         setPhoneNumber(userData.phoneNumber || "");
-        setMediaShared(userData.mediaShared || 0);
       }
     };
     fetchUserProfile();
+
+    if (!profilePicture) {
+      Alert.alert("Profile Picture Missing", "Please add a profile picture.", [
+        {
+          text: "Choose Picture",
+          onPress: pickImage,
+        },
+      ]);
+    }
   }, [user]);
 
   const handleSave = async () => {
-    if (!name || !email || !statusMessage || !phoneNumber) {
-      Alert.alert("Oops!", "Please fill in all fields before saving.");
+    if (!name || !email || !statusMessage || !phoneNumber || !profilePicture) {
+      Alert.alert(
+        "Oops!",
+        "Please fill in all fields and add a profile picture before saving."
+      );
+      return;
+    } else if (phoneNumber.length !== 10) {
+      Alert.alert("Oops!", "A phone number must be 10-digit number");
       return;
     }
 
@@ -65,13 +81,12 @@ const UserProfile = () => {
       await updateEmail(user, email);
 
       const db = getDatabase();
-      await set(ref(db, "users/" + user.uid), {
+      await set(ref(db, "about/" + user.uid), {
         photoUrl: profilePicture,
         name: name,
         email: email,
         statusMessage: statusMessage,
         phoneNumber: phoneNumber,
-        mediaShared: mediaShared,
       });
 
       Alert.alert("Profile Updated Successfully");
@@ -115,7 +130,10 @@ const UserProfile = () => {
           </TouchableOpacity>
           <TouchableOpacity onPress={pickImage}>
             <Image
-              source={{ uri: profilePicture }}
+              source={
+                profilePicture ? { uri: profilePicture } : placeholderImage
+              }
+              alt="Profile Picture"
               style={styles.profilePicture}
             />
           </TouchableOpacity>
@@ -140,7 +158,10 @@ const UserProfile = () => {
         </View>
       </ScrollView>
 
-      <View style={styles.infoContainer}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={styles.infoContainer}
+      >
         <View style={styles.dragger} />
         <View style={styles.infoContent}>
           <View style={styles.inputContainer}>
@@ -149,6 +170,8 @@ const UserProfile = () => {
               style={styles.input}
               value={name}
               onChangeText={setName}
+              placeholder="Enter your name"
+              placeholderTextColor="#AAAAAA"
             />
           </View>
           <View style={styles.inputContainer}>
@@ -158,6 +181,8 @@ const UserProfile = () => {
               value={email}
               onChangeText={setEmail}
               keyboardType="email-address"
+              placeholder="Enter your email"
+              placeholderTextColor="#AAAAAA"
             />
           </View>
           <View style={styles.inputContainer}>
@@ -166,6 +191,8 @@ const UserProfile = () => {
               style={styles.input}
               value={statusMessage}
               onChangeText={setStatusMessage}
+              placeholder="Enter a status message"
+              placeholderTextColor="#AAAAAA"
             />
           </View>
           <View style={styles.inputContainer}>
@@ -175,17 +202,15 @@ const UserProfile = () => {
               value={phoneNumber}
               onChangeText={setPhoneNumber}
               keyboardType="phone-pad"
+              placeholder="Enter your phone number"
+              placeholderTextColor="#AAAAAA"
             />
-          </View>
-          <View style={styles.inputContainer}>
-            <Text style={styles.label}>Media Shared</Text>
-            <Text style={styles.input}>{mediaShared}</Text>
           </View>
           <TouchableOpacity style={styles.button} onPress={handleSave}>
             <Text style={styles.buttonText}>Save Changes</Text>
           </TouchableOpacity>
         </View>
-      </View>
+      </KeyboardAvoidingView>
     </View>
   );
 };
@@ -206,7 +231,7 @@ const styles = StyleSheet.create({
   headerContainer: {
     position: "relative",
     alignItems: "center",
-    top: verticalScale(30),
+    top: verticalScale(40),
   },
   backButton: {
     position: "absolute",
@@ -243,6 +268,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 40,
     borderTopRightRadius: 40,
     height: verticalScale(500),
+    paddingTop: 20,
   },
   dragger: {
     alignSelf: "center",
@@ -272,6 +298,7 @@ const styles = StyleSheet.create({
     paddingBottom: 8,
     fontFamily: "Poppins-Regular",
     fontSize: 16,
+    color: "#000",
   },
   buttonText: {
     fontFamily: "Poppins-Bold",

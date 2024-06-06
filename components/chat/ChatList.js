@@ -55,7 +55,6 @@ const CombinedChatList = ({ navigation }) => {
       setItems(combinedList);
       setStatuses(contactsList);
 
-      // Setup notification listener
       Notifications.addListener(handleNotification);
     };
 
