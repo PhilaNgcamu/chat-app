@@ -29,7 +29,7 @@ const UserProfile = () => {
   const [name, setName] = useState(user.displayName || "");
   const [email, setEmail] = useState(user.email || "");
   const [statusMessage, setStatusMessage] = useState("");
-  const [profilePicture, setProfilePicture] = useState(user.photoURL || "");
+  const [profilePicture, setProfilePicture] = useState(user.photoUrl || "");
   const [phoneNumber, setPhoneNumber] = useState("");
 
   const [fontsLoaded] = useFonts({
@@ -75,7 +75,7 @@ const UserProfile = () => {
     try {
       await updateProfile(user, {
         displayName: name,
-        photoURL: profilePicture,
+        photoUrl: profilePicture,
       });
 
       await updateEmail(user, email);

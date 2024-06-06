@@ -7,13 +7,11 @@ import {
   StyleSheet,
   Image,
   TextInput,
-  Alert,
 } from "react-native";
 import { MaterialIcons, AntDesign } from "@expo/vector-icons";
-import { getDatabase, ref, get } from "firebase/database";
+import { getDatabase, ref, onValue, off } from "firebase/database";
 import { auth } from "../../backend/firebaseConfig";
 import { StatusBar } from "expo-status-bar";
-import { Notifications } from "expo";
 
 const CombinedChatList = ({ navigation }) => {
   const [items, setItems] = useState([]);
@@ -22,48 +20,46 @@ const CombinedChatList = ({ navigation }) => {
 
   useEffect(() => {
     const db = getDatabase();
+    const chatsRef = ref(db, "chats");
+    const contactsRef = ref(db, "users");
+    const currentUserID = auth.currentUser.uid;
 
-    const fetchItems = async () => {
-      const chatsRef = ref(db, "chats");
-      const contactsRef = ref(db, "users");
-
-      const chatsSnapshot = await get(chatsRef);
-      const contactsSnapshot = await get(contactsRef);
-
-      const currentUserID = auth.currentUser.uid;
+    const fetchItems = () => {
       const chatList = [];
       const contactsList = [];
 
-      if (chatsSnapshot.exists()) {
-        chatsSnapshot.forEach((childSnapshot) => {
+      onValue(chatsRef, (snapshot) => {
+        chatList.length = 0;
+        snapshot.forEach((childSnapshot) => {
           const chatData = childSnapshot.val();
           if (chatData.users && chatData.users[currentUserID]) {
             chatList.push({ id: childSnapshot.key, ...chatData });
           }
         });
-      }
 
-      if (contactsSnapshot.exists()) {
-        Object.entries(contactsSnapshot.val()).forEach(([id, data]) => {
+        setItems([...chatList, ...contactsList]);
+      });
+
+      onValue(contactsRef, (snapshot) => {
+        contactsList.length = 0;
+        Object.entries(snapshot.val()).forEach(([id, data]) => {
           if (id !== currentUserID) {
             contactsList.push({ id, ...data });
           }
         });
-      }
 
-      const combinedList = [...chatList, ...contactsList];
-      setItems(combinedList);
-      setStatuses(contactsList);
+        setStatuses(contactsList);
+        setItems(() => [...chatList, ...contactsList]);
+      });
 
-      Notifications.addListener(handleNotification);
+      return () => {
+        off(chatsRef);
+        off(contactsRef);
+      };
     };
 
     fetchItems();
   }, []);
-
-  const handleNotification = (notification) => {
-    Alert.alert("New Message", notification.data.message);
-  };
 
   const handleItemPress = (item) => {
     console.log(item);

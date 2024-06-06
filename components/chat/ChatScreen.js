@@ -23,6 +23,8 @@ import {
   onValue,
   update,
   serverTimestamp,
+  get,
+  child,
 } from "firebase/database";
 import * as ImagePicker from "expo-image-picker";
 import { useNavigation } from "@react-navigation/native";
@@ -72,15 +74,25 @@ const ChatScreen = ({ route }) => {
       markMessagesAsRead(messageList);
     });
 
-    const unsubscribeTyping = onValue(typingRef, (snapshot) => {
+    const unsubscribeTyping = onValue(typingRef, async (snapshot) => {
       if (snapshot.exists()) {
-        const typingUsers = [];
+        const typingUserIds = [];
         snapshot.forEach((childSnapshot) => {
           if (childSnapshot.val().isTyping) {
-            typingUsers.push(childSnapshot.key);
+            typingUserIds.push(childSnapshot.key);
           }
         });
-        setOtherUserTyping(typingUsers);
+
+        const userPromises = typingUserIds.map((userId) =>
+          get(ref(db, `users/${userId}`)).then((userSnapshot) => ({
+            id: userId,
+            name: userSnapshot.val().name,
+          }))
+        );
+
+        const users = await Promise.all(userPromises);
+        const userNames = users.map((user) => user.name);
+        setOtherUserTyping(userNames);
       }
     });
 
@@ -89,8 +101,6 @@ const ChatScreen = ({ route }) => {
       unsubscribeTyping();
     };
   }, [chatId]);
-
-  console.log(chatId);
 
   const markMessagesAsRead = async (messages) => {
     const db = getDatabase();
@@ -126,7 +136,6 @@ const ChatScreen = ({ route }) => {
     const db = getDatabase();
     const userId = auth.currentUser.uid;
 
-    // Sending text message
     if (newMessage.trim() !== "") {
       await push(ref(db, `groups/${chatId}/messages`), {
         text: newMessage,
@@ -225,12 +234,11 @@ const ChatScreen = ({ route }) => {
           <Ionicons name="arrow-back" size={24} color="#000" />
         </TouchableOpacity>
         <Image
-          source={{ uri: "https://via.placeholder.com/150" }} // Replace with actual image URL or state variable
+          source={{ uri: "https://via.placeholder.com/150" }}
           style={styles.headerImage}
         />
         <View style={styles.headerContent}>
           <Text style={styles.chatName}>{chatName}</Text>
-          {/* Add any additional status text or components here */}
         </View>
       </View>
       <FlatList
@@ -268,11 +276,10 @@ const ChatScreen = ({ route }) => {
         <TouchableOpacity style={styles.iconButton}>
           <Feather name="camera" size={24} color="#666" />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.iconButton}>
-          <AntDesign name="sound" size={24} color="#666" />
-        </TouchableOpacity>
+        {image && (
+          <Image source={{ uri: image }} style={styles.selectedImage} />
+        )}
       </View>
-      {image && <Image source={{ uri: image }} style={styles.selectedImage} />}
     </KeyboardAvoidingView>
   );
 };
