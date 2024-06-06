@@ -12,7 +12,7 @@ import {
   moderateScale,
 } from "../../util/scale";
 
-const Onboarding = () => {
+const Onboarding = ({ navigation }) => {
   const [fontsLoaded, fontError] = useFonts({
     "Poppins-Bold": require("../../assets/fonts/Poppins-Bold.ttf"),
     "Poppins-SemiBold": require("../../assets/fonts/Poppins-SemiBold.ttf"),
@@ -65,10 +65,16 @@ const Onboarding = () => {
           <Text style={styles.orText}>OR</Text>
           <View style={styles.line} />
         </View>
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => navigation.navigate("UserSignup")}
+        >
           <Text style={styles.buttonText}>Sign Up</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.link}>
+        <TouchableOpacity
+          style={styles.link}
+          onPress={() => navigation.navigate("UserLogin")}
+        >
           <View>
             <Text style={styles.linkText}>
               Existing account? <Text style={styles.loginText}>Log in</Text>

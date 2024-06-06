@@ -18,6 +18,7 @@ import Home from "./Home";
 import CreateGroupChat from "../chat/CreateGroupChat";
 import PrivateChatScreen from "../chat/PrivateChatScreen";
 import CombinedChatList from "../chat/ChatList";
+import Onboarding from "../onboarding/Onboarding";
 
 const Stack = createNativeStackNavigator();
 const MessagesStack = createNativeStackNavigator();
@@ -155,7 +156,12 @@ export default function NavigationScreens() {
   return (
     <TabBarVisibilityProvider>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="UserSignup">
+        <Stack.Navigator initialRouteName="Onboarding">
+          <Stack.Screen
+            name="Onboarding"
+            component={Onboarding}
+            options={{ headerShown: false }}
+          />
           <Stack.Screen
             name="UserSignup"
             component={UserSignup}
