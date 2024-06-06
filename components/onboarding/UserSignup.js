@@ -131,19 +131,20 @@ const UserSignup = ({ navigation }) => {
             secureTextEntry
           />
         </View>
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity style={styles.button} onPress={handleSignup}>
+            <Text style={styles.buttonText}>Create an account</Text>
+          </TouchableOpacity>
 
-        <TouchableOpacity style={styles.button} onPress={handleSignup}>
-          <Text style={styles.buttonText}>Create an account</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={styles.loginButton}
-          onPress={() => navigation.navigate("UserLogin")}
-        >
-          <Text style={styles.loginButtonText}>
-            Existing account? <Text style={styles.loginText}>Log in</Text>
-          </Text>
-        </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.loginButton}
+            onPress={() => navigation.navigate("UserLogin")}
+          >
+            <Text style={styles.loginButtonText}>
+              Existing account? <Text style={styles.loginText}>Log in</Text>
+            </Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   );
@@ -201,6 +202,7 @@ const styles = StyleSheet.create({
     marginBottom: verticalScale(16),
   },
   inputContainer: {
+    marginTop: verticalScale(16),
     marginBottom: verticalScale(16),
   },
   label: {
@@ -211,10 +213,14 @@ const styles = StyleSheet.create({
   },
   input: {
     borderBottomWidth: 1,
-    borderBottomColor: "#24786D",
+    borderBottomColor: "#CDD1D0",
     paddingBottom: verticalScale(8),
     fontFamily: "Poppins-Regular",
     fontSize: moderateScale(16),
+  },
+  buttonContainer: {
+    position: "relative",
+    top: verticalScale(60),
   },
   buttonText: {
     fontFamily: "Poppins-Bold",
@@ -238,6 +244,7 @@ const styles = StyleSheet.create({
     marginTop: verticalScale(16),
   },
   loginButtonText: {
+    marginTop: verticalScale(20),
     fontFamily: "Poppins-Regular",
     fontSize: moderateScale(16),
     textAlign: "center",
