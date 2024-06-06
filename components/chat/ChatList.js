@@ -79,9 +79,6 @@ const CombinedChatList = ({ navigation }) => {
   };
 
   const renderStatusItem = ({ item }) => {
-    if (item.lastChanged) {
-      return null;
-    }
     return (
       <TouchableOpacity style={styles.statusItem}>
         <Image
