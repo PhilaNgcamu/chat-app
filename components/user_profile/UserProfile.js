@@ -40,7 +40,7 @@ const UserProfile = ({ route }) => {
   useEffect(() => {
     const fetchUserProfile = async () => {
       const db = getDatabase();
-      const userRef = ref(db, "users/" + user.uid);
+      const userRef = ref(db, "about/" + user.uid);
       const snapshot = await get(userRef);
       if (snapshot.exists()) {
         const userData = snapshot.val();
@@ -81,7 +81,7 @@ const UserProfile = ({ route }) => {
       await updateEmail(user, email);
 
       const db = getDatabase();
-      await set(ref(db, "users/" + user.uid), {
+      await set(ref(db, "about/" + user.uid), {
         photoUrl: profilePicture,
         name: name,
         email: email,

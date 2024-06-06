@@ -30,7 +30,7 @@ const Home = () => {
 
   return (
     <View style={styles.container}>
-      <StatusBar style="auto" />
+      <StatusBar backgroundColor="#000" style="light" />
       <Text style={styles.title}>Chatbox</Text>
 
       <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
@@ -76,11 +76,6 @@ const styles = StyleSheet.create({
     marginVertical: 12,
     width: "80%",
     alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
   },
   buttonText: {
     color: "#FFFFFF",

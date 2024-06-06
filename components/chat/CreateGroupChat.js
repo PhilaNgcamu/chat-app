@@ -140,7 +140,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 20,
     backgroundColor: "#f4f4f4",
-    marginTop: 20,
+    marginTop: 30,
   },
   header: {
     flexDirection: "row",
@@ -206,14 +206,6 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     alignItems: "center",
     marginTop: 20,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
   },
   createButtonDisabled: {
     backgroundColor: "#b2d8d8",
