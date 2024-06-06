@@ -124,7 +124,7 @@ const UserLogin = ({ navigation }) => {
             disabled={loading}
           >
             <Text style={styles.buttonText}>
-              {loading ? "Logging in..." : "Login"}
+              {loading ? "Logging in..." : "Log in"}
             </Text>
           </TouchableOpacity>
 
