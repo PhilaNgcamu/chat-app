@@ -18,7 +18,6 @@ import Home from "./Home";
 import CreateGroupChat from "../chat/CreateGroupChat";
 import PrivateChatScreen from "../chat/PrivateChatScreen";
 import CombinedChatList from "../chat/ChatList";
-import { StatusBar } from "expo-status-bar";
 
 const Stack = createNativeStackNavigator();
 const MessagesStack = createNativeStackNavigator();
@@ -184,7 +183,7 @@ export default function NavigationScreens() {
           />
 
           <Stack.Screen
-            name="Chat Screen"
+            name="ChatScreen"
             component={ChatScreen}
             options={{ headerShown: false }}
           />

@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import { useFonts } from "expo-font";
 import { createUserWithEmailAndPassword, getAuth } from "firebase/auth";
-import { auth } from "../../backend/firebaseConfig";
+
 import { getDatabase, ref, set } from "firebase/database";
 
 const UserSignup = ({ navigation }) => {
@@ -38,14 +38,16 @@ const UserSignup = ({ navigation }) => {
       );
       const user = userCredential.user;
 
-      // Store user information in Realtime Database
       const db = getDatabase();
       await set(ref(db, "users/" + user.uid), {
         name: name,
         email: email,
       });
 
-      navigation.navigate("UserProfile", { userId: user.uid });
+      navigation.navigate("UserProfile", {
+        userId: user.uid,
+        signup: "SignUp",
+      });
     } catch (error) {
       console.error(error);
     }

@@ -110,7 +110,7 @@ const CombinedChatList = ({ navigation }) => {
   );
 
   const filteredItems = items.filter((item) =>
-    item.name.toLowerCase().includes(searchQuery.toLowerCase())
+    item.name?.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   return (

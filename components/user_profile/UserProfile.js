@@ -22,7 +22,7 @@ import { verticalScale } from "../../util/scale";
 import { StatusBar } from "expo-status-bar";
 import placeholderImage from "../../assets/insert-image.png";
 
-const UserProfile = () => {
+const UserProfile = ({ route }) => {
   const auth = getAuth();
   const user = auth.currentUser;
   const navigation = useNavigation();
@@ -81,7 +81,7 @@ const UserProfile = () => {
       await updateEmail(user, email);
 
       const db = getDatabase();
-      await set(ref(db, "about/" + user.uid), {
+      await set(ref(db, "users/" + user.uid), {
         photoUrl: profilePicture,
         name: name,
         email: email,
@@ -90,7 +90,8 @@ const UserProfile = () => {
       });
 
       Alert.alert("Profile Updated Successfully");
-      navigation.navigate("ChatList");
+
+      navigation.navigate("Home");
     } catch (error) {
       Alert.alert("Error", error.message);
     }
