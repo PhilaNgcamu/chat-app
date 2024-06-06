@@ -224,7 +224,7 @@ const PrivateChatScreen = ({ route, navigation }) => {
               : styles.otherMessageTimestamp,
           ]}
         >
-          {format(new Date(item.createdAt), "HH:mm")}
+          {format(new Date(item.createdAt), "HH:mm")}{" "}
         </Text>
         {item.read && item.userId === auth.currentUser.uid && (
           <MaterialIcons name="done-all" size={16} color="#4CAF50" />
@@ -365,10 +365,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   myMessageText: {
-    color: "#FFF", // White text for sender's message
+    color: "#FFF",
   },
   otherMessageText: {
-    color: "#000", // Black text for receiver's message
+    color: "#000",
   },
   image: {
     width: 200,
