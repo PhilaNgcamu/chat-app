@@ -144,7 +144,7 @@ const CombinedChatList = ({ navigation }) => {
             style={styles.addStatusImage}
           />
           <View style={styles.addStatusIconWrapper}>
-            <MaterialIcons name="add" size={16} color="#fff" />
+            <MaterialIcons name="add" size={16} color="#362F34" />
           </View>
           <Text style={styles.myStatusText}>My Status</Text>
         </View>

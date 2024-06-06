@@ -24,18 +24,12 @@ import {
   update,
   serverTimestamp,
   get,
-  child,
 } from "firebase/database";
 import * as ImagePicker from "expo-image-picker";
 import { useNavigation } from "@react-navigation/native";
 
 import { auth } from "../../backend/firebaseConfig";
-import {
-  MaterialIcons,
-  Ionicons,
-  Feather,
-  AntDesign,
-} from "@expo/vector-icons";
+import { MaterialIcons, Ionicons, Feather } from "@expo/vector-icons";
 import { format } from "date-fns";
 import { useTabBarVisibility } from "../screens/useTabBarVisibilityContext";
 import { StatusBar } from "expo-status-bar";

@@ -197,7 +197,18 @@ const PrivateChatScreen = ({ route, navigation }) => {
         item.userId === auth.currentUser.uid && styles.myMessage,
       ]}
     >
-      {item.text && <Text style={styles.messageText}>{item.text}</Text>}
+      {item.text && (
+        <Text
+          style={[
+            styles.messageText,
+            item.userId === auth.currentUser.uid
+              ? styles.myMessageText
+              : styles.otherMessageText,
+          ]}
+        >
+          {item.text.trim()}
+        </Text>
+      )}
       {item.imageUrl && (
         <Image
           source={{ uri: item.imageUrl || "https://via.placeholder.com/150" }}
@@ -205,10 +216,14 @@ const PrivateChatScreen = ({ route, navigation }) => {
         />
       )}
       <View style={styles.messageMeta}>
-        <Text style={styles.senderName}>
-          {item.userId === auth.currentUser.uid ? "You" : item.senderName}
-        </Text>
-        <Text style={styles.messageTimestamp}>
+        <Text
+          style={[
+            styles.messageTimestamp,
+            item.userId === auth.currentUser.uid
+              ? styles.myMessageTimestamp
+              : styles.otherMessageTimestamp,
+          ]}
+        >
           {format(new Date(item.createdAt), "HH:mm")}
         </Text>
         {item.read && item.userId === auth.currentUser.uid && (
@@ -327,7 +342,7 @@ const styles = StyleSheet.create({
   },
   messageItem: {
     padding: 12,
-    backgroundColor: "#fff",
+    backgroundColor: "#F2F7FB",
     borderRadius: 8,
     marginVertical: 4,
     marginHorizontal: 16,
@@ -343,12 +358,17 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   myMessage: {
-    backgroundColor: "#dcf8c6",
+    backgroundColor: "#24786D",
     alignSelf: "flex-end",
   },
   messageText: {
     fontSize: 16,
-    color: "#333",
+  },
+  myMessageText: {
+    color: "#FFF", // White text for sender's message
+  },
+  otherMessageText: {
+    color: "#000", // Black text for receiver's message
   },
   image: {
     width: 200,
@@ -362,12 +382,17 @@ const styles = StyleSheet.create({
   },
   senderName: {
     fontSize: 12,
-    color: "#888",
+    color: "##000E08",
     marginRight: 4,
   },
   messageTimestamp: {
     fontSize: 12,
-    color: "#888",
+  },
+  myMessageTimestamp: {
+    color: "#FFF",
+  },
+  otherMessageTimestamp: {
+    color: "#000",
   },
   inputContainer: {
     flexDirection: "row",
