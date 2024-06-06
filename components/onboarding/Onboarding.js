@@ -3,10 +3,14 @@ import { View, Text, TouchableOpacity, StyleSheet, Image } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { useFonts } from "expo-font";
 import cLogo from "../../assets/c-logo.png";
+import fbLogo from "../../assets/facebook.png";
+import googleLogo from "../../assets/google.png";
+import appleLogo from "../../assets/apple.png";
 
 const Onboarding = () => {
   const [fontsLoaded, fontError] = useFonts({
     "Poppins-Bold": require("../../assets/fonts/Poppins-Bold.ttf"),
+    "Poppins-SemiBold": require("../../assets/fonts/Poppins-SemiBold.ttf"),
     "Poppins-Regular": require("../../assets/fonts/Poppins-Regular.ttf"),
   });
 
@@ -40,11 +44,31 @@ const Onboarding = () => {
         <Text style={styles.description}>
           connected with friends and family.
         </Text>
+        <View style={styles.socialLogos}>
+          <View style={styles.socialLogoWrapper}>
+            <Image source={fbLogo} style={styles.socialLogo} />
+          </View>
+          <View style={styles.socialLogoWrapper}>
+            <Image source={googleLogo} style={styles.socialLogo} />
+          </View>
+          <View style={styles.socialLogoWrapper}>
+            <Image source={appleLogo} style={styles.socialLogo} />
+          </View>
+        </View>
+        <View style={styles.separator}>
+          <View style={styles.line} />
+          <Text style={styles.orText}>OR</Text>
+          <View style={styles.line} />
+        </View>
         <TouchableOpacity style={styles.button}>
           <Text style={styles.buttonText}>Sign Up</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.link}>
-          <Text style={styles.linkText}>Existing account? Log in</Text>
+          <View>
+            <Text style={styles.linkText}>
+              Existing account? <Text style={styles.loginText}>Log in</Text>
+            </Text>
+          </View>
         </TouchableOpacity>
       </View>
     </LinearGradient>
@@ -108,13 +132,53 @@ const styles = StyleSheet.create({
   content: {
     position: "absolute",
     top: 480,
-    width: 321,
-    left: 10,
+    width: "100%",
     paddingHorizontal: 20,
   },
   description: {
-    fontSize: 16,
+    fontSize: 20,
     color: "#fff",
+    marginLeft: 10,
+  },
+  socialLogos: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    width: "100%",
+    marginVertical: 20,
+  },
+  socialLogoWrapper: {
+    width: 70,
+    height: 70,
+    borderRadius: 35,
+    borderWidth: 1,
+    borderColor: "#fff",
+    backgroundColor: "#000",
+    justifyContent: "center",
+    alignItems: "center",
+    marginHorizontal: 10,
+  },
+  socialLogo: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+  },
+  separator: {
+    flexDirection: "row",
+    alignItems: "center",
+    width: "100%",
+    marginVertical: 20,
+  },
+  line: {
+    flex: 1,
+    height: 1,
+    backgroundColor: "#CDD1D0",
+  },
+  orText: {
+    fontSize: 14,
+    fontFamily: "Poppins-Bold",
+    color: "#fff",
+    marginHorizontal: 15,
   },
   button: {
     backgroundColor: "#fff",
@@ -122,9 +186,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 25,
     borderRadius: 25,
     marginVertical: 20,
+    alignItems: "center",
   },
   buttonText: {
-    color: "#24786D",
+    color: "#000E08",
     fontSize: 16,
     fontFamily: "Poppins-Bold",
     textAlign: "center",
@@ -135,7 +200,10 @@ const styles = StyleSheet.create({
   linkText: {
     color: "#fff",
     fontSize: 16,
-    textDecorationLine: "underline",
+    textAlign: "center",
+  },
+  loginText: {
+    fontFamily: "Poppins-SemiBold",
   },
 });
 
