@@ -219,8 +219,8 @@ const styles = StyleSheet.create({
     fontSize: moderateScale(16),
   },
   buttonContainer: {
-    position: "relative",
-    top: verticalScale(60),
+    position: "position",
+    top: verticalScale(70),
   },
   buttonText: {
     fontFamily: "Poppins-Bold",

@@ -279,10 +279,10 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   registerText: {
-    fontSize: moderateScale(14),
+    fontSize: moderateScale(16),
     textAlign: "center",
     color: "#24786D",
-    fontFamily: "Poppins-SemiBold",
+    fontFamily: "Poppins-Regular",
   },
 });
 
