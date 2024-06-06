@@ -100,8 +100,8 @@ const styles = StyleSheet.create({
   title: {
     fontFamily: "Poppins-Regular",
     fontSize: moderateScale(25),
-    color: "#fff",
-    marginLeft: horizontalScale(10),
+    color: "#FFF",
+    marginTop: verticalScale(4),
   },
   subtitle: {
     position: "absolute",
@@ -114,25 +114,25 @@ const styles = StyleSheet.create({
     fontFamily: "Poppins-Regular",
     fontSize: moderateScale(52),
     lineHeight: moderateScale(60),
-    color: "#fff",
+    color: "#FFF",
   },
   friendsText: {
     fontFamily: "Poppins-Regular",
     fontSize: moderateScale(52),
     lineHeight: moderateScale(60),
-    color: "#fff",
+    color: "#FFF",
   },
   easilyText: {
     fontFamily: "Poppins-Bold",
     fontSize: moderateScale(52),
     lineHeight: moderateScale(60),
-    color: "#fff",
+    color: "#FFF",
   },
   quicklyText: {
     fontFamily: "Poppins-Bold",
     fontSize: moderateScale(52),
     lineHeight: moderateScale(60),
-    color: "#fff",
+    color: "#FFF",
   },
   content: {
     position: "absolute",
@@ -142,7 +142,8 @@ const styles = StyleSheet.create({
   },
   description: {
     fontSize: moderateScale(16),
-    color: "#fff",
+    lineHeight: moderateScale(24),
+    color: "#FFF",
   },
   socialLogos: {
     flexDirection: "row",
@@ -156,7 +157,7 @@ const styles = StyleSheet.create({
     height: horizontalScale(70),
     borderRadius: horizontalScale(35),
     borderWidth: 1,
-    borderColor: "#fff",
+    borderColor: "#FFF",
     backgroundColor: "#000",
     justifyContent: "center",
     alignItems: "center",
@@ -181,11 +182,11 @@ const styles = StyleSheet.create({
   orText: {
     fontSize: moderateScale(14),
     fontFamily: "Poppins-Bold",
-    color: "#fff",
+    color: "#FFF",
     marginHorizontal: horizontalScale(15),
   },
   button: {
-    backgroundColor: "#fff",
+    backgroundColor: "#FFF",
     paddingVertical: verticalScale(12),
     paddingHorizontal: horizontalScale(25),
     borderRadius: 25,
@@ -202,7 +203,7 @@ const styles = StyleSheet.create({
     marginTop: verticalScale(10),
   },
   linkText: {
-    color: "#fff",
+    color: "#FFF",
     fontSize: moderateScale(16),
     textAlign: "center",
   },
