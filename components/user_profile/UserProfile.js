@@ -68,7 +68,7 @@ const UserProfile = ({ route }) => {
       );
       return;
     } else if (phoneNumber.length !== 10) {
-      Alert.alert("Oops!", "A phone number must be 10-digit number");
+      Alert.alert("Oops!", "A phone number must be 10-digit number.");
       return;
     }
 
@@ -93,7 +93,7 @@ const UserProfile = ({ route }) => {
 
       navigation.navigate("Home");
     } catch (error) {
-      Alert.alert("Error", error.message);
+      Alert.alert("Oops!", "Changing an email address is not allowed.");
     }
   };
 
@@ -119,100 +119,102 @@ const UserProfile = ({ route }) => {
   }
 
   return (
-    <View style={styles.container}>
-      <StatusBar style="light" />
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <View style={styles.headerContainer}>
-          <TouchableOpacity
-            onPress={() => navigation.goBack()}
-            style={styles.backButton}
-          >
-            <MaterialIcons name="arrow-back" size={24} color="#FFFFFF" />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={pickImage}>
-            <Image
-              source={
-                profilePicture ? { uri: profilePicture } : placeholderImage
-              }
-              alt="Profile Picture"
-              style={styles.profilePicture}
-            />
-          </TouchableOpacity>
-          <Text style={styles.profileName}>{name}</Text>
-          <Text style={styles.hashtag}>
-            {name && `@${name.toLowerCase().replace(/\s/g, "")}`}
-          </Text>
-          <View style={styles.iconContainer}>
-            <TouchableOpacity>
-              <MaterialIcons name="message" size={24} color="#24786D" />
-            </TouchableOpacity>
-            <TouchableOpacity>
-              <MaterialIcons name="videocam" size={24} color="#24786D" />
-            </TouchableOpacity>
-            <TouchableOpacity>
-              <MaterialIcons name="call" size={24} color="#24786D" />
-            </TouchableOpacity>
-            <TouchableOpacity>
-              <MaterialIcons name="more-vert" size={24} color="#24786D" />
-            </TouchableOpacity>
-          </View>
-        </View>
-      </ScrollView>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      style={styles.container}
+    >
+      <View style={styles.container}>
+        <StatusBar style="light" />
 
-      <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-        style={styles.infoContainer}
-      >
-        <View style={styles.dragger} />
-        <View style={styles.infoContent}>
-          <View style={styles.inputContainer}>
-            <Text style={styles.label}>Name</Text>
-            <TextInput
-              style={styles.input}
-              value={name}
-              onChangeText={setName}
-              placeholder="Enter your name"
-              placeholderTextColor="#AAAAAA"
-            />
+        <ScrollView contentContainerStyle={styles.scrollContainer}>
+          <View style={styles.headerContainer}>
+            <TouchableOpacity
+              onPress={() => navigation.goBack()}
+              style={styles.backButton}
+            >
+              <MaterialIcons name="arrow-back" size={24} color="#FFFFFF" />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={pickImage}>
+              <Image
+                source={
+                  profilePicture ? { uri: profilePicture } : placeholderImage
+                }
+                alt="Profile Picture"
+                style={styles.profilePicture}
+              />
+            </TouchableOpacity>
+            <Text style={styles.profileName}>{name}</Text>
+            <Text style={styles.hashtag}>
+              {name && `@${name.toLowerCase().replace(/\s/g, "")}`}
+            </Text>
+            <View style={styles.iconContainer}>
+              <TouchableOpacity>
+                <MaterialIcons name="message" size={24} color="#24786D" />
+              </TouchableOpacity>
+              <TouchableOpacity>
+                <MaterialIcons name="videocam" size={24} color="#24786D" />
+              </TouchableOpacity>
+              <TouchableOpacity>
+                <MaterialIcons name="call" size={24} color="#24786D" />
+              </TouchableOpacity>
+              <TouchableOpacity>
+                <MaterialIcons name="more-vert" size={24} color="#24786D" />
+              </TouchableOpacity>
+            </View>
           </View>
-          <View style={styles.inputContainer}>
-            <Text style={styles.label}>Email</Text>
-            <TextInput
-              style={styles.input}
-              value={email}
-              onChangeText={setEmail}
-              keyboardType="email-address"
-              placeholder="Enter your email"
-              placeholderTextColor="#AAAAAA"
-            />
+        </ScrollView>
+        <View style={styles.infoContainer}>
+          <View style={styles.dragger} />
+          <View style={styles.infoContent}>
+            <View style={styles.inputContainer}>
+              <Text style={styles.label}>Name</Text>
+              <TextInput
+                style={styles.input}
+                value={name}
+                onChangeText={setName}
+                placeholder="Enter your name"
+                placeholderTextColor="#AAAAAA"
+              />
+            </View>
+            <View style={styles.inputContainer}>
+              <Text style={styles.label}>Email</Text>
+              <TextInput
+                style={styles.input}
+                value={email}
+                onChangeText={setEmail}
+                keyboardType="email-address"
+                placeholder="Enter your email"
+                placeholderTextColor="#AAAAAA"
+              />
+            </View>
+            <View style={styles.inputContainer}>
+              <Text style={styles.label}>Status Message</Text>
+              <TextInput
+                style={styles.input}
+                value={statusMessage}
+                onChangeText={setStatusMessage}
+                placeholder="Enter a status message"
+                placeholderTextColor="#AAAAAA"
+              />
+            </View>
+            <View style={styles.inputContainer}>
+              <Text style={styles.label}>Phone Number</Text>
+              <TextInput
+                style={styles.input}
+                value={phoneNumber}
+                onChangeText={setPhoneNumber}
+                keyboardType="phone-pad"
+                placeholder="Enter your phone number"
+                placeholderTextColor="#AAAAAA"
+              />
+            </View>
+            <TouchableOpacity style={styles.button} onPress={handleSave}>
+              <Text style={styles.buttonText}>Save Changes</Text>
+            </TouchableOpacity>
           </View>
-          <View style={styles.inputContainer}>
-            <Text style={styles.label}>Status Message</Text>
-            <TextInput
-              style={styles.input}
-              value={statusMessage}
-              onChangeText={setStatusMessage}
-              placeholder="Enter a status message"
-              placeholderTextColor="#AAAAAA"
-            />
-          </View>
-          <View style={styles.inputContainer}>
-            <Text style={styles.label}>Phone Number</Text>
-            <TextInput
-              style={styles.input}
-              value={phoneNumber}
-              onChangeText={setPhoneNumber}
-              keyboardType="phone-pad"
-              placeholder="Enter your phone number"
-              placeholderTextColor="#AAAAAA"
-            />
-          </View>
-          <TouchableOpacity style={styles.button} onPress={handleSave}>
-            <Text style={styles.buttonText}>Save Changes</Text>
-          </TouchableOpacity>
         </View>
-      </KeyboardAvoidingView>
-    </View>
+      </View>
+    </KeyboardAvoidingView>
   );
 };
 
