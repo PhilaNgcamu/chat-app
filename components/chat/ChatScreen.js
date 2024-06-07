@@ -38,6 +38,8 @@ import { useFocusEffect } from "@react-navigation/native";
 const ChatScreen = ({ route }) => {
   const { chatId, chatName } = route.params;
   const [messages, setMessages] = useState([]);
+  const [filteredMessages, setFilteredMessages] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
   const [newMessage, setNewMessage] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const [otherUserTyping, setOtherUserTyping] = useState([]);
@@ -65,6 +67,7 @@ const ChatScreen = ({ route }) => {
         messageList.push({ id: childSnapshot.key, ...childSnapshot.val() });
       });
       setMessages(messageList);
+      setFilteredMessages(messageList);
       markMessagesAsRead(messageList);
     });
 
@@ -95,6 +98,17 @@ const ChatScreen = ({ route }) => {
       unsubscribeTyping();
     };
   }, [chatId]);
+
+  useEffect(() => {
+    if (searchQuery === "") {
+      setFilteredMessages(messages);
+    } else {
+      const filtered = messages.filter((message) =>
+        message.text?.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+      setFilteredMessages(filtered);
+    }
+  }, [searchQuery, messages]);
 
   const markMessagesAsRead = async (messages) => {
     const db = getDatabase();
@@ -261,8 +275,15 @@ const ChatScreen = ({ route }) => {
           </TouchableOpacity>
         </View>
       </View>
+      <TextInput
+        style={styles.searchInput}
+        value={searchQuery}
+        onChangeText={setSearchQuery}
+        placeholder="Search messages"
+        placeholderTextColor="#888"
+      />
       <FlatList
-        data={messages}
+        data={filteredMessages}
         renderItem={renderItem}
         keyExtractor={(item) => item.id}
         style={styles.messageList}
@@ -345,6 +366,17 @@ const styles = StyleSheet.create({
   },
   headerIcon: {
     marginLeft: 15,
+  },
+  searchInput: {
+    borderWidth: 1,
+    borderColor: "#ddd",
+    borderRadius: 25,
+    padding: 10,
+    margin: 16,
+    paddingLeft: 16,
+    fontFamily: "Poppins-Regular",
+    color: "#333",
+    backgroundColor: "#f9f9f9",
   },
   messageList: {
     flex: 1,
