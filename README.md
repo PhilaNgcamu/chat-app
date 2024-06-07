@@ -76,8 +76,3 @@ The `PrivateChatScreen` component handles individual chat interactions, displayi
 ## License
 
 This project is licensed under the MIT License.
-
-```
-
-This documentation provides an overview of the components, their props, state, and usage. It also includes examples of how to use the components and set up Firebase. Adjust the paths and details according to your project's structure and requirements.
-```
