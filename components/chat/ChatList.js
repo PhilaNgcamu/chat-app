@@ -100,7 +100,7 @@ const CombinedChatList = ({ navigation }) => {
         <View style={styles.itemDetails}>
           <Text style={styles.itemTitle}>{item.name || "Chat"}</Text>
           <Text style={styles.itemLastMessage}>
-            {item.lastMessage || "No messages yet..."}
+            {"Click here to see messages..."}
           </Text>
         </View>
       </View>
