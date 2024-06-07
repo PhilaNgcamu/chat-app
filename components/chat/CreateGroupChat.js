@@ -83,7 +83,6 @@ const CreateGroupChat = () => {
       ]}
       onPress={() => toggleContactSelection(item)}
     >
-      <Image source={{ uri: item.avatar }} style={styles.contactAvatar} />
       <Text style={styles.contactName}>{item.name}</Text>
     </TouchableOpacity>
   );
