@@ -40,12 +40,14 @@ import { StatusBar } from "expo-status-bar";
 const PrivateChatScreen = ({ route, navigation }) => {
   const { contactId, contactName, contactAvatar } = route.params;
   const [messages, setMessages] = useState([]);
+  const [filteredMessages, setFilteredMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const [otherUserTyping, setOtherUserTyping] = useState(false);
   const [otherUserName, setOtherUserName] = useState("");
   const [isOnline, setIsOnline] = useState(false);
   const [image, setImage] = useState(null);
+  const [searchQuery, setSearchQuery] = useState("");
   const inputRef = useRef(null);
 
   const { setTabBarVisible } = useTabBarVisibility();
@@ -71,6 +73,7 @@ const PrivateChatScreen = ({ route, navigation }) => {
         messageList.push({ id: childSnapshot.key, ...childSnapshot.val() });
       });
       setMessages(messageList);
+      setFilteredMessages(messageList);
       markMessagesAsRead(messageList, chatId);
     });
 
@@ -94,6 +97,17 @@ const PrivateChatScreen = ({ route, navigation }) => {
       unsubscribeUser();
     };
   }, [contactId]);
+
+  useEffect(() => {
+    if (searchQuery) {
+      const filtered = messages.filter((message) =>
+        message.text.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+      setFilteredMessages(filtered);
+    } else {
+      setFilteredMessages(messages);
+    }
+  }, [searchQuery, messages]);
 
   const markMessagesAsRead = async (messages, chatId) => {
     const db = getDatabase();
@@ -259,8 +273,15 @@ const PrivateChatScreen = ({ route, navigation }) => {
           </TouchableOpacity>
         </View>
       </View>
+      <TextInput
+        style={styles.searchInput}
+        placeholder="Search messages"
+        placeholderTextColor="#aaa"
+        value={searchQuery}
+        onChangeText={setSearchQuery}
+      />
       <FlatList
-        data={messages}
+        data={filteredMessages}
         renderItem={renderItem}
         keyExtractor={(item) => item.id}
         style={styles.messageList}
@@ -336,6 +357,16 @@ const styles = StyleSheet.create({
   },
   headerIcon: {
     marginLeft: 15,
+  },
+  searchInput: {
+    padding: 10,
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: "#ddd",
+    margin: 16,
+    backgroundColor: "#fff",
+    fontSize: 16,
+    color: "#000",
   },
   messageList: {
     flex: 1,
