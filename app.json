@@ -1,10 +1,10 @@
 {
   "expo": {
-    "name": "lss-chat-app",
+    "name": "Chatbox",
     "slug": "lss-chat-app",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/c-logo.png",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash.png",
@@ -16,15 +16,19 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/c-logo.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.philangcamu.lsschatapp"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "plugins": [
-      "expo-font"
-    ]
+    "plugins": ["expo-font"],
+    "extra": {
+      "eas": {
+        "projectId": "9dd274ca-37e7-4e67-a731-4988656ce431"
+      }
+    }
   }
 }
