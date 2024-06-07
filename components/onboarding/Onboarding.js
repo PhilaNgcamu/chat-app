@@ -11,6 +11,7 @@ import {
   verticalScale,
   moderateScale,
 } from "../../util/scale";
+import { StatusBar } from "expo-status-bar";
 
 const Onboarding = ({ navigation }) => {
   const [fontsLoaded, fontError] = useFonts({
@@ -32,6 +33,7 @@ const Onboarding = ({ navigation }) => {
       colors={["#24786D", "#0f4c4c", "#000"]}
       style={styles.container}
     >
+      <StatusBar backgroundColor="#000" style="light" />
       <View style={styles.header}>
         <Image source={cLogo} style={styles.logo} />
         <Text style={styles.title}>Chatbox</Text>

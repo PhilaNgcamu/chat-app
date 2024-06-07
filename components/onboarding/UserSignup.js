@@ -15,6 +15,7 @@ import {
   verticalScale,
   moderateScale,
 } from "../../util/scale";
+import { StatusBar } from "expo-status-bar";
 
 const UserSignup = ({ navigation }) => {
   const [name, setName] = useState("");
@@ -67,6 +68,7 @@ const UserSignup = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
+      <StatusBar backgroundColor="#000" style="light" />
       <TouchableOpacity onPress={() => navigation.goBack()}>
         <AntDesign
           name="arrowleft"

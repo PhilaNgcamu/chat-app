@@ -20,6 +20,7 @@ import {
 import fbLogo from "../../assets/facebook.png";
 import googleLogo from "../../assets/google.png";
 import appleLogo from "../../assets/apple-black.png";
+import { StatusBar } from "expo-status-bar";
 
 const UserLogin = ({ navigation }) => {
   const [email, setEmail] = useState("");
@@ -58,6 +59,7 @@ const UserLogin = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
+      <StatusBar backgroundColor="#000" style="light" />
       <TouchableOpacity onPress={() => navigation.goBack()}>
         <AntDesign
           name="arrowleft"

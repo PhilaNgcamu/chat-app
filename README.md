@@ -1,6 +1,3 @@
-Sure, here's an example of how you could document the `CombinedChatList` component and `PrivateChatScreen` in your README.md file:
-
-````markdown
 # Chat Application
 
 This is a chat application built with React Native and Firebase. It includes features such as private chats, group chats, and user statuses.
@@ -21,49 +18,12 @@ The `CombinedChatList` component displays a combined list of group and individua
 - `statuses`: Array of user status items.
 - `searchQuery`: The search query entered by the user.
 
-#### Usage
-
-```jsx
-import CombinedChatList from "./path/to/CombinedChatList";
-
-// In your navigation setup or screen component
-<CombinedChatList navigation={navigation} />;
-```
-````
-
 #### Description
 
 - Fetches and displays chat and contact items from Firebase Realtime Database.
 - Allows users to search for contacts and chats.
 - Displays user statuses at the top.
 - Navigates to the `ChatScreen` for group chats or `PrivateChat` for individual chats when an item is pressed.
-
-#### Example
-
-```jsx
-import React from "react";
-import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
-import CombinedChatList from "./path/to/CombinedChatList";
-import ChatScreen from "./path/to/ChatScreen";
-import PrivateChat from "./path/to/PrivateChat";
-
-const Stack = createStackNavigator();
-
-const App = () => {
-  return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName="CombinedChatList">
-        <Stack.Screen name="CombinedChatList" component={CombinedChatList} />
-        <Stack.Screen name="ChatScreen" component={ChatScreen} />
-        <Stack.Screen name="PrivateChat" component={PrivateChat} />
-      </Stack.Navigator>
-    </NavigationContainer>
-  );
-};
-
-export default App;
-```
 
 ### PrivateChatScreen
 
