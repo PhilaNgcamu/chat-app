@@ -24,10 +24,10 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-export const auth = initializeAuth(app, {
+const auth = initializeAuth(app, {
   persistence: getReactNativePersistence(AsyncStorage),
 });
-export const db = getDatabase(app);
+const db = getDatabase(app);
 
 const setUserOnlineStatus = () => {
   const userId = auth.currentUser.uid;
@@ -61,3 +61,5 @@ onAuthStateChanged(auth, (user) => {
     setUserOnlineStatus();
   }
 });
+
+export { auth, db, setUserOnlineStatus };
