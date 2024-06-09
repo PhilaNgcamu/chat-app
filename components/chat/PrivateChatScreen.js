@@ -290,6 +290,7 @@ const PrivateChatScreen = ({ route, navigation }) => {
           inputRef.current.scrollToEnd({ animated: true })
         }
       />
+
       {otherUserTyping && (
         <Text style={styles.typingIndicator}>{otherUserName} is typing...</Text>
       )}
