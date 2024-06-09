@@ -294,6 +294,7 @@ const PrivateChatScreen = ({ route, navigation }) => {
       {otherUserTyping && (
         <Text style={styles.typingIndicator}>{otherUserName} is typing...</Text>
       )}
+
       <View style={styles.inputContainer}>
         <TouchableOpacity onPress={pickImage} style={styles.iconButton}>
           <Feather name="paperclip" size={24} color="##000E08" />
