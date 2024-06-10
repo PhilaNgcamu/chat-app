@@ -9,7 +9,7 @@
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#24786D"
     },
     "ios": {
       "supportsTablet": true
@@ -17,7 +17,7 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/c-logo.png",
-        "backgroundColor": "#ffffff"
+        "backgroundColor": "#24786D"
       },
       "package": "com.philangcamu.lsschatapp"
     },
