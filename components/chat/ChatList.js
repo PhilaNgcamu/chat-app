@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import {
   View,
   Text,
@@ -12,11 +12,14 @@ import { MaterialIcons, AntDesign } from "@expo/vector-icons";
 import { getDatabase, ref, onValue, off } from "firebase/database";
 import { auth } from "../../backend/firebaseConfig";
 import { StatusBar } from "expo-status-bar";
+import { useDispatch, useSelector } from "react-redux";
+import { setItems, setStatuses, setSearchQuery } from "../../redux/actions";
 
 const CombinedChatList = ({ navigation }) => {
-  const [items, setItems] = useState([]);
-  const [statuses, setStatuses] = useState([]);
-  const [searchQuery, setSearchQuery] = useState("");
+  const dispatch = useDispatch();
+  const items = useSelector((state) => state.items);
+  const statuses = useSelector((state) => state.statuses);
+  const searchQuery = useSelector((state) => state.searchQuery);
 
   useEffect(() => {
     const db = getDatabase();
@@ -27,7 +30,6 @@ const CombinedChatList = ({ navigation }) => {
     const fetchItems = () => {
       const chatList = [];
       const contactsList = [];
-
       onValue(chatsRef, (snapshot) => {
         chatList.length = 0;
         snapshot.forEach((childSnapshot) => {
@@ -37,7 +39,7 @@ const CombinedChatList = ({ navigation }) => {
           }
         });
 
-        setItems([...chatList, ...contactsList]);
+        dispatch(setItems([...chatList, ...contactsList]));
       });
 
       onValue(contactsRef, (snapshot) => {
@@ -48,8 +50,8 @@ const CombinedChatList = ({ navigation }) => {
           }
         });
 
-        setStatuses(contactsList);
-        setItems(() => [...chatList, ...contactsList]);
+        dispatch(setStatuses(contactsList));
+        dispatch(setItems([...chatList, ...contactsList]));
       });
 
       return () => {
@@ -59,10 +61,9 @@ const CombinedChatList = ({ navigation }) => {
     };
 
     fetchItems();
-  }, []);
+  }, [dispatch]);
 
   const handleItemPress = (item) => {
-    console.log(item);
     if (item.type === "group") {
       navigation.navigate("ChatScreen", {
         chatId: item.id,
@@ -73,7 +74,7 @@ const CombinedChatList = ({ navigation }) => {
       navigation.navigate("PrivateChat", {
         contactId: item.id,
         contactName: item.name,
-        contactAvatar: item.photoUrl || "https://via.placeholder.com/150",
+        contactAvatar: item.photoUrl,
       });
     }
   };
@@ -122,7 +123,7 @@ const CombinedChatList = ({ navigation }) => {
             placeholder="Search"
             placeholderTextColor="#aaa"
             value={searchQuery}
-            onChangeText={setSearchQuery}
+            onChangeText={(text) => dispatch(setSearchQuery(text))}
           />
         </View>
 

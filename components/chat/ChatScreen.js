@@ -34,16 +34,30 @@ import { format } from "date-fns";
 import { useTabBarVisibility } from "../screens/useTabBarVisibilityContext";
 import { StatusBar } from "expo-status-bar";
 import { useFocusEffect } from "@react-navigation/native";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  setGroupFilteredMessages,
+  setOtherUserTyping,
+  setGroupMessages,
+  addGroupMessage,
+  setSearchQuery,
+  setIsTyping,
+  setImage,
+} from "../../redux/actions";
 
 const ChatScreen = ({ route }) => {
+  const dispatch = useDispatch();
+
   const { chatId, chatName } = route.params;
-  const [messages, setMessages] = useState([]);
-  const [filteredMessages, setFilteredMessages] = useState([]);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [newMessage, setNewMessage] = useState("");
-  const [isTyping, setIsTyping] = useState(false);
-  const [otherUserTyping, setOtherUserTyping] = useState([]);
-  const [image, setImage] = useState(null);
+  const groupMessages = useSelector((state) => state.groupMessages);
+  const searchQuery = useSelector((state) => state.searchQuery);
+  const groupFilteredMessages = useSelector(
+    (state) => state.groupFilteredMessages
+  );
+  const newMessage = useSelector((state) => state.newMessage);
+  const isTyping = useSelector((state) => state.isTyping);
+  const otherUserTyping = useSelector((state) => state.otherUserTyping);
+  const image = useSelector((state) => state.image);
   const inputRef = useRef(null);
   const navigation = useNavigation();
 
@@ -66,8 +80,8 @@ const ChatScreen = ({ route }) => {
       snapshot.forEach((childSnapshot) => {
         messageList.push({ id: childSnapshot.key, ...childSnapshot.val() });
       });
-      setMessages(messageList);
-      setFilteredMessages(messageList);
+      dispatch(setGroupMessages(messageList));
+      dispatch(setGroupFilteredMessages(messageList));
       markMessagesAsRead(messageList);
     });
 
@@ -89,7 +103,7 @@ const ChatScreen = ({ route }) => {
 
         const users = await Promise.all(userPromises);
         const userNames = users.map((user) => user.name);
-        setOtherUserTyping(userNames);
+        dispatch(setOtherUserTyping(userNames));
       }
     });
 
@@ -101,14 +115,17 @@ const ChatScreen = ({ route }) => {
 
   useEffect(() => {
     if (searchQuery === "") {
-      setFilteredMessages(messages);
+      dispatch(setGroupFilteredMessages(groupMessages));
     } else {
-      const filtered = messages.filter((message) =>
-        message.text?.toLowerCase().includes(searchQuery.toLowerCase())
-      );
-      setFilteredMessages(filtered);
+      const filtered = groupMessages.filter((message) => {
+        if (message.text)
+          return message.text
+            ?.toLowerCase()
+            .includes(searchQuery.toLowerCase());
+      });
+      dispatch(setGroupFilteredMessages(filtered));
     }
-  }, [searchQuery, messages]);
+  }, [searchQuery, groupMessages]);
 
   const markMessagesAsRead = async (messages) => {
     const db = getDatabase();
@@ -135,7 +152,7 @@ const ChatScreen = ({ route }) => {
     console.log(result);
 
     if (!result.canceled) {
-      setImage(result.assets[0].uri);
+      dispatch(setImage(result.assets[0].uri));
     }
   };
 
@@ -152,9 +169,9 @@ const ChatScreen = ({ route }) => {
         readBy: { [userId]: true },
         senderName: auth.currentUser.displayName,
       });
-      setNewMessage("");
+      dispatch(addGroupMessage(""));
     }
-    setIsTyping(false);
+    dispatch(setIsTyping(false));
     await updateTypingStatus(false);
     if (image) {
       const storage = getStorage();
@@ -176,10 +193,10 @@ const ChatScreen = ({ route }) => {
         senderName: auth.currentUser.displayName,
       });
 
-      setImage(null);
+      dispatch(setImage(null));
     }
 
-    setIsTyping(false);
+    dispatch(setIsTyping(false));
     await updateTypingStatus(false);
   };
 
@@ -192,12 +209,12 @@ const ChatScreen = ({ route }) => {
   };
 
   const handleTyping = (text) => {
-    setNewMessage(text);
+    dispatch(addGroupMessage(text));
     if (text.trim() !== "" && !isTyping) {
-      setIsTyping(true);
+      dispatch(setIsTyping(true));
       updateTypingStatus(true);
     } else if (text.trim() === "" && isTyping) {
-      setIsTyping(false);
+      dispatch(setIsTyping(false));
       updateTypingStatus(false);
     }
   };
@@ -278,12 +295,12 @@ const ChatScreen = ({ route }) => {
       <TextInput
         style={styles.searchInput}
         value={searchQuery}
-        onChangeText={setSearchQuery}
+        onChangeText={(text) => dispatch(setSearchQuery(text))}
         placeholder="Search messages"
         placeholderTextColor="#888"
       />
       <FlatList
-        data={filteredMessages}
+        data={groupFilteredMessages}
         renderItem={renderItem}
         keyExtractor={(item) => item.id}
         style={styles.messageList}

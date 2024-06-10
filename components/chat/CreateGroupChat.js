@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import {
   View,
   Text,
   TextInput,
   TouchableOpacity,
   FlatList,
-  Image,
   StyleSheet,
 } from "react-native";
 import { getDatabase, ref, push, get, set } from "firebase/database";
@@ -13,11 +12,19 @@ import { auth } from "../../backend/firebaseConfig";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { StatusBar } from "expo-status-bar";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  setContacts,
+  setGroupName,
+  setSelectedContacts,
+} from "../../redux/actions";
 
 const CreateGroupChat = () => {
-  const [groupName, setGroupName] = useState("");
-  const [contacts, setContacts] = useState([]);
-  const [selectedContacts, setSelectedContacts] = useState([]);
+  const dispatch = useDispatch();
+
+  const groupName = useSelector((state) => state.groupName);
+  const contacts = useSelector((state) => state.contacts);
+  const selectedContacts = useSelector((state) => state.selectedContacts);
   const navigation = useNavigation();
 
   useEffect(() => {
@@ -39,9 +46,9 @@ const CreateGroupChat = () => {
           (contact) => contact.id !== currentUserID
         );
 
-        setContacts(filteredContacts);
+        dispatch(setContacts(filteredContacts));
       } else {
-        setContacts([]);
+        dispatch(setContacts([]));
       }
     };
 
@@ -68,9 +75,11 @@ const CreateGroupChat = () => {
 
   const toggleContactSelection = (contact) => {
     if (selectedContacts.some((c) => c.id === contact.id)) {
-      setSelectedContacts(selectedContacts.filter((c) => c.id !== contact.id));
+      dispatch(
+        setSelectedContacts(selectedContacts.filter((c) => c.id !== contact.id))
+      );
     } else {
-      setSelectedContacts([...selectedContacts, contact]);
+      dispatch(setSelectedContacts([...selectedContacts, contact]));
     }
   };
 
@@ -99,7 +108,7 @@ const CreateGroupChat = () => {
       <TextInput
         style={styles.input}
         value={groupName}
-        onChangeText={setGroupName}
+        onChangeText={(text) => dispatch(setGroupName(text))}
         placeholder="Group Name"
         placeholderTextColor="#888"
       />

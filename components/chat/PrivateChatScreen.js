@@ -25,29 +25,40 @@ import {
   getDownloadURL,
 } from "firebase/storage";
 import { auth } from "../../backend/firebaseConfig";
-import {
-  MaterialIcons,
-  Ionicons,
-  Feather,
-  AntDesign,
-} from "@expo/vector-icons";
+import { MaterialIcons, Ionicons, Feather } from "@expo/vector-icons";
 import { format } from "date-fns";
 import * as ImagePicker from "expo-image-picker";
 import { useTabBarVisibility } from "../screens/useTabBarVisibilityContext";
 import { useFocusEffect } from "@react-navigation/native";
 import { StatusBar } from "expo-status-bar";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  setImage,
+  setIsTyping,
+  setIsOnline,
+  setSearchQuery,
+  setOtherUserName,
+  setOtherUserTyping,
+  setPrivateMessages,
+  addNewPrivateMessage,
+  setPrivateFilteredMessages,
+} from "../../redux/actions";
 
 const PrivateChatScreen = ({ route, navigation }) => {
   const { contactId, contactName, contactAvatar } = route.params;
-  const [messages, setMessages] = useState([]);
-  const [filteredMessages, setFilteredMessages] = useState([]);
-  const [newMessage, setNewMessage] = useState("");
-  const [isTyping, setIsTyping] = useState(false);
-  const [otherUserTyping, setOtherUserTyping] = useState(false);
-  const [otherUserName, setOtherUserName] = useState("");
-  const [isOnline, setIsOnline] = useState(false);
-  const [image, setImage] = useState(null);
-  const [searchQuery, setSearchQuery] = useState("");
+  const dispatch = useDispatch();
+
+  const privateMessages = useSelector((state) => state.privateMessages);
+  const privateFilteredMessages = useSelector(
+    (state) => state.privateFilteredMessages
+  );
+  const newMessage = useSelector((state) => state.newMessage);
+  const isTyping = useSelector((state) => state.isTyping);
+  const otherUserTyping = useSelector((state) => state.otherUserTyping);
+  const otherUserName = useSelector((state) => state.otherUserName);
+  const isOnline = useSelector((state) => state.isOnline);
+  const image = useSelector((state) => state.image);
+  const searchQuery = useSelector((state) => state.searchQuery);
   const inputRef = useRef(null);
 
   const { setTabBarVisible } = useTabBarVisibility();
@@ -72,22 +83,22 @@ const PrivateChatScreen = ({ route, navigation }) => {
       snapshot.forEach((childSnapshot) => {
         messageList.push({ id: childSnapshot.key, ...childSnapshot.val() });
       });
-      setMessages(messageList);
-      setFilteredMessages(messageList);
+      dispatch(setPrivateMessages(messageList));
+      dispatch(setPrivateFilteredMessages(messageList));
       markMessagesAsRead(messageList, chatId);
     });
 
     const unsubscribeTyping = onValue(typingRef, (snapshot) => {
       if (snapshot.exists()) {
-        setOtherUserTyping(snapshot.val().isTyping);
+        dispatch(setOtherUserTyping(snapshot.val().isTyping));
       }
     });
 
     const unsubscribeUser = onValue(userRef, (snapshot) => {
       if (snapshot.exists()) {
         const userData = snapshot.val();
-        setOtherUserName(userData.name);
-        setIsOnline(userData.online);
+        dispatch(setOtherUserName(userData.name));
+        dispatch(setIsOnline(userData.online));
       }
     });
 
@@ -98,16 +109,19 @@ const PrivateChatScreen = ({ route, navigation }) => {
     };
   }, [contactId]);
 
+  console.log(JSON.stringify(privateMessages, null, 2));
+
   useEffect(() => {
     if (searchQuery) {
-      const filtered = messages.filter((message) =>
-        message.text.toLowerCase().includes(searchQuery.toLowerCase())
-      );
-      setFilteredMessages(filtered);
+      const filtered = privateMessages.filter((message) => {
+        if (message.text)
+          return message.text.toLowerCase().includes(searchQuery.toLowerCase());
+      });
+      dispatch(setPrivateFilteredMessages(filtered));
     } else {
-      setFilteredMessages(messages);
+      dispatch(setPrivateFilteredMessages(privateMessages));
     }
-  }, [searchQuery, messages]);
+  }, [searchQuery, privateMessages]);
 
   const markMessagesAsRead = async (messages, chatId) => {
     const db = getDatabase();
@@ -137,7 +151,7 @@ const PrivateChatScreen = ({ route, navigation }) => {
         read: false,
         senderName: auth.currentUser.displayName,
       });
-      setNewMessage("");
+      dispatch(addNewPrivateMessage(""));
     }
 
     if (image) {
@@ -159,10 +173,10 @@ const PrivateChatScreen = ({ route, navigation }) => {
         read: false,
         senderName: auth.currentUser.displayName,
       });
-      setImage(null);
+      dispatch(setImage(null));
     }
 
-    setIsTyping(false);
+    dispatch(setIsTyping(false));
     await updateTypingStatus(false, chatId);
   };
 
@@ -177,7 +191,7 @@ const PrivateChatScreen = ({ route, navigation }) => {
     console.log(result);
 
     if (!result.canceled) {
-      setImage(result.assets[0].uri);
+      dispatch(setImage(result.assets[0].uri));
     }
   };
 
@@ -194,12 +208,12 @@ const PrivateChatScreen = ({ route, navigation }) => {
   const handleTyping = (text) => {
     const userId = auth.currentUser.uid;
     const chatId = [userId, contactId].sort().join("_");
-    setNewMessage(text);
+    dispatch(addNewPrivateMessage(text));
     if (text.trim() !== "" && !isTyping) {
-      setIsTyping(true);
+      dispatch(setIsTyping(true));
       updateTypingStatus(true, chatId);
     } else if (text.trim() === "" && isTyping) {
-      setIsTyping(false);
+      dispatch(setIsTyping(false));
       updateTypingStatus(false, chatId);
     }
   };
@@ -278,10 +292,10 @@ const PrivateChatScreen = ({ route, navigation }) => {
         placeholder="Search messages"
         placeholderTextColor="#aaa"
         value={searchQuery}
-        onChangeText={setSearchQuery}
+        onChangeText={(text) => dispatch(setSearchQuery(text))}
       />
       <FlatList
-        data={filteredMessages}
+        data={privateFilteredMessages}
         renderItem={renderItem}
         keyExtractor={(item) => item.id}
         style={styles.messageList}
@@ -290,11 +304,9 @@ const PrivateChatScreen = ({ route, navigation }) => {
           inputRef.current.scrollToEnd({ animated: true })
         }
       />
-
       {otherUserTyping && (
         <Text style={styles.typingIndicator}>{otherUserName} is typing...</Text>
       )}
-
       <View style={styles.inputContainer}>
         <TouchableOpacity onPress={pickImage} style={styles.iconButton}>
           <Feather name="paperclip" size={24} color="##000E08" />
