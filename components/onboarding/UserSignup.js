@@ -26,6 +26,7 @@ const UserSignup = ({ navigation }) => {
 
   const [fontsLoaded, fontError] = useFonts({
     "Poppins-Bold": require("../../assets/fonts/Poppins-Bold.ttf"),
+    "Poppins-SemiBold": require("../../assets/fonts/Poppins-SemiBold.ttf"),
     "Poppins-Regular": require("../../assets/fonts/Poppins-Regular.ttf"),
   });
 
