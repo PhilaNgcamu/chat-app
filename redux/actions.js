@@ -114,3 +114,8 @@ export const setError = (error) => ({
   type: actionTypes.SET_ERROR,
   payload: error,
 });
+
+export const setTabBarVisible = (tabBarVisible) => ({
+  type: actionTypes.IS_TAB_BAR_VISIBLE,
+  payload: tabBarVisible,
+});

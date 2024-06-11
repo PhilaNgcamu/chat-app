@@ -23,6 +23,7 @@ const initialState = {
   loading: false,
   confirmedPassword: "",
   error: null,
+  tabBarVisible: true,
 };
 
 const rootReducer = (state = initialState, action) => {
@@ -142,6 +143,11 @@ const rootReducer = (state = initialState, action) => {
       return {
         ...state,
         error: action.payload,
+      };
+    case actionTypes.IS_TAB_BAR_VISIBLE:
+      return {
+        ...state,
+        tabBarVisible: action.payload,
       };
     default:
       return state;

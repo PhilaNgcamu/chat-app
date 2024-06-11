@@ -22,6 +22,7 @@ const actionTypes = {
   SET_IS_LOADING: "SET_IS_LOADING",
   SET_NAME: "SET_NAME",
   SET_ERROR: "SET_ERROR",
+  IS_TAB_BAR_VISIBLE: "IS_TAB_BAR_VISIBLE",
 };
 
 export default actionTypes;

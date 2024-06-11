@@ -1,13 +1,19 @@
 import React, { createContext, useState, useContext } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { setTabBarVisible } from "../../redux/actions";
 
 const TabBarVisibilityContext = createContext();
 
 export const TabBarVisibilityProvider = ({ children }) => {
-  const [isTabBarVisible, setTabBarVisible] = useState(true);
+  const dispatch = useDispatch();
+  const tabBarVisible = useSelector((state) => state.tabBarVisible);
+  const setTabBarVisibility = (isVisible) => {
+    dispatch(setTabBarVisible(isVisible));
+  };
 
   return (
     <TabBarVisibilityContext.Provider
-      value={{ isTabBarVisible, setTabBarVisible }}
+      value={{ tabBarVisible, setTabBarVisible: setTabBarVisibility }}
     >
       {children}
     </TabBarVisibilityContext.Provider>

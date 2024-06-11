@@ -19,6 +19,7 @@ import CreateGroupChat from "../chat/CreateGroupChat";
 import PrivateChatScreen from "../chat/PrivateChatScreen";
 import CombinedChatList from "../chat/ChatList";
 import Onboarding from "../onboarding/Onboarding";
+import { useSelector } from "react-redux";
 
 const Stack = createNativeStackNavigator();
 const MessagesStack = createNativeStackNavigator();
@@ -93,7 +94,7 @@ function SettingsStackNavigator() {
 const Tab = createBottomTabNavigator();
 
 function BottomTabNavigator() {
-  const { isTabBarVisible } = useTabBarVisibility();
+  const tabBarVisible = useSelector((state) => state.tabBarVisible);
 
   return (
     <Tab.Navigator
@@ -101,7 +102,7 @@ function BottomTabNavigator() {
         tabBarShowLabel: true,
         tabBarStyle: [
           styles.tabBar,
-          { display: isTabBarVisible ? "flex" : "none" },
+          { display: tabBarVisible ? "flex" : "none" },
         ],
         tabBarActiveTintColor: "#24786D",
         tabBarInactiveTintColor: "#888",
