@@ -149,8 +149,6 @@ const ChatScreen = ({ route }) => {
       quality: 1,
     });
 
-    console.log(result);
-
     if (!result.canceled) {
       dispatch(setImage(result.assets[0].uri));
     }

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   View,
   Text,
@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Alert,
   Image,
+  ActivityIndicator,
 } from "react-native";
 import { useFonts } from "expo-font";
 import { AntDesign } from "@expo/vector-icons";
@@ -21,20 +22,23 @@ import fbLogo from "../../assets/facebook.png";
 import googleLogo from "../../assets/google.png";
 import appleLogo from "../../assets/apple-black.png";
 import { StatusBar } from "expo-status-bar";
+import { useDispatch, useSelector } from "react-redux";
+import { setEmail, setLoading, setPassword } from "../../redux/actions";
 
 const UserLogin = ({ navigation }) => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
+  const email = useSelector((state) => state.email);
+  const password = useSelector((state) => state.password);
+  const loading = useSelector((state) => state.loading);
 
-  const [fontsLoaded, fontError] = useFonts({
+  const [fontsLoaded] = useFonts({
     "Poppins-Bold": require("../../assets/fonts/Poppins-Bold.ttf"),
     "Poppins-SemiBold": require("../../assets/fonts/Poppins-SemiBold.ttf"),
     "Poppins-Regular": require("../../assets/fonts/Poppins-Regular.ttf"),
   });
 
   const handleLogin = async () => {
-    setLoading(true);
+    dispatch(setLoading(true));
     try {
       await signInWithEmailAndPassword(auth, email, password);
       Alert.alert("Login Successful");
@@ -45,14 +49,14 @@ const UserLogin = ({ navigation }) => {
         "Please enter the correct email address or password"
       );
     } finally {
-      setLoading(false);
+      dispatch(setLoading(false));
     }
   };
 
   if (!fontsLoaded) {
     return (
       <View>
-        <Text>Loading...</Text>
+        <ActivityIndicator style={styles.loading} />
       </View>
     );
   }
@@ -102,7 +106,7 @@ const UserLogin = ({ navigation }) => {
           <TextInput
             style={styles.input}
             value={email}
-            onChangeText={setEmail}
+            onChangeText={(text) => dispatch(setEmail(text))}
             keyboardType="email-address"
             autoCapitalize="none"
           />
@@ -112,7 +116,7 @@ const UserLogin = ({ navigation }) => {
           <TextInput
             style={styles.input}
             value={password}
-            onChangeText={setPassword}
+            onChangeText={(text) => dispatch(setPassword(text))}
             secureTextEntry
           />
         </View>
@@ -146,6 +150,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#FFF",
+  },
+  loading: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#24786D",
   },
   content: {
     flex: 1,

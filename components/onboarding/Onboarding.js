@@ -1,5 +1,12 @@
 import React from "react";
-import { View, Text, TouchableOpacity, StyleSheet, Image } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  Image,
+  ActivityIndicator,
+} from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { useFonts } from "expo-font";
 import cLogo from "../../assets/c-logo.png";
@@ -14,7 +21,7 @@ import {
 import { StatusBar } from "expo-status-bar";
 
 const Onboarding = ({ navigation }) => {
-  const [fontsLoaded, fontError] = useFonts({
+  const [fontsLoaded] = useFonts({
     "Poppins-Bold": require("../../assets/fonts/Poppins-Bold.ttf"),
     "Poppins-SemiBold": require("../../assets/fonts/Poppins-SemiBold.ttf"),
     "Poppins-Regular": require("../../assets/fonts/Poppins-Regular.ttf"),
@@ -23,7 +30,7 @@ const Onboarding = ({ navigation }) => {
   if (!fontsLoaded) {
     return (
       <View>
-        <Text>Loading...</Text>
+        <ActivityIndicator style={styles.loading} />
       </View>
     );
   }
@@ -93,6 +100,12 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+  },
+  loading: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#24786D",
   },
   header: {
     position: "absolute",

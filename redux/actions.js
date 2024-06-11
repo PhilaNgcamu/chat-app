@@ -84,3 +84,18 @@ export const setIsOnline = (isOnline) => ({
   type: actionTypes.SET_IS_ONLINE,
   payload: isOnline,
 });
+
+export const setEmail = (email) => ({
+  type: actionTypes.SET_EMAIL,
+  payload: email,
+});
+
+export const setPassword = (password) => ({
+  type: actionTypes.SET_PASSWORD,
+  payload: password,
+});
+
+export const setLoading = (loading) => ({
+  type: actionTypes.SET_IS_LOADING,
+  payload: loading,
+});

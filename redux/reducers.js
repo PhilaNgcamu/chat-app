@@ -17,6 +17,9 @@ const initialState = {
   privateFilteredMessages: [],
   otherUserName: "",
   isOnline: false,
+  email: "",
+  password: "",
+  loading: false,
 };
 
 const rootReducer = (state = initialState, action) => {
@@ -101,6 +104,26 @@ const rootReducer = (state = initialState, action) => {
       return {
         ...state,
         otherUserName: action.payload,
+      };
+    case actionTypes.SET_IS_ONLINE:
+      return {
+        ...state,
+        isOnline: action.payload,
+      };
+    case actionTypes.SET_EMAIL:
+      return {
+        ...state,
+        email: action.payload,
+      };
+    case actionTypes.SET_PASSWORD:
+      return {
+        ...state,
+        password: action.payload,
+      };
+    case actionTypes.SET_LOADING:
+      return {
+        ...state,
+        loading: action.payload,
       };
     default:
       return state;

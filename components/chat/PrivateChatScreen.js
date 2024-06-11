@@ -109,8 +109,6 @@ const PrivateChatScreen = ({ route, navigation }) => {
     };
   }, [contactId]);
 
-  console.log(JSON.stringify(privateMessages, null, 2));
-
   useEffect(() => {
     if (searchQuery) {
       const filtered = privateMessages.filter((message) => {
@@ -187,8 +185,6 @@ const PrivateChatScreen = ({ route, navigation }) => {
       aspect: [4, 3],
       quality: 1,
     });
-
-    console.log(result);
 
     if (!result.canceled) {
       dispatch(setImage(result.assets[0].uri));

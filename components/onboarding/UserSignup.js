@@ -5,6 +5,7 @@ import {
   TextInput,
   TouchableOpacity,
   View,
+  ActivityIndicator,
 } from "react-native";
 import { useFonts } from "expo-font";
 import { createUserWithEmailAndPassword, getAuth } from "firebase/auth";
@@ -24,7 +25,7 @@ const UserSignup = ({ navigation }) => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState(null);
 
-  const [fontsLoaded, fontError] = useFonts({
+  const [fontsLoaded] = useFonts({
     "Poppins-Bold": require("../../assets/fonts/Poppins-Bold.ttf"),
     "Poppins-SemiBold": require("../../assets/fonts/Poppins-SemiBold.ttf"),
     "Poppins-Regular": require("../../assets/fonts/Poppins-Regular.ttf"),
@@ -62,7 +63,7 @@ const UserSignup = ({ navigation }) => {
   if (!fontsLoaded) {
     return (
       <View>
-        <Text>Loading...</Text>
+        <ActivityIndicator style={styles.loading} />
       </View>
     );
   }
@@ -156,6 +157,12 @@ const UserSignup = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  loading: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#24786D",
   },
   content: {
     flex: 1,
