@@ -109,3 +109,8 @@ export const setConfirmedPassword = (password) => ({
   type: actionTypes.SET_CONFIRMED_PASSWORD,
   payload: password,
 });
+
+export const setError = (error) => ({
+  type: actionTypes.SET_ERROR,
+  payload: error,
+});

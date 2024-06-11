@@ -20,6 +20,7 @@ import { StatusBar } from "expo-status-bar";
 import {
   setConfirmedPassword,
   setEmail,
+  setError,
   setName,
   setPassword,
 } from "../../redux/actions";
@@ -31,7 +32,7 @@ const UserSignup = ({ navigation }) => {
   const email = useSelector((state) => state.email);
   const password = useSelector((state) => state.password);
   const confirmPassword = useSelector((state) => state.confirmPassword);
-  const [error, setError] = useState(null);
+  const error = useSelector((state) => state.error);
 
   const [fontsLoaded] = useFonts({
     "Poppins-Bold": require("../../assets/fonts/Poppins-Bold.ttf"),
@@ -41,7 +42,7 @@ const UserSignup = ({ navigation }) => {
 
   const handleSignup = async () => {
     if (password !== confirmPassword) {
-      setError("Passwords do not match");
+      dispatch(setError("Passwords do not match"));
       return;
     }
 

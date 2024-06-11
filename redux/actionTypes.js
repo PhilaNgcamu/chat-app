@@ -21,6 +21,7 @@ const actionTypes = {
   SET_CONFIRMED_PASSWORD: "SET_CONFIRMED_PASSWORD",
   SET_IS_LOADING: "SET_IS_LOADING",
   SET_NAME: "SET_NAME",
+  SET_ERROR: "SET_ERROR",
 };
 
 export default actionTypes;

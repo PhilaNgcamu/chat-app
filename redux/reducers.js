@@ -17,10 +17,12 @@ const initialState = {
   privateFilteredMessages: [],
   otherUserName: "",
   isOnline: false,
+  name: "",
   email: "",
   password: "",
   loading: false,
   confirmedPassword: "",
+  error: null,
 };
 
 const rootReducer = (state = initialState, action) => {
@@ -135,6 +137,11 @@ const rootReducer = (state = initialState, action) => {
       return {
         ...state,
         confirmedPassword: action.payload,
+      };
+    case actionTypes.SET_ERROR:
+      return {
+        ...state,
+        error: action.payload,
       };
     default:
       return state;
