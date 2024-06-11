@@ -120,10 +120,15 @@ const rootReducer = (state = initialState, action) => {
         ...state,
         password: action.payload,
       };
-    case actionTypes.SET_LOADING:
+    case actionTypes.SET_IS_LOADING:
       return {
         ...state,
         loading: action.payload,
+      };
+    case actionTypes.SET_NAME:
+      return {
+        ...state,
+        name: action.payload,
       };
     default:
       return state;

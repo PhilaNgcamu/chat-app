@@ -99,3 +99,8 @@ export const setLoading = (loading) => ({
   type: actionTypes.SET_IS_LOADING,
   payload: loading,
 });
+
+export const setName = (name) => ({
+  type: actionTypes.SET_NAME,
+  payload: name,
+});

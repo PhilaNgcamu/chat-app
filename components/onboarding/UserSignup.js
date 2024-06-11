@@ -17,9 +17,11 @@ import {
   moderateScale,
 } from "../../util/scale";
 import { StatusBar } from "expo-status-bar";
+import { setName } from "../../redux/actions";
+import { useSelector } from "react-redux";
 
 const UserSignup = ({ navigation }) => {
-  const [name, setName] = useState("");
+  const name = useSelector((state) => state.name);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -100,7 +102,7 @@ const UserSignup = ({ navigation }) => {
           <TextInput
             style={styles.input}
             value={name}
-            onChangeText={setName}
+            onChangeText={(text) => dispatch(setName(text))}
             keyboardType="default"
           />
         </View>

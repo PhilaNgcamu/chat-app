@@ -19,6 +19,7 @@ const actionTypes = {
   SET_EMAIL: "SET_EMAIL",
   SET_PASSWORD: "SET_PASSWORD",
   SET_IS_LOADING: "SET_IS_LOADING",
+  SET_NAME: "SET_NAME",
 };
 
 export default actionTypes;
