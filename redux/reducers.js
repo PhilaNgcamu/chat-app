@@ -20,6 +20,7 @@ const initialState = {
   email: "",
   password: "",
   loading: false,
+  confirmedPassword: "",
 };
 
 const rootReducer = (state = initialState, action) => {
@@ -129,6 +130,11 @@ const rootReducer = (state = initialState, action) => {
       return {
         ...state,
         name: action.payload,
+      };
+    case actionTypes.SET_CONFIRMED_PASSWORD:
+      return {
+        ...state,
+        confirmedPassword: action.payload,
       };
     default:
       return state;

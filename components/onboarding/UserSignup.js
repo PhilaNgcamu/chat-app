@@ -17,14 +17,20 @@ import {
   moderateScale,
 } from "../../util/scale";
 import { StatusBar } from "expo-status-bar";
-import { setName } from "../../redux/actions";
-import { useSelector } from "react-redux";
+import {
+  setConfirmedPassword,
+  setEmail,
+  setName,
+  setPassword,
+} from "../../redux/actions";
+import { useDispatch, useSelector } from "react-redux";
 
 const UserSignup = ({ navigation }) => {
+  const dispatch = useDispatch();
   const name = useSelector((state) => state.name);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const email = useSelector((state) => state.email);
+  const password = useSelector((state) => state.password);
+  const confirmPassword = useSelector((state) => state.confirmPassword);
   const [error, setError] = useState(null);
 
   const [fontsLoaded] = useFonts({
@@ -112,7 +118,7 @@ const UserSignup = ({ navigation }) => {
           <TextInput
             style={styles.input}
             value={email}
-            onChangeText={setEmail}
+            onChangeText={(text) => dispatch(setEmail(text))}
             keyboardType="email-address"
             autoCapitalize="none"
           />
@@ -123,7 +129,7 @@ const UserSignup = ({ navigation }) => {
           <TextInput
             style={styles.input}
             value={password}
-            onChangeText={setPassword}
+            onChangeText={(text) => dispatch(setPassword(text))}
             secureTextEntry
           />
         </View>
@@ -133,7 +139,7 @@ const UserSignup = ({ navigation }) => {
           <TextInput
             style={styles.input}
             value={confirmPassword}
-            onChangeText={setConfirmPassword}
+            onChangeText={(text) => dispatch(setConfirmedPassword(text))}
             secureTextEntry
           />
         </View>
