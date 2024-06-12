@@ -28,7 +28,7 @@ const UserSignUp = ({ navigation }) => {
   const name = useSelector((state) => state.name);
   const email = useSelector((state) => state.email);
   const password = useSelector((state) => state.password);
-  const confirmPassword = useSelector((state) => state.confirmPassword);
+  const confirmedPassword = useSelector((state) => state.confirmedPassword);
   const error = useSelector((state) => state.error);
 
   const [fontsLoaded] = useFonts({
@@ -38,7 +38,10 @@ const UserSignUp = ({ navigation }) => {
   });
 
   const handleSignup = async () => {
-    if (password !== confirmPassword) {
+    console.log(password);
+    console.log(confirmedPassword);
+
+    if (password !== confirmedPassword) {
       dispatch(setError("Passwords do not match"));
       return;
     }
@@ -126,7 +129,7 @@ const UserSignUp = ({ navigation }) => {
 
         <InputField
           label="Confirm Password"
-          value={confirmPassword}
+          value={confirmedPassword}
           onChangeText={(text) => dispatch(setConfirmedPassword(text))}
           secureTextEntry
         />
