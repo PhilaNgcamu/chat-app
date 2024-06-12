@@ -6,7 +6,7 @@ This is a chat application built with React Native and Firebase. It includes fea
 
 ### All Chats List
 
-The `CombinedChatList` component displays a combined list of group and individual chats, along with user statuses.
+The `ChatList` component displays a combined list of group and individual chats, along with user statuses.
 
 #### Props
 

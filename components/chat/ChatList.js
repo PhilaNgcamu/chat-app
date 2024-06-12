@@ -15,7 +15,7 @@ import { StatusBar } from "expo-status-bar";
 import { useDispatch, useSelector } from "react-redux";
 import { setItems, setStatuses, setSearchQuery } from "../../redux/actions";
 
-const CombinedChatList = ({ navigation }) => {
+const ChatList = ({ navigation }) => {
   const dispatch = useDispatch();
   const items = useSelector((state) => state.items);
   const statuses = useSelector((state) => state.statuses);
@@ -339,4 +339,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CombinedChatList;
+export default ChatList;

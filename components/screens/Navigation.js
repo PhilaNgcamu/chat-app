@@ -5,10 +5,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { AntDesign, Feather, FontAwesome } from "@expo/vector-icons";
 import { StyleSheet } from "react-native";
 
-import {
-  TabBarVisibilityProvider,
-  useTabBarVisibility,
-} from "./useTabBarVisibilityContext";
+import { TabBarVisibilityProvider } from "./useTabBarVisibilityContext";
 import UserLogin from "../onboarding/UserLogin";
 import UserSignup from "../onboarding/UserSignup";
 import UserProfile from "../user_profile/UserProfile";
@@ -17,7 +14,6 @@ import ChatScreen from "../chat/ChatScreen";
 import Home from "./Home";
 import CreateGroupChat from "../chat/CreateGroupChat";
 import PrivateChatScreen from "../chat/PrivateChatScreen";
-import CombinedChatList from "../chat/ChatList";
 import Onboarding from "../onboarding/Onboarding";
 import { useSelector } from "react-redux";
 
@@ -185,7 +181,7 @@ export default function NavigationScreens() {
           />
           <Stack.Screen
             name="ChatList"
-            component={CombinedChatList}
+            component={ChatList}
             options={{ headerShown: false }}
           />
 
