@@ -1,78 +1,60 @@
-# Chat Application
+### Chatbox
 
-This is a chat application built with React Native and Firebase. It includes features such as private chats, group chats, and user statuses.
+This is a professional chat application built using Expo/React Native, Firebase, and Redux. It enables users to engage in one-on-one or group conversations exclusively.
 
-## Components
+### Features
 
-### All Chats List
+1. **User Registration and Authentication**: Users can create an account by providing necessary details like username, email, and password. A secure authentication system verifies user credentials during login.
 
-The `ChatList` component displays a combined list of group and individual chats, along with user statuses.
+2. **User Profile Management**: Users can update their profiles, including fields such as name, profile picture, status message, and email address.
 
-#### Props
+3. **Individual Chat**: Users can initiate private conversations with their contacts. The interface facilitates seamless messaging with features like message timestamps, read receipts, and typing indicators for real-time interaction.
 
-- `navigation`: Provided by React Navigation to navigate between screens.
+4. **Group Chat**: Users can create or join group chats, add participants, and set group names.
 
-#### State
+5. **User Interface and Experience**: The UI is designed based on the provided Figma file, ensuring an intuitive and user-friendly experience. It is responsive and adapts to various devices and screen sizes. Features like search functionality, message filtering, and a notification system enhance the user experience.
 
-- `items`: Array of chat and contact items.
-- `statuses`: Array of user status items.
-- `searchQuery`: The search query entered by the user.
+### Screens
 
-#### Description
+1. **Login Screen**: Allows users to log in with their credentials or navigate to the registration screen if they don't have an account.
 
-- Fetches and displays chat and contact items from Firebase Realtime Database.
-- Allows users to search for contacts and chats.
-- Displays user statuses at the top.
-- Navigates to the `ChatScreen` for group chats or `PrivateChat` for individual chats when an item is pressed.
+2. **Registration Screen**: Enables users to create a new account by providing necessary details.
 
-### Individual Chat
+3. **Profile Screen**: Allows users to view and update their profile information and settings.
 
-The `PrivateChatScreen` component handles individual chat interactions, displaying messages and allowing users to send new messages and images.
+4. **Individual Chat Screen**: Displays private conversations between two users with message timestamps, read receipts, and typing indicators.
 
-#### Props
+5. **Group Chat Screen**: Shows group conversations with features like participant management, group name setting, and message filtering.
 
-- `route`: Provided by React Navigation, contains `contactId`, `contactName`, and `contactAvatar`.
-- `navigation`: Provided by React Navigation to navigate between screens.
+6. **Search Screen**: Facilitates searching for users or groups to start new conversations.
 
-#### State
+7. **Notification Screen**: Notifies users of new messages or group invitations.
 
-- `messages`: Array of messages in the chat.
-- `newMessage`: The text of the new message being typed.
-- `isTyping`: Boolean indicating if the current user is typing.
-- `otherUserTyping`: Boolean indicating if the other user is typing.
-- `otherUserName`: The name of the other user.
-- `isOnline`: Boolean indicating if the other user is online.
-- `image`: URI of the selected image.
+### Technologies Used
 
-#### Description
+- Expo/React Native: For building the mobile application with cross-platform compatibility.
+- Firebase: For backend services like authentication, real-time database, and cloud storage.
+- Redux: For state management, ensuring data consistency and scalability.
 
-- Fetches and displays messages from Firebase Realtime Database.
-- Marks messages as read when displayed.
-- Allows users to send text messages and images.
-- Updates typing status in the database.
-- Displays the online status and typing status of the other user.
+### How to Run
 
-## Firebase Setup
+1. Clone the repository to your local machine.
+2. Install dependencies using `npm install` or `yarn install`.
+3. Set up Firebase project and configure the Firebase credentials in the application.
+4. Run the application using `npm start`.
+5. Use Expo go on your mobile device to view the application or run it on an emulator.
 
-1. Set up a Firebase project at [Firebase Console](https://console.firebase.google.com/).
-2. Enable Firebase Realtime Database.
-3. Enable Firebase Authentication and set up the desired authentication methods (e.g., Email/Password, Google Sign-In).
-4. Update the Firebase configuration in `firebaseConfig.js`.
+### Future Improvements
 
-## Installation
+- Implement end-to-end encryption for secure messaging.
+- Integrate push notifications for real-time updates.
+- Enhance search functionality with advanced filters and suggestions.
+- Improve UI/UX based on user feedback and usability testing.
 
-1. Clone the repository.
-2. Run `npm install` or `yarn install` to install dependencies.
-3. Set up Firebase and update the configuration in `firebaseConfig.js`.
-4. Run the app using `npm start` or `yarn start`.
+### License
 
-## Dependencies
+This project is licensed under the [MIT License](https://opensource.org/licenses/MIT).
 
-- React Native
-- Firebase
-- React Navigation
-- Expo
+### Acknowledgements
 
-## License
-
-This project is licensed under the MIT License.
+Special thanks to the Tumi Gede and Navisha for providing the Figma designs and inspiration for the UI/UX of the application.
