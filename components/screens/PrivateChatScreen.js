@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useCallback } from "react";
 import {
-  View,
   TextInput,
   KeyboardAvoidingView,
   Platform,
