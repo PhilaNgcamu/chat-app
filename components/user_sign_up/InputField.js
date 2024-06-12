@@ -18,6 +18,7 @@ const InputField = ({
         onChangeText={onChangeText}
         secureTextEntry={secureTextEntry}
         keyboardType={keyboardType}
+        autoCapitalize={label === "Your Email" ? "none" : "words"}
       />
     </View>
   );
