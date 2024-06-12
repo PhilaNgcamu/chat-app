@@ -7,7 +7,7 @@ import { StyleSheet } from "react-native";
 
 import { TabBarVisibilityProvider } from "../chat/custom_hook/useTabBarVisibilityContext";
 import UserLogin from "../user_login/UserLogin";
-import UserSignUp from "../onboarding/UserSignUp";
+import UserSignUp from "../user_sign_up/UserSignUp";
 import UserProfile from "../user_profile/UserProfile";
 import ChatList from "../chat/display_chats/ChatList";
 import ChatScreen from "./GroupChatScreen";

@@ -1,22 +1,10 @@
 import React from "react";
-import {
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-  ActivityIndicator,
-} from "react-native";
+import { View, Text, ActivityIndicator, StyleSheet } from "react-native";
 import { useFonts } from "expo-font";
 import { createUserWithEmailAndPassword, getAuth } from "firebase/auth";
 import { getDatabase, ref, set } from "firebase/database";
-import { AntDesign } from "@expo/vector-icons";
-import {
-  horizontalScale,
-  verticalScale,
-  moderateScale,
-} from "../../util/scale";
 import { StatusBar } from "expo-status-bar";
+import { useDispatch, useSelector } from "react-redux";
 import {
   setConfirmedPassword,
   setEmail,
@@ -24,7 +12,16 @@ import {
   setName,
   setPassword,
 } from "../../redux/actions";
-import { useDispatch, useSelector } from "react-redux";
+
+import BackButton from "./BackButton";
+import InputField from "./InputField";
+import SignUpButton from "./SignUpButton";
+import ExistingAccountButton from "./ExistingAccountButton";
+import {
+  horizontalScale,
+  moderateScale,
+  verticalScale,
+} from "../../util/scale";
 
 const UserSignUp = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -77,17 +74,18 @@ const UserSignUp = ({ navigation }) => {
     );
   }
 
+  if (!fontsLoaded) {
+    return (
+      <View style={styles.loading}>
+        <ActivityIndicator size="large" color="#FFF" />
+      </View>
+    );
+  }
+
   return (
     <View style={styles.container}>
       <StatusBar backgroundColor="#000" style="light" />
-      <TouchableOpacity onPress={() => navigation.goBack()}>
-        <AntDesign
-          name="arrowleft"
-          size={moderateScale(24)}
-          color="black"
-          style={styles.icon}
-        />
-      </TouchableOpacity>
+      <BackButton onPress={() => navigation.goBack()} />
       <View style={styles.content}>
         <View style={styles.titleContainer}>
           <Text style={styles.title}>Sign up with </Text>
@@ -104,59 +102,40 @@ const UserSignUp = ({ navigation }) => {
 
         {error && <Text style={styles.error}>{error}</Text>}
 
-        <View style={styles.inputContainer}>
-          <Text style={styles.label}>Your Name</Text>
-          <TextInput
-            style={styles.input}
-            value={name}
-            onChangeText={(text) => dispatch(setName(text))}
-            keyboardType="default"
-          />
-        </View>
+        <InputField
+          label="Your Name"
+          value={name}
+          onChangeText={(text) => dispatch(setName(text))}
+          keyboardType="default"
+        />
 
-        <View style={styles.inputContainer}>
-          <Text style={styles.label}>Your Email</Text>
-          <TextInput
-            style={styles.input}
-            value={email}
-            onChangeText={(text) => dispatch(setEmail(text))}
-            keyboardType="email-address"
-            autoCapitalize="none"
-          />
-        </View>
+        <InputField
+          label="Your Email"
+          value={email}
+          onChangeText={(text) => dispatch(setEmail(text))}
+          keyboardType="email-address"
+          autoCapitalize="none"
+        />
 
-        <View style={styles.inputContainer}>
-          <Text style={styles.label}>Password</Text>
-          <TextInput
-            style={styles.input}
-            value={password}
-            onChangeText={(text) => dispatch(setPassword(text))}
-            secureTextEntry
-          />
-        </View>
+        <InputField
+          label="Password"
+          value={password}
+          onChangeText={(text) => dispatch(setPassword(text))}
+          secureTextEntry
+        />
 
-        <View style={styles.inputContainer}>
-          <Text style={styles.label}>Confirm Password</Text>
-          <TextInput
-            style={styles.input}
-            value={confirmPassword}
-            onChangeText={(text) => dispatch(setConfirmedPassword(text))}
-            secureTextEntry
-          />
-        </View>
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.button} onPress={handleSignup}>
-            <Text style={styles.buttonText}>Create an account</Text>
-          </TouchableOpacity>
+        <InputField
+          label="Confirm Password"
+          value={confirmPassword}
+          onChangeText={(text) => dispatch(setConfirmedPassword(text))}
+          secureTextEntry
+        />
+        <View style={styles.chooseOptions}>
+          <SignUpButton onPress={handleSignup} />
 
-          <TouchableOpacity
-            style={styles.loginButton}
+          <ExistingAccountButton
             onPress={() => navigation.navigate("UserLogin")}
-          >
-            <Text style={styles.loginButtonText}>
-              Existing account? <Text style={styles.loginText}>Log in</Text>
-            </Text>
-          </TouchableOpacity>
+          />
         </View>
       </View>
     </View>
@@ -177,12 +156,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     padding: horizontalScale(16),
-  },
-  icon: {
-    position: "absolute",
-    top: verticalScale(61),
-    left: horizontalScale(24),
-    color: "#000E08",
   },
   titleContainer: {
     flexDirection: "row",
@@ -237,16 +210,6 @@ const styles = StyleSheet.create({
     fontFamily: "Poppins-Regular",
     fontSize: moderateScale(16),
   },
-  buttonContainer: {
-    position: "position",
-    top: verticalScale(70),
-  },
-  buttonText: {
-    fontFamily: "Poppins-Bold",
-    fontSize: moderateScale(16),
-    textAlign: "center",
-    color: "#FFFFFF",
-  },
   button: {
     backgroundColor: "#24786D",
     paddingVertical: verticalScale(12),
@@ -254,6 +217,12 @@ const styles = StyleSheet.create({
     borderRadius: moderateScale(20),
     marginTop: verticalScale(16),
     alignItems: "center",
+  },
+  buttonText: {
+    fontFamily: "Poppins-Bold",
+    fontSize: moderateScale(16),
+    textAlign: "center",
+    color: "#FFFFFF",
   },
   loginButton: {
     backgroundColor: "transparent",
@@ -274,6 +243,10 @@ const styles = StyleSheet.create({
     fontSize: moderateScale(16),
     textAlign: "center",
     color: "#24786D",
+  },
+  chooseOptions: {
+    position: "relative",
+    top: verticalScale(60),
   },
   error: {
     color: "red",
