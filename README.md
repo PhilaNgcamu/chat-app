@@ -46,10 +46,9 @@ This is a professional chat application built using Expo/React Native, Firebase,
 
 ### Future Improvements
 
-- Implement end-to-end encryption for secure messaging.
 - Integrate push notifications for real-time updates.
 - Enhance search functionality with advanced filters and suggestions.
-- Improve UI/UX based on user feedback and usability testing.
+- Improve UI/UX overall
 
 ### License
 
