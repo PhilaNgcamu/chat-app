@@ -44,6 +44,10 @@ This is a professional chat application built using Expo/React Native, Firebase,
 4. Run the application using `npm start`.
 5. Use Expo go on your mobile device to view the application or run it on an emulator.
 
+### Download the App
+
+First version (v1.0): [Chatbox](https://drive.google.com/file/d/1IXMiI6VnF_7UYra7S5F28c7LMJhy7K5v/view?usp=drive_link)
+
 ### Future Improvements
 
 - Integrate push notifications for real-time updates.
