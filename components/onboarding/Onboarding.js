@@ -1,24 +1,20 @@
 import React from "react";
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-  Image,
-  ActivityIndicator,
-} from "react-native";
+import { View, Text, ActivityIndicator, StyleSheet } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { useFonts } from "expo-font";
-import cLogo from "../../assets/c-logo.png";
-import fbLogo from "../../assets/facebook.png";
-import googleLogo from "../../assets/google.png";
-import appleLogo from "../../assets/apple.png";
 import {
   horizontalScale,
   verticalScale,
   moderateScale,
 } from "../../util/scale";
 import { StatusBar } from "expo-status-bar";
+
+import Header from "./Header";
+import Subtitle from "./Subtitle";
+import SocialLoginButtons from "./SocialLoginButtons";
+import Separator from "./Separator";
+import SignUpButton from "./SignUpButton";
+import LoginLink from "./LoginLink";
 
 const Onboarding = ({ navigation }) => {
   const [fontsLoaded] = useFonts({
@@ -29,8 +25,8 @@ const Onboarding = ({ navigation }) => {
 
   if (!fontsLoaded) {
     return (
-      <View>
-        <ActivityIndicator style={styles.loading} />
+      <View style={styles.loading}>
+        <ActivityIndicator size="large" color="#FFF" />
       </View>
     );
   }
@@ -41,16 +37,8 @@ const Onboarding = ({ navigation }) => {
       style={styles.container}
     >
       <StatusBar backgroundColor="#000" style="light" />
-      <View style={styles.header}>
-        <Image source={cLogo} style={styles.logo} />
-        <Text style={styles.title}>Chatbox</Text>
-      </View>
-      <View style={styles.subtitle}>
-        <Text style={styles.connectText}>Connect</Text>
-        <Text style={styles.friendsText}>friends</Text>
-        <Text style={styles.easilyText}>easily &</Text>
-        <Text style={styles.quicklyText}>quickly</Text>
-      </View>
+      <Header />
+      <Subtitle />
       <View style={styles.content}>
         <Text style={styles.description}>
           Our chat app is the perfect way to stay
@@ -58,38 +46,10 @@ const Onboarding = ({ navigation }) => {
         <Text style={styles.description}>
           connected with friends and family.
         </Text>
-        <View style={styles.socialLogos}>
-          <View style={styles.socialLogoWrapper}>
-            <Image source={fbLogo} style={styles.socialLogo} />
-          </View>
-          <View style={styles.socialLogoWrapper}>
-            <Image source={googleLogo} style={styles.socialLogo} />
-          </View>
-          <View style={styles.socialLogoWrapper}>
-            <Image source={appleLogo} style={styles.socialLogo} />
-          </View>
-        </View>
-        <View style={styles.separator}>
-          <View style={styles.line} />
-          <Text style={styles.orText}>OR</Text>
-          <View style={styles.line} />
-        </View>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => navigation.navigate("UserSignup")}
-        >
-          <Text style={styles.buttonText}>Sign Up</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.link}
-          onPress={() => navigation.navigate("UserLogin")}
-        >
-          <View>
-            <Text style={styles.linkText}>
-              Existing account? <Text style={styles.loginText}>Log in</Text>
-            </Text>
-          </View>
-        </TouchableOpacity>
+        <SocialLoginButtons />
+        <Separator />
+        <SignUpButton onPress={() => navigation.navigate("UserSignup")} />
+        <LoginLink onPress={() => navigation.navigate("UserLogin")} />
       </View>
     </LinearGradient>
   );
@@ -107,54 +67,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "#24786D",
   },
-  header: {
-    position: "absolute",
-    top: verticalScale(88),
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: verticalScale(20),
-  },
-  logo: {
-    width: horizontalScale(50),
-    height: horizontalScale(50),
-  },
-  title: {
-    fontFamily: "Poppins-Regular",
-    fontSize: moderateScale(25),
-    color: "#FFF",
-    marginTop: verticalScale(4),
-  },
-  subtitle: {
-    position: "absolute",
-    top: verticalScale(180),
-    left: horizontalScale(30),
-    width: horizontalScale(338),
-    marginBottom: verticalScale(20),
-  },
-  connectText: {
-    fontFamily: "Poppins-Regular",
-    fontSize: moderateScale(52),
-    lineHeight: moderateScale(60),
-    color: "#FFF",
-  },
-  friendsText: {
-    fontFamily: "Poppins-Regular",
-    fontSize: moderateScale(52),
-    lineHeight: moderateScale(60),
-    color: "#FFF",
-  },
-  easilyText: {
-    fontFamily: "Poppins-Bold",
-    fontSize: moderateScale(52),
-    lineHeight: moderateScale(60),
-    color: "#FFF",
-  },
-  quicklyText: {
-    fontFamily: "Poppins-Bold",
-    fontSize: moderateScale(52),
-    lineHeight: moderateScale(60),
-    color: "#FFF",
-  },
   content: {
     position: "absolute",
     top: verticalScale(460),
@@ -166,71 +78,7 @@ const styles = StyleSheet.create({
     lineHeight: moderateScale(24),
     marginLeft: horizontalScale(10),
     color: "#FFF",
-  },
-  socialLogos: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-    width: "100%",
-    marginVertical: verticalScale(20),
-  },
-  socialLogoWrapper: {
-    width: horizontalScale(70),
-    height: horizontalScale(70),
-    borderRadius: horizontalScale(35),
-    borderWidth: 1,
-    borderColor: "#FFF",
-    backgroundColor: "#000",
-    justifyContent: "center",
-    alignItems: "center",
-    marginHorizontal: horizontalScale(10),
-  },
-  socialLogo: {
-    width: horizontalScale(36),
-    height: horizontalScale(36),
-    borderRadius: horizontalScale(18),
-  },
-  separator: {
-    flexDirection: "row",
-    alignItems: "center",
-    width: "100%",
-    marginVertical: verticalScale(20),
-  },
-  line: {
-    flex: 1,
-    height: 1,
-    backgroundColor: "#CDD1D0",
-  },
-  orText: {
-    fontSize: moderateScale(14),
-    fontFamily: "Poppins-Bold",
-    color: "#FFF",
-    marginHorizontal: horizontalScale(15),
-  },
-  button: {
-    backgroundColor: "#FFF",
-    paddingVertical: verticalScale(12),
-    paddingHorizontal: horizontalScale(25),
-    borderRadius: 25,
-    marginVertical: verticalScale(20),
-    alignItems: "center",
-  },
-  buttonText: {
-    color: "#000E08",
-    fontSize: moderateScale(16),
-    fontFamily: "Poppins-Bold",
     textAlign: "center",
-  },
-  link: {
-    marginTop: verticalScale(10),
-  },
-  linkText: {
-    color: "#FFF",
-    fontSize: moderateScale(16),
-    textAlign: "center",
-  },
-  loginText: {
-    fontFamily: "Poppins-SemiBold",
   },
 });
 
