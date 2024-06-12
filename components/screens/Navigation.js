@@ -6,8 +6,8 @@ import { AntDesign, Feather, FontAwesome } from "@expo/vector-icons";
 import { StyleSheet } from "react-native";
 
 import { TabBarVisibilityProvider } from "../chat/custom_hook/useTabBarVisibilityContext";
-import UserLogin from "../onboarding/UserLogin";
-import UserSignup from "../onboarding/UserSignup";
+import UserLogin from "../user_login/UserLogin";
+import UserSignUp from "../onboarding/UserSignUp";
 import UserProfile from "../user_profile/UserProfile";
 import ChatList from "../chat/display_chats/ChatList";
 import ChatScreen from "./GroupChatScreen";
@@ -160,8 +160,8 @@ export default function NavigationScreens() {
             options={{ headerShown: false }}
           />
           <Stack.Screen
-            name="UserSignup"
-            component={UserSignup}
+            name="UserSignUp"
+            component={UserSignUp}
             options={{ headerShown: false }}
           />
           <Stack.Screen

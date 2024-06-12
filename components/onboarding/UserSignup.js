@@ -26,7 +26,7 @@ import {
 } from "../../redux/actions";
 import { useDispatch, useSelector } from "react-redux";
 
-const UserSignup = ({ navigation }) => {
+const UserSignUp = ({ navigation }) => {
   const dispatch = useDispatch();
   const name = useSelector((state) => state.name);
   const email = useSelector((state) => state.email);
@@ -283,4 +283,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default UserSignup;
+export default UserSignUp;

@@ -48,7 +48,7 @@ const Onboarding = ({ navigation }) => {
         </Text>
         <SocialLoginButtons />
         <Separator />
-        <SignUpButton onPress={() => navigation.navigate("UserSignup")} />
+        <SignUpButton onPress={() => navigation.navigate("UserSignUp")} />
         <LoginLink onPress={() => navigation.navigate("UserLogin")} />
       </View>
     </LinearGradient>
