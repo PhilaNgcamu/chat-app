@@ -22,6 +22,7 @@ import {
   moderateScale,
   verticalScale,
 } from "../../util/scale";
+import { signUpUser } from "../../redux/userActions";
 
 const UserSignUp = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -30,6 +31,7 @@ const UserSignUp = ({ navigation }) => {
   const password = useSelector((state) => state.password);
   const confirmedPassword = useSelector((state) => state.confirmedPassword);
   const error = useSelector((state) => state.error);
+  const uniqueUserID = useSelector((state) => state.uniqueUserID);
 
   const [fontsLoaded] = useFonts({
     "Poppins-Bold": require("../../assets/fonts/Poppins-Bold.ttf"),
@@ -37,36 +39,16 @@ const UserSignUp = ({ navigation }) => {
     "Poppins-Regular": require("../../assets/fonts/Poppins-Regular.ttf"),
   });
 
-  const handleSignup = async () => {
-    console.log(password);
-    console.log(confirmedPassword);
-
+  const handleSignUp = async () => {
     if (password !== confirmedPassword) {
       dispatch(setError("Passwords do not match"));
       return;
     }
+    dispatch(signUpUser());
 
-    try {
-      const auth = getAuth();
-      const userCredential = await createUserWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
-      const user = userCredential.user;
-
-      const db = getDatabase();
-      await set(ref(db, "users/" + user.uid), {
-        name: name,
-        email: email,
-      });
-
-      navigation.navigate("UserProfile", {
-        userId: user.uid,
-      });
-    } catch (error) {
-      console.error(error);
-    }
+    navigation.navigate("UserProfile", {
+      userId: uniqueUserID,
+    });
   };
 
   if (!fontsLoaded) {
@@ -134,7 +116,7 @@ const UserSignUp = ({ navigation }) => {
           secureTextEntry
         />
         <View style={styles.chooseOptions}>
-          <SignUpButton onPress={handleSignup} />
+          <SignUpButton onPress={handleSignUp} />
 
           <ExistingAccountButton
             onPress={() => navigation.navigate("UserLogin")}

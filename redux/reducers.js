@@ -24,6 +24,7 @@ const initialState = {
   confirmedPassword: "",
   error: null,
   tabBarVisible: true,
+  uniqueUserID: "",
 };
 
 const rootReducer = (state = initialState, action) => {
@@ -148,6 +149,11 @@ const rootReducer = (state = initialState, action) => {
       return {
         ...state,
         tabBarVisible: action.payload,
+      };
+    case actionTypes.USER_UID:
+      return {
+        ...state,
+        uniqueUserID: action.payload,
       };
     default:
       return state;

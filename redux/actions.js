@@ -119,3 +119,8 @@ export const setTabBarVisible = (tabBarVisible) => ({
   type: actionTypes.IS_TAB_BAR_VISIBLE,
   payload: tabBarVisible,
 });
+
+export const userUID = (uid) => ({
+  type: actionTypes.USER_UID,
+  payload: uid,
+});

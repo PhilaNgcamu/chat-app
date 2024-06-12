@@ -23,6 +23,7 @@ const actionTypes = {
   SET_NAME: "SET_NAME",
   SET_ERROR: "SET_ERROR",
   IS_TAB_BAR_VISIBLE: "IS_TAB_BAR_VISIBLE",
+  USER_UID: "USER_UID",
 };
 
 export default actionTypes;
