@@ -9,7 +9,7 @@ import { TabBarVisibilityProvider } from "./useTabBarVisibilityContext";
 import UserLogin from "../onboarding/UserLogin";
 import UserSignup from "../onboarding/UserSignup";
 import UserProfile from "../user_profile/UserProfile";
-import ChatList from "../chat/ChatList";
+import ChatList from "../chat/display_chats/ChatList";
 import ChatScreen from "./GroupChatScreen";
 import Home from "./Home";
 import CreateGroupChat from "../chat/group_chat/CreateGroupChat";
