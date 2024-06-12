@@ -22,7 +22,7 @@ import {
 } from "firebase/storage";
 import { auth } from "../../backend/firebaseConfig";
 import * as ImagePicker from "expo-image-picker";
-import { useTabBarVisibility } from "./useTabBarVisibilityContext";
+import { useTabBarVisibility } from "../chat/custom_hook/useTabBarVisibilityContext";
 import { useFocusEffect } from "@react-navigation/native";
 import { StatusBar } from "expo-status-bar";
 import { useDispatch, useSelector } from "react-redux";

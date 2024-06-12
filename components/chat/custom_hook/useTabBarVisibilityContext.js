@@ -1,6 +1,6 @@
-import React, { createContext, useState, useContext } from "react";
+import React, { createContext, useContext } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setTabBarVisible } from "../../redux/actions";
+import { setTabBarVisible } from "../../../redux/actions";
 
 const TabBarVisibilityContext = createContext();
 

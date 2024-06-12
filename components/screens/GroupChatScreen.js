@@ -10,7 +10,7 @@ import { getDatabase, ref, onValue, update, get } from "firebase/database";
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
 
 import { auth } from "../../backend/firebaseConfig";
-import { useTabBarVisibility } from "./useTabBarVisibilityContext";
+import { useTabBarVisibility } from "../chat/custom_hook/useTabBarVisibilityContext";
 import {
   setGroupFilteredMessages,
   setOtherUserTyping,

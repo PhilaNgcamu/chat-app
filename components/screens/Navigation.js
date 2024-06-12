@@ -5,7 +5,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { AntDesign, Feather, FontAwesome } from "@expo/vector-icons";
 import { StyleSheet } from "react-native";
 
-import { TabBarVisibilityProvider } from "./useTabBarVisibilityContext";
+import { TabBarVisibilityProvider } from "../chat/custom_hook/useTabBarVisibilityContext";
 import UserLogin from "../onboarding/UserLogin";
 import UserSignup from "../onboarding/UserSignup";
 import UserProfile from "../user_profile/UserProfile";
