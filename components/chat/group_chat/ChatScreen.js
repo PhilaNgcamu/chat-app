@@ -9,14 +9,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { getDatabase, ref, onValue, update, get } from "firebase/database";
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
 
-import { auth } from "../../backend/firebaseConfig";
-import { useTabBarVisibility } from "../screens/useTabBarVisibilityContext";
+import { auth } from "../../../backend/firebaseConfig";
+import { useTabBarVisibility } from "../../screens/useTabBarVisibilityContext";
 import {
   setGroupFilteredMessages,
   setOtherUserTyping,
   setGroupMessages,
   setSearchQuery,
-} from "../../redux/actions";
+} from "../../../redux/actions";
 
 import ChatHeader from "./ChatHeader";
 import MessageList from "./MessageList";

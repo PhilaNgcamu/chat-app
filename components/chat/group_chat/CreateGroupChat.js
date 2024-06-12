@@ -8,7 +8,7 @@ import {
   StyleSheet,
 } from "react-native";
 import { getDatabase, ref, push, get, set } from "firebase/database";
-import { auth } from "../../backend/firebaseConfig";
+import { auth } from "../../../backend/firebaseConfig";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { StatusBar } from "expo-status-bar";
@@ -17,7 +17,7 @@ import {
   setContacts,
   setGroupName,
   setSelectedContacts,
-} from "../../redux/actions";
+} from "../../../redux/actions";
 
 const CreateGroupChat = () => {
   const dispatch = useDispatch();

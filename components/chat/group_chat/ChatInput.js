@@ -8,9 +8,9 @@ import {
 } from "react-native";
 import { Feather, Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { useDispatch, useSelector } from "react-redux";
-import { setImage, addGroupMessage, setIsTyping } from "../../redux/actions";
+import { setImage, addGroupMessage, setIsTyping } from "../../../redux/actions";
 import * as ImagePicker from "expo-image-picker";
-import { auth } from "../../backend/firebaseConfig";
+import { auth } from "../../../backend/firebaseConfig";
 import {
   getDatabase,
   ref,
