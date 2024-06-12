@@ -1,8 +1,6 @@
 import React from "react";
 import { View, Text, ActivityIndicator, StyleSheet } from "react-native";
 import { useFonts } from "expo-font";
-import { createUserWithEmailAndPassword, getAuth } from "firebase/auth";
-import { getDatabase, ref, set } from "firebase/database";
 import { StatusBar } from "expo-status-bar";
 import { useDispatch, useSelector } from "react-redux";
 import {
