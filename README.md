@@ -51,7 +51,6 @@ First version (v1.0): [Chatbox](https://drive.google.com/file/d/1IXMiI6VnF_7UYra
 ### Future Improvements
 
 - Integrate push notifications for real-time updates.
-- Enhance search functionality with advanced filters and suggestions.
 - Improve UI/UX overall
 
 ### License
