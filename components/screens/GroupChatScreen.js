@@ -9,19 +9,19 @@ import { useDispatch, useSelector } from "react-redux";
 import { getDatabase, ref, onValue, update, get } from "firebase/database";
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
 
-import { auth } from "../../../backend/firebaseConfig";
-import { useTabBarVisibility } from "../../screens/useTabBarVisibilityContext";
+import { auth } from "../../backend/firebaseConfig";
+import { useTabBarVisibility } from "./useTabBarVisibilityContext";
 import {
   setGroupFilteredMessages,
   setOtherUserTyping,
   setGroupMessages,
   setSearchQuery,
-} from "../../../redux/actions";
+} from "../../redux/actions";
 
-import ChatHeader from "./ChatHeader";
-import MessageList from "./MessageList";
-import ChatInput from "./ChatInput";
-import TypingIndicator from "./TypingIndicator";
+import ChatHeader from "../chat/group_chat/ChatHeader";
+import MessageList from "../chat/group_chat/MessageList";
+import ChatInput from "../chat/group_chat/ChatInput";
+import TypingIndicator from "../chat/group_chat/TypingIndicator";
 import { StatusBar } from "expo-status-bar";
 
 const ChatScreen = ({ route }) => {

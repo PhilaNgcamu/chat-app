@@ -1,14 +1,10 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useEffect, useRef, useCallback } from "react";
 import {
   View,
-  Text,
   TextInput,
-  TouchableOpacity,
-  FlatList,
-  StyleSheet,
   KeyboardAvoidingView,
   Platform,
-  Image,
+  StyleSheet,
 } from "react-native";
 import {
   getDatabase,
@@ -25,10 +21,8 @@ import {
   getDownloadURL,
 } from "firebase/storage";
 import { auth } from "../../backend/firebaseConfig";
-import { MaterialIcons, Ionicons, Feather } from "@expo/vector-icons";
-import { format } from "date-fns";
 import * as ImagePicker from "expo-image-picker";
-import { useTabBarVisibility } from "../screens/useTabBarVisibilityContext";
+import { useTabBarVisibility } from "./useTabBarVisibilityContext";
 import { useFocusEffect } from "@react-navigation/native";
 import { StatusBar } from "expo-status-bar";
 import { useDispatch, useSelector } from "react-redux";
@@ -43,6 +37,10 @@ import {
   addNewPrivateMessage,
   setPrivateFilteredMessages,
 } from "../../redux/actions";
+import ChatHeader from "../../components/chat/individual_chat/ChatHeader";
+import MessageList from "../../components/chat/individual_chat/MessageList";
+import TypingIndicator from "../../components/chat/individual_chat/TypingIndicator";
+import ChatInput from "../../components/chat/individual_chat/ChatInput";
 
 const PrivateChatScreen = ({ route, navigation }) => {
   const { contactId, contactName, contactAvatar } = route.params;
@@ -214,75 +212,18 @@ const PrivateChatScreen = ({ route, navigation }) => {
     }
   };
 
-  const renderItem = ({ item }) => (
-    <View
-      style={[
-        styles.messageItem,
-        item.userId === auth.currentUser.uid && styles.myMessage,
-      ]}
-    >
-      {item.text && (
-        <Text
-          style={[
-            styles.messageText,
-            item.userId === auth.currentUser.uid
-              ? styles.myMessageText
-              : styles.otherMessageText,
-          ]}
-        >
-          {item.text.trim()}
-        </Text>
-      )}
-      {item.imageUrl && (
-        <Image
-          source={{ uri: item.imageUrl || "https://via.placeholder.com/150" }}
-          style={styles.image}
-        />
-      )}
-      <View style={styles.messageMeta}>
-        <Text
-          style={[
-            styles.messageTimestamp,
-            item.userId === auth.currentUser.uid
-              ? styles.myMessageTimestamp
-              : styles.otherMessageTimestamp,
-          ]}
-        >
-          {format(new Date(item.createdAt), "HH:mm")}{" "}
-        </Text>
-        {item.read && item.userId === auth.currentUser.uid && (
-          <MaterialIcons name="done-all" size={16} color="#4CAF50" />
-        )}
-      </View>
-    </View>
-  );
-
   return (
     <KeyboardAvoidingView
       style={styles.container}
       behavior={Platform.OS === "ios" ? "padding" : undefined}
     >
       <StatusBar style="dark" />
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Ionicons name="arrow-back" size={24} color="#000" />
-        </TouchableOpacity>
-        <Image source={{ uri: contactAvatar }} style={styles.avatar} />
-        <View style={styles.headerContent}>
-          <Text style={styles.chatName}>{contactName}</Text>
-          <Text style={styles.statusText}>
-            {isOnline ? "Active Now" : "Offline"}
-          </Text>
-        </View>
-        <View style={styles.headerIcons}>
-          <TouchableOpacity style={styles.headerIcon}>
-            <Feather name="phone" size={24} color="#000" />
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.headerIcon}>
-            <Feather name="video" size={24} color="#000" />
-          </TouchableOpacity>
-        </View>
-      </View>
+      <ChatHeader
+        contactAvatar={contactAvatar}
+        contactName={contactName}
+        isOnline={isOnline}
+        navigation={navigation}
+      />
       <TextInput
         style={styles.searchInput}
         placeholder="Search messages"
@@ -290,43 +231,18 @@ const PrivateChatScreen = ({ route, navigation }) => {
         value={searchQuery}
         onChangeText={(text) => dispatch(setSearchQuery(text))}
       />
-      <FlatList
-        data={privateFilteredMessages}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.id}
-        style={styles.messageList}
-        ref={inputRef}
-        onContentSizeChange={() =>
-          inputRef.current.scrollToEnd({ animated: true })
-        }
+      <MessageList messages={privateFilteredMessages} inputRef={inputRef} />
+      <TypingIndicator
+        otherUserTyping={otherUserTyping}
+        otherUserName={otherUserName}
       />
-      {otherUserTyping && (
-        <Text style={styles.typingIndicator}>{otherUserName} is typing...</Text>
-      )}
-      <View style={styles.inputContainer}>
-        <TouchableOpacity onPress={pickImage} style={styles.iconButton}>
-          <Feather name="paperclip" size={24} color="##000E08" />
-        </TouchableOpacity>
-        <TextInput
-          style={styles.input}
-          value={newMessage}
-          onChangeText={handleTyping}
-          placeholder="Write your message"
-          placeholderTextColor="#888"
-          onSubmitEditing={handleSend}
-          returnKeyType="send"
-        />
-        <TouchableOpacity onPress={handleSend} style={styles.iconButton}>
-          <Ionicons name="send" size={24} color="##000E08" />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.iconButton}>
-          <Feather name="camera" size={24} color="##000E08" />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.iconButton}>
-          <MaterialIcons name="keyboard-voice" size={24} color="##000E08" />
-        </TouchableOpacity>
-      </View>
-      {image && <Image source={{ uri: image }} style={styles.selectedImage} />}
+      <ChatInput
+        newMessage={newMessage}
+        handleTyping={handleTyping}
+        handleSend={handleSend}
+        pickImage={pickImage}
+        image={image}
+      />
     </KeyboardAvoidingView>
   );
 };
@@ -335,38 +251,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#f4f4f4",
-  },
-  header: {
-    backgroundColor: "#fff",
-    marginTop: 30,
-    padding: 16,
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  headerContent: {
-    flex: 1,
-    alignItems: "flex-start",
-    marginLeft: 10,
-  },
-  avatar: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-  },
-  chatName: {
-    fontSize: 20,
-    fontWeight: "bold",
-    color: "#000",
-  },
-  statusText: {
-    fontSize: 14,
-    color: "#000",
-  },
-  headerIcons: {
-    flexDirection: "row",
-  },
-  headerIcon: {
-    marginLeft: 15,
   },
   searchInput: {
     padding: 10,
@@ -377,102 +261,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     fontSize: 16,
     color: "#000",
-  },
-  messageList: {
-    flex: 1,
-  },
-  messageItem: {
-    padding: 12,
-    backgroundColor: "#F2F7FB",
-    borderRadius: 8,
-    marginVertical: 4,
-    marginHorizontal: 16,
-    alignSelf: "flex-start",
-    maxWidth: "75%",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 0.22,
-    shadowRadius: 2.22,
-    elevation: 3,
-  },
-  myMessage: {
-    backgroundColor: "#24786D",
-    alignSelf: "flex-end",
-  },
-  messageText: {
-    fontSize: 16,
-  },
-  myMessageText: {
-    color: "#FFF",
-  },
-  otherMessageText: {
-    color: "#000",
-  },
-  image: {
-    width: 200,
-    height: 200,
-    borderRadius: 8,
-  },
-  messageMeta: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginTop: 4,
-  },
-  senderName: {
-    fontSize: 12,
-    color: "##000E08",
-    marginRight: 4,
-  },
-  messageTimestamp: {
-    fontSize: 12,
-  },
-  myMessageTimestamp: {
-    color: "#FFF",
-  },
-  otherMessageTimestamp: {
-    color: "#000",
-  },
-  inputContainer: {
-    flexDirection: "row",
-    padding: 16,
-    borderTopWidth: 1,
-    borderTopColor: "#ddd",
-    backgroundColor: "#fff",
-    alignItems: "center",
-  },
-  input: {
-    flex: 1,
-    borderWidth: 1,
-    borderColor: "#ddd",
-    borderRadius: 25,
-    padding: 10,
-    paddingLeft: 16,
-    fontFamily: "Poppins-Regular",
-    color: "#333",
-    backgroundColor: "#f9f9f9",
-    marginRight: 8,
-  },
-  iconButton: {
-    padding: 8,
-    borderRadius: 16,
-    backgroundColor: "#f0f0f0",
-    marginHorizontal: 4,
-  },
-  typingIndicator: {
-    paddingHorizontal: 16,
-    color: "#888",
-    fontStyle: "italic",
-    marginBottom: 5,
-    textAlign: "center",
-  },
-  selectedImage: {
-    width: 200,
-    height: 200,
-    margin: 16,
-    alignSelf: "center",
   },
 });
 

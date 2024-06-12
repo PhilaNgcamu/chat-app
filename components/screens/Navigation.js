@@ -10,10 +10,10 @@ import UserLogin from "../onboarding/UserLogin";
 import UserSignup from "../onboarding/UserSignup";
 import UserProfile from "../user_profile/UserProfile";
 import ChatList from "../chat/ChatList";
-import ChatScreen from "../chat/group_chat/ChatScreen";
+import ChatScreen from "./GroupChatScreen";
 import Home from "./Home";
 import CreateGroupChat from "../chat/group_chat/CreateGroupChat";
-import PrivateChatScreen from "../chat/PrivateChatScreen";
+import PrivateChatScreen from "./PrivateChatScreen";
 import Onboarding from "../onboarding/Onboarding";
 import { useSelector } from "react-redux";
 
