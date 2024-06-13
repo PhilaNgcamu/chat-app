@@ -29,14 +29,13 @@ const UserProfile = () => {
   const [name, setName] = useState(user.displayName || "");
   const [email, setEmail] = useState(user.email || "");
   const [statusMessage, setStatusMessage] = useState("");
-  const [profilePicture, setProfilePicture] = useState(user.photoUrl || "");
+  const [profilePicture, setProfilePicture] = useState(user.photoURL || "");
   const [phoneNumber, setPhoneNumber] = useState("");
 
   const [fontsLoaded] = useFonts({
     "Poppins-Bold": require("../../assets/fonts/Poppins-Bold.ttf"),
     "Poppins-Regular": require("../../assets/fonts/Poppins-Regular.ttf"),
   });
-
   useEffect(() => {
     const fetchUserProfile = async () => {
       const db = getDatabase();
