@@ -26,10 +26,6 @@ This is a professional chat application built using Expo/React Native, Firebase,
 
 5. **Group Chat Screen**: Shows group conversations with features like participant management, group name setting, and message filtering.
 
-6. **Search Screen**: Facilitates searching for users or groups to start new conversations.
-
-7. **Notification Screen**: Notifies users of new messages or group invitations.
-
 ### Technologies Used
 
 - Expo/React Native: For building the mobile application with cross-platform compatibility.
