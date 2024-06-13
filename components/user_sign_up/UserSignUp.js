@@ -20,6 +20,7 @@ import {
   verticalScale,
 } from "../../util/scale";
 import { createUserWithEmailAndPassword, getAuth } from "firebase/auth";
+import { getDatabase, ref, set } from "firebase/database";
 
 const UserSignUp = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -37,6 +38,7 @@ const UserSignUp = ({ navigation }) => {
   const handleSignUp = async () => {
     if (password !== confirmedPassword) {
       Alert.alert("Oops!", "Password do not match. Please try again.");
+      return;
     }
 
     try {
@@ -57,7 +59,7 @@ const UserSignUp = ({ navigation }) => {
         userId: user.uid,
       });
     } catch (error) {
-      Alert.alert("Oops!", "A user with the same email address exists.");
+      Alert.alert("Oops!", "Something wrong happened.");
     } finally {
       dispatch(setName(""));
       dispatch(setEmail(""));
