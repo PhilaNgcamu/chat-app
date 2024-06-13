@@ -57,19 +57,17 @@ const UserSignUp = ({ navigation }) => {
         name: name,
         email: email,
       });
+      navigation.navigate("UserProfile", {
+        userId: uniqueUserID,
+      });
     } catch (error) {
-      Alert.alert(error.message);
+      Alert.alert("Oops!", "Something wrong happened. Please try again.");
     } finally {
       dispatch(setName(""));
       dispatch(setEmail(""));
       dispatch(setPassword(""));
       dispatch(setConfirmedPassword(""));
-      dispatch(userUID(""));
     }
-
-    navigation.navigate("UserProfile", {
-      userId: uniqueUserID,
-    });
   };
 
   if (!fontsLoaded) {
