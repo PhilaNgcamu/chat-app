@@ -6,7 +6,7 @@ const InputField = ({
   label,
   value,
   onChangeText,
-  secureTextEntry = false,
+  secureTextEntry = true,
   keyboardType = "default",
 }) => {
   return (
@@ -16,7 +16,9 @@ const InputField = ({
         style={styles.input}
         value={value}
         onChangeText={onChangeText}
-        secureTextEntry={secureTextEntry}
+        secureTextEntry={
+          label === "Password" || "Your Password" ? secureTextEntry : false
+        }
         keyboardType={keyboardType}
         autoCapitalize={label === "Your Email" ? "none" : "words"}
       />

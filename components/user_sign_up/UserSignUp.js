@@ -6,7 +6,6 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   setConfirmedPassword,
   setEmail,
-  setError,
   setName,
   setPassword,
 } from "../../redux/actions";
@@ -112,14 +111,14 @@ const UserSignUp = ({ navigation }) => {
           label="Password"
           value={password}
           onChangeText={(text) => dispatch(setPassword(text))}
-          secureTextEntry
+          secureTextEntry={true}
         />
 
         <InputField
           label="Confirm Password"
           value={confirmedPassword}
           onChangeText={(text) => dispatch(setConfirmedPassword(text))}
-          secureTextEntry
+          secureTextEntry={true}
         />
         <View style={styles.chooseOptions}>
           <SignUpButton onPress={handleSignUp} />
