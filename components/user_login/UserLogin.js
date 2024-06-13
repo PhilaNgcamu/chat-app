@@ -43,7 +43,7 @@ const UserLogin = ({ navigation }) => {
     dispatch(setLoading(true));
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      Alert.alert("Login Successful");
+      Alert.alert("Yay!", "Login Successful");
       navigation.navigate("Home");
     } catch (error) {
       Alert.alert(
@@ -52,6 +52,8 @@ const UserLogin = ({ navigation }) => {
       );
     } finally {
       dispatch(setLoading(false));
+      dispatch(setEmail(""));
+      dispatch(setPassword(""));
     }
   };
 
