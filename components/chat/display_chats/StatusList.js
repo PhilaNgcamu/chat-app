@@ -8,15 +8,16 @@ import {
   StyleSheet,
 } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { auth } from "../../../backend/firebaseConfig";
 import { getDatabase, ref, get } from "firebase/database";
+import { setProfilePicture } from "../../../redux/actions";
 
 const StatusList = () => {
+  const dispatch = useDispatch();
+
   const statuses = useSelector((state) => state.statuses);
-  const [profilePicture, setProfilePicture] = useState(
-    "https://via.placeholder.com/150"
-  );
+  const profilePicture = useSelector((state) => state.profilePicture);
 
   useEffect(() => {
     const fetchUserProfilePicture = async () => {
@@ -25,8 +26,10 @@ const StatusList = () => {
       const snapshot = await get(userRef);
       if (snapshot.exists()) {
         const userData = snapshot.val();
-        setProfilePicture(
-          userData.photoUrl || "https://via.placeholder.com/150"
+        dispatch(
+          setProfilePicture(
+            userData.photoUrl || "https://via.placeholder.com/150"
+          )
         );
       }
     };

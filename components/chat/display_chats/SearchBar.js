@@ -2,16 +2,14 @@ import React, { useEffect, useState } from "react";
 import { View, TextInput, StyleSheet, Image } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import { useDispatch, useSelector } from "react-redux";
-import { setSearchQuery } from "../../../redux/actions";
+import { setProfilePicture, setSearchQuery } from "../../../redux/actions";
 import { auth } from "../../../backend/firebaseConfig";
 import { getDatabase, ref, get } from "firebase/database";
 
 const SearchBar = () => {
   const dispatch = useDispatch();
   const searchQuery = useSelector((state) => state.searchQuery);
-  const [profilePicture, setProfilePicture] = useState(
-    "https://via.placeholder.com/150"
-  );
+  const profilePicture = useSelector((state) => state.profilePicture);
 
   useEffect(() => {
     const fetchUserProfilePicture = async () => {
@@ -20,8 +18,10 @@ const SearchBar = () => {
       const snapshot = await get(userRef);
       if (snapshot.exists()) {
         const userData = snapshot.val();
-        setProfilePicture(
-          userData.photoUrl || "https://via.placeholder.com/150"
+        dispatch(
+          setProfilePicture(
+            userData.photoUrl || "https://via.placeholder.com/150"
+          )
         );
       }
     };

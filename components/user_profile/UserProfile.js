@@ -21,6 +21,8 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { verticalScale } from "../../util/scale";
 import { StatusBar } from "expo-status-bar";
 import placeholderImage from "../../assets/insert-image.png";
+import { useDispatch, useSelector } from "react-redux";
+import { setProfilePicture } from "../../redux/actions";
 
 const UserProfile = () => {
   const auth = getAuth();
@@ -29,8 +31,10 @@ const UserProfile = () => {
   const [name, setName] = useState(user.displayName || "");
   const [email, setEmail] = useState(user.email || "");
   const [statusMessage, setStatusMessage] = useState("");
-  const [profilePicture, setProfilePicture] = useState(user.photoURL || "");
   const [phoneNumber, setPhoneNumber] = useState("");
+
+  const dispatch = useDispatch();
+  const profilePicture = useSelector((state) => state.profilePicture);
 
   const [fontsLoaded] = useFonts({
     "Poppins-Bold": require("../../assets/fonts/Poppins-Bold.ttf"),
@@ -105,7 +109,7 @@ const UserProfile = () => {
     });
 
     if (!result.canceled) {
-      setProfilePicture(result.assets[0].uri);
+      dispatch(setProfilePicture(result.assets[0].uri));
     }
   };
 

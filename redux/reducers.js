@@ -24,6 +24,7 @@ const initialState = {
   confirmedPassword: "",
   error: null,
   tabBarVisible: true,
+  profilePicture: "https://via.placeholder.com/150",
   uniqueUserID: "",
 };
 
@@ -149,6 +150,11 @@ const rootReducer = (state = initialState, action) => {
       return {
         ...state,
         tabBarVisible: action.payload,
+      };
+    case actionTypes.SET_PROFILE_PICTURE:
+      return {
+        ...state,
+        profilePicture: action.payload,
       };
     case actionTypes.USER_UID:
       return {
