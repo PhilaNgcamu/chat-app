@@ -18,7 +18,7 @@ const StatusList = () => {
     return (
       <TouchableOpacity style={styles.statusItem}>
         <Image
-          source={{ uri: item.photoURL || "https://via.placeholder.com/150" }}
+          source={{ uri: item.photoUrl || "https://via.placeholder.com/150" }}
           style={styles.statusImage}
         />
         <Text style={styles.statusName}>{item.name}</Text>
