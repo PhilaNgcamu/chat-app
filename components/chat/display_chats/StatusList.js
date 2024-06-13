@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   FlatList,
@@ -10,9 +10,31 @@ import {
 import { MaterialIcons } from "@expo/vector-icons";
 import { useSelector } from "react-redux";
 import { auth } from "../../../backend/firebaseConfig";
+import { getDatabase, ref, get } from "firebase/database";
 
 const StatusList = () => {
   const statuses = useSelector((state) => state.statuses);
+  const [profilePicture, setProfilePicture] = useState(
+    "https://via.placeholder.com/150"
+  );
+
+  useEffect(() => {
+    const fetchUserProfilePicture = async () => {
+      const db = getDatabase();
+      const userRef = ref(db, "users/" + auth.currentUser.uid);
+      const snapshot = await get(userRef);
+      if (snapshot.exists()) {
+        const userData = snapshot.val();
+        setProfilePicture(
+          userData.photoUrl || "https://via.placeholder.com/150"
+        );
+      }
+    };
+
+    if (auth.currentUser) {
+      fetchUserProfilePicture();
+    }
+  }, [auth.currentUser]);
 
   const renderStatusItem = ({ item }) => {
     return (
@@ -29,12 +51,7 @@ const StatusList = () => {
   return (
     <View style={styles.statusContainer}>
       <View style={styles.addStatusContainer}>
-        <Image
-          source={{
-            uri: auth.currentUser.photoURL || "https://via.placeholder.com/150",
-          }}
-          style={styles.addStatusImage}
-        />
+        <Image source={{ uri: profilePicture }} style={styles.addStatusImage} />
         <View style={styles.addStatusIconWrapper}>
           <MaterialIcons name="add" size={16} color="#362F34" />
         </View>

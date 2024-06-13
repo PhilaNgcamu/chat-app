@@ -1,13 +1,35 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { View, TextInput, StyleSheet, Image } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import { useDispatch, useSelector } from "react-redux";
 import { setSearchQuery } from "../../../redux/actions";
 import { auth } from "../../../backend/firebaseConfig";
+import { getDatabase, ref, get } from "firebase/database";
 
 const SearchBar = () => {
   const dispatch = useDispatch();
   const searchQuery = useSelector((state) => state.searchQuery);
+  const [profilePicture, setProfilePicture] = useState(
+    "https://via.placeholder.com/150"
+  );
+
+  useEffect(() => {
+    const fetchUserProfilePicture = async () => {
+      const db = getDatabase();
+      const userRef = ref(db, "users/" + auth.currentUser.uid);
+      const snapshot = await get(userRef);
+      if (snapshot.exists()) {
+        const userData = snapshot.val();
+        setProfilePicture(
+          userData.photoUrl || "https://via.placeholder.com/150"
+        );
+      }
+    };
+
+    if (auth.currentUser) {
+      fetchUserProfilePicture();
+    }
+  }, [auth.currentUser]);
 
   return (
     <View style={styles.header}>
@@ -21,12 +43,7 @@ const SearchBar = () => {
           onChangeText={(text) => dispatch(setSearchQuery(text))}
         />
       </View>
-      <Image
-        source={{
-          uri: auth.currentUser.photoURL || "https://via.placeholder.com/150",
-        }}
-        style={styles.userProfile}
-      />
+      <Image source={{ uri: profilePicture }} style={styles.userProfile} />
     </View>
   );
 };
