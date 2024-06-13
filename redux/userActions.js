@@ -1,6 +1,13 @@
 import { createUserWithEmailAndPassword, getAuth } from "firebase/auth";
 import { getDatabase, ref, set } from "firebase/database";
-import { setError, userUID } from "./actions";
+import {
+  setConfirmedPassword,
+  setEmail,
+  setError,
+  setName,
+  setPassword,
+  userUID,
+} from "./actions";
 
 export const signUpUser = () => async (dispatch, getState) => {
   const { email, password, confirmedPassword, name } = getState();
@@ -28,5 +35,10 @@ export const signUpUser = () => async (dispatch, getState) => {
   } catch (error) {
     console.error(error);
     dispatch(setError(error.message));
+  } finally {
+    dispatch(setName(""));
+    dispatch(setEmail(""));
+    dispatch(setPassword(""));
+    dispatch(setConfirmedPassword(""));
   }
 };
