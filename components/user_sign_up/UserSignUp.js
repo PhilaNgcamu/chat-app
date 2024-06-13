@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, ActivityIndicator, StyleSheet } from "react-native";
+import { View, Text, ActivityIndicator, StyleSheet, Alert } from "react-native";
 import { useFonts } from "expo-font";
 import { StatusBar } from "expo-status-bar";
 import { useDispatch, useSelector } from "react-redux";
@@ -58,8 +58,7 @@ const UserSignUp = ({ navigation }) => {
         email: email,
       });
     } catch (error) {
-      console.error(error);
-      dispatch(setError(error.message));
+      Alert.alert(error.message);
     } finally {
       dispatch(setName(""));
       dispatch(setEmail(""));
@@ -98,8 +97,6 @@ const UserSignUp = ({ navigation }) => {
           Get chatting with friends and family today by signing up for our chat
           app!
         </Text>
-
-        {error && <Text style={styles.error}>{error}</Text>}
 
         <InputField
           label="Your Name"
@@ -245,7 +242,7 @@ const styles = StyleSheet.create({
   },
   chooseOptions: {
     position: "relative",
-    top: verticalScale(60),
+    top: verticalScale(76),
   },
   error: {
     color: "red",
