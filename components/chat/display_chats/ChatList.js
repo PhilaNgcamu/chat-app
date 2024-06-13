@@ -58,6 +58,7 @@ const ChatList = ({ navigation }) => {
   }, [dispatch]);
 
   const handleItemPress = (item) => {
+    console.log(JSON.stringify(item, null, 2));
     if (item.type === "group") {
       navigation.navigate("ChatScreen", {
         chatId: item.id,
