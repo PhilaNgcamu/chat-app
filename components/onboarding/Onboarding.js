@@ -78,7 +78,6 @@ const styles = StyleSheet.create({
     lineHeight: moderateScale(24),
     marginLeft: horizontalScale(10),
     color: "#FFF",
-    textAlign: "center",
   },
 });
 
