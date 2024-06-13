@@ -28,8 +28,6 @@ const UserSignUp = ({ navigation }) => {
   const email = useSelector((state) => state.email);
   const password = useSelector((state) => state.password);
   const confirmedPassword = useSelector((state) => state.confirmedPassword);
-  const error = useSelector((state) => state.error);
-  const uniqueUserID = useSelector((state) => state.uniqueUserID);
 
   const [fontsLoaded] = useFonts({
     "Poppins-Bold": require("../../assets/fonts/Poppins-Bold.ttf"),
@@ -39,8 +37,7 @@ const UserSignUp = ({ navigation }) => {
 
   const handleSignUp = async () => {
     if (password !== confirmedPassword) {
-      dispatch(setError("Passwords do not match"));
-      return;
+      Alert.alert("Oops!", "Password do not match. Please try again.");
     }
 
     try {
@@ -58,10 +55,10 @@ const UserSignUp = ({ navigation }) => {
         email: email,
       });
       navigation.navigate("UserProfile", {
-        userId: uniqueUserID,
+        userId: user.uid,
       });
     } catch (error) {
-      Alert.alert("Oops!", "Something wrong happened. Please try again.");
+      Alert.alert("Oops!", "A user with the same email address exists.");
     } finally {
       dispatch(setName(""));
       dispatch(setEmail(""));
