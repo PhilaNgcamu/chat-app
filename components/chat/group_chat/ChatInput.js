@@ -18,6 +18,12 @@ import {
   update,
   serverTimestamp,
 } from "firebase/database";
+import {
+  getDownloadURL,
+  getStorage,
+  ref as storageRef,
+  uploadBytes,
+} from "firebase/storage";
 
 const ChatInput = ({ chatId }) => {
   const dispatch = useDispatch();
