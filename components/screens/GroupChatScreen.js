@@ -122,13 +122,6 @@ const ChatScreen = ({ route }) => {
     >
       <StatusBar style="dark" />
       <ChatHeader chatName={chatName} />
-      <TextInput
-        style={styles.searchInput}
-        value={searchQuery}
-        onChangeText={(text) => dispatch(setSearchQuery(text))}
-        placeholder="Search messages"
-        placeholderTextColor="#888"
-      />
       <MessageList messages={groupFilteredMessages} />
       <TypingIndicator otherUserTyping={otherUserTyping} />
       <ChatInput chatId={chatId} />

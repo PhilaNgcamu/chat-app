@@ -223,13 +223,6 @@ const PrivateChatScreen = ({ route, navigation }) => {
         isOnline={isOnline}
         navigation={navigation}
       />
-      <TextInput
-        style={styles.searchInput}
-        placeholder="Search messages"
-        placeholderTextColor="#aaa"
-        value={searchQuery}
-        onChangeText={(text) => dispatch(setSearchQuery(text))}
-      />
       <MessageList messages={privateFilteredMessages} inputRef={inputRef} />
       <TypingIndicator
         otherUserTyping={otherUserTyping}
