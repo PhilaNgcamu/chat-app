@@ -20,25 +20,24 @@ const ChatInput = ({
       <Feather name="paperclip" size={24} color="#000E08" />
     </TouchableOpacity>
     <View style={styles.inputWrapper}>
-    <TextInput
-      value={newMessage}
-      onChangeText={handleTyping}
-      placeholder="Write your message"
-      placeholderTextColor="#888"
-      onSubmitEditing={handleSend}
-      returnKeyType="send"
-    />
-    <TouchableOpacity style={styles.documentIcon}>
-    <Ionicons name="documents-outline" size={24} color="black" />
-    </TouchableOpacity>
-   </View>
+      <TextInput
+        value={newMessage}
+        onChangeText={handleTyping}
+        placeholder="Write your message"
+        placeholderTextColor="#888"
+        onSubmitEditing={handleSend}
+        returnKeyType="send"
+      />
+      <TouchableOpacity style={styles.documentIcon}>
+        <Ionicons name="documents-outline" size={24} color="black" />
+      </TouchableOpacity>
+    </View>
     <TouchableOpacity style={styles.iconButton}>
       <Feather name="camera" size={24} color="#000E08" />
     </TouchableOpacity>
     <TouchableOpacity style={styles.iconButton}>
       <MaterialIcons name="keyboard-voice" size={24} color="#000E08" />
     </TouchableOpacity>
-    
     {image && <Image source={{ uri: image }} style={styles.selectedImage} />}
   </View>
 );
