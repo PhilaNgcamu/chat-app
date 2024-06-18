@@ -70,10 +70,9 @@ const PrivateChatScreen = ({ route, navigation }) => {
   useEffect(() => {
     const db = getDatabase();
     const userId = auth.currentUser.uid;
-    const chatId = [userId, contactId].sort().join("_");
-    const messagesRef = ref(db, `chats/${chatId}/messages`);
-    const typingRef = ref(db, `chats/${chatId}/typingStatus/${contactId}`);
-    const userRef = ref(db, `users/${contactId}`);
+    console.log(contactId, "This is a contact ID");
+    const messagesRef = ref(db, `chats/${userId}/messages`);
+    const userRef = ref(db, `users/${userId}`);
 
     const unsubscribeMessages = onValue(messagesRef, (snapshot) => {
       const messageList = [];
@@ -82,13 +81,6 @@ const PrivateChatScreen = ({ route, navigation }) => {
       });
       dispatch(setPrivateMessages(messageList));
       dispatch(setPrivateFilteredMessages(messageList));
-      markMessagesAsRead(messageList, chatId);
-    });
-
-    const unsubscribeTyping = onValue(typingRef, (snapshot) => {
-      if (snapshot.exists()) {
-        dispatch(setOtherUserTyping(snapshot.val().isTyping));
-      }
     });
 
     const unsubscribeUser = onValue(userRef, (snapshot) => {
@@ -101,7 +93,6 @@ const PrivateChatScreen = ({ route, navigation }) => {
 
     return () => {
       unsubscribeMessages();
-      unsubscribeTyping();
       unsubscribeUser();
     };
   }, [contactId]);
@@ -118,17 +109,6 @@ const PrivateChatScreen = ({ route, navigation }) => {
     }
   }, [searchQuery, privateMessages]);
 
-  const markMessagesAsRead = async (messages, chatId) => {
-    const db = getDatabase();
-    const updates = {};
-    messages.forEach((message) => {
-      if (!message.read && message.userId !== auth.currentUser.uid) {
-        updates[`chats/${chatId}/messages/${message.id}/read`] = true;
-      }
-    });
-    await update(ref(db), updates);
-  };
-
   const handleSend = async () => {
     if (newMessage.trim() === "" && !image) {
       return;
@@ -136,10 +116,9 @@ const PrivateChatScreen = ({ route, navigation }) => {
 
     const db = getDatabase();
     const userId = auth.currentUser.uid;
-    const chatId = [userId, contactId].sort().join("_");
 
     if (newMessage.trim() !== "") {
-      await push(ref(db, `chats/${chatId}/messages`), {
+      await push(ref(db, `chats/${userId}/messages`), {
         text: newMessage,
         createdAt: serverTimestamp(),
         userId,
@@ -161,7 +140,7 @@ const PrivateChatScreen = ({ route, navigation }) => {
       await uploadBytes(imageRef, blob);
       const imageUrl = await getDownloadURL(imageRef);
 
-      await push(ref(db, `chats/${chatId}/messages`), {
+      await push(ref(db, `chats/${userId}/messages`), {
         imageUrl,
         createdAt: serverTimestamp(),
         userId,
@@ -188,26 +167,14 @@ const PrivateChatScreen = ({ route, navigation }) => {
     }
   };
 
-  const updateTypingStatus = async (status, chatId) => {
-    const db = getDatabase();
-    await update(
-      ref(db, `chats/${chatId}/typingStatus/${auth.currentUser.uid}`),
-      {
-        isTyping: status,
-      }
-    );
-  };
-
   const handleTyping = (text) => {
     const userId = auth.currentUser.uid;
-    const chatId = [userId, contactId].sort().join("_");
+    console.log(userId);
     dispatch(addNewPrivateMessage(text));
     if (text.trim() !== "" && !isTyping) {
       dispatch(setIsTyping(true));
-      updateTypingStatus(true, chatId);
     } else if (text.trim() === "" && isTyping) {
       dispatch(setIsTyping(false));
-      updateTypingStatus(false, chatId);
     }
   };
 

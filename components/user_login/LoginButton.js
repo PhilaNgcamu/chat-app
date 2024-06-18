@@ -4,7 +4,7 @@ import {
   verticalScale,
   horizontalScale,
   moderateScale,
-} from "../../util/scale";
+} from "../../utils/scale";
 
 const LoginButton = ({ onPress, loading }) => {
   return (

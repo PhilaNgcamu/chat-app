@@ -27,9 +27,9 @@ import {
 
 const ChatInput = ({ chatId }) => {
   const dispatch = useDispatch();
-  const newMessage = useSelector((state) => state.newMessage);
-  const isTyping = useSelector((state) => state.isTyping);
-  const image = useSelector((state) => state.image);
+  // const newMessage = useSelector((state) => state.newMessage);
+  // const isTyping = useSelector((state) => state.isTyping);
+  // const image = useSelector((state) => state.image);
 
   const pickImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
@@ -45,44 +45,43 @@ const ChatInput = ({ chatId }) => {
   };
 
   const handleSend = async () => {
-    if (newMessage.trim() === "" && !image) return;
-    const db = getDatabase();
-    const userId = auth.currentUser.uid;
+    // if (newMessage.trim() === "" && !image) return;
+    // const db = getDatabase();
+    // const userId = auth.currentUser.uid;
 
-    if (newMessage.trim() !== "") {
-      await push(ref(db, `groups/${chatId}/messages`), {
-        text: newMessage,
-        createdAt: serverTimestamp(),
-        userId,
-        readBy: { [userId]: true },
-        senderName: auth.currentUser.displayName,
-      });
-      dispatch(addGroupMessage(""));
-    }
-    dispatch(setIsTyping(false));
-    await updateTypingStatus(false);
-    if (image) {
-      const storage = getStorage();
-      const imageRef = storageRef(
-        storage,
-        `chatImages/${chatId}/${Date.now()}`
-      );
-      const response = await fetch(image);
-      const blob = await response.blob();
+    // if (newMessage.trim() !== "") {
+    //   await push(ref(db, `groups/${chatId}/messages`), {
+    //     text: newMessage,
+    //     createdAt: serverTimestamp(),
+    //     userId,
+    //     readBy: { [userId]: true },
+    //     senderName: auth.currentUser.displayName,
+    //   });
+    //   dispatch(addGroupMessage(""));
+    // }
 
-      await uploadBytes(imageRef, blob);
-      const downloadURL = await getDownloadURL(imageRef);
+    // if (image) {
+    //   const storage = getStorage();
+    //   const imageRef = storageRef(
+    //     storage,
+    //     `chatImages/${chatId}/${Date.now()}`
+    //   );
+    //   const response = await fetch(image);
+    //   const blob = await response.blob();
 
-      await push(ref(db, `groups/${chatId}/messages`), {
-        imageUrl: downloadURL,
-        createdAt: serverTimestamp(),
-        userId,
-        readBy: { [userId]: true },
-        senderName: auth.currentUser.displayName,
-      });
+    //   await uploadBytes(imageRef, blob);
+    //   const downloadURL = await getDownloadURL(imageRef);
 
-      dispatch(setImage(null));
-    }
+    //   await push(ref(db, `groups/${chatId}/messages`), {
+    //     imageUrl: downloadURL,
+    //     createdAt: serverTimestamp(),
+    //     userId,
+    //     readBy: { [userId]: true },
+    //     senderName: auth.currentUser.displayName,
+    //   });
+
+    //   dispatch(setImage(null));
+    // }
 
     dispatch(setIsTyping(false));
     await updateTypingStatus(false);
@@ -120,6 +119,7 @@ const ChatInput = ({ chatId }) => {
           placeholderTextColor="#888"
           onSubmitEditing={handleSend}
           returnKeyType="send"
+          style={styles.input}
         />
         <TouchableOpacity style={styles.documentIcon}>
           <Ionicons name="documents-outline" size={24} color="black" />
@@ -131,7 +131,7 @@ const ChatInput = ({ chatId }) => {
       <TouchableOpacity style={styles.iconButton}>
         <MaterialIcons name="keyboard-voice" size={24} color="#000E08" />
       </TouchableOpacity>
-      {image && <Image source={{ uri: image }} style={styles.selectedImage} />}
+      {/* {image && <Image source={{ uri: image }} style={styles.selectedImage} />} */}
     </View>
   );
 };
@@ -145,18 +145,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
   },
-  input: {
-    flex: 1,
-    borderWidth: 1,
-    borderColor: "#ddd",
-    borderRadius: 25,
-    padding: 10,
-    paddingLeft: 16,
-    fontFamily: "Poppins-Regular",
-    color: "#333",
-    backgroundColor: "#f9f9f9",
-    marginRight: 8,
-  },
   inputWrapper: {
     flex: 1,
     flexDirection: "row",
@@ -167,6 +155,11 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     padding: 7,
     justifyContent: "space-between",
+  },
+  input: {
+    flex: 1,
+    color: "#333",
+    marginRight: 8,
   },
   iconButton: {
     padding: 8,

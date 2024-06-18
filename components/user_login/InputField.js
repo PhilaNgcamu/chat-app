@@ -1,6 +1,6 @@
 import React from "react";
 import { View, Text, TextInput, StyleSheet } from "react-native";
-import { verticalScale, moderateScale } from "../../util/scale";
+import { verticalScale, moderateScale } from "../../utils/scale";
 
 const InputField = ({
   label,

@@ -4,7 +4,7 @@ import {
   horizontalScale,
   verticalScale,
   moderateScale,
-} from "../../util/scale";
+} from "../../utils/scale";
 import cLogo from "../../assets/c-logo.png";
 
 const Header = () => {

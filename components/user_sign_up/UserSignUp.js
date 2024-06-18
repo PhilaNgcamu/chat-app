@@ -18,7 +18,7 @@ import {
   horizontalScale,
   moderateScale,
   verticalScale,
-} from "../../util/scale";
+} from "../../utils/scale";
 import { createUserWithEmailAndPassword, getAuth } from "firebase/auth";
 import { getDatabase, ref, set } from "firebase/database";
 

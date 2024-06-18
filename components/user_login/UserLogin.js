@@ -14,7 +14,7 @@ import {
   horizontalScale,
   verticalScale,
   moderateScale,
-} from "../../util/scale";
+} from "../../utils/scale";
 import { StatusBar } from "expo-status-bar";
 import { useDispatch, useSelector } from "react-redux";
 import { setEmail, setLoading, setPassword } from "../../redux/actions";

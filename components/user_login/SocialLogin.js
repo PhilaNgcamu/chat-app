@@ -3,7 +3,7 @@ import { View, TouchableOpacity, Image, StyleSheet } from "react-native";
 import fbLogo from "../../assets/facebook.png";
 import googleLogo from "../../assets/google.png";
 import appleLogo from "../../assets/apple-black.png";
-import { horizontalScale, verticalScale } from "../../util/scale";
+import { horizontalScale, verticalScale } from "../../utils/scale";
 
 const SocialLogin = () => {
   return (

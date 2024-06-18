@@ -5,7 +5,7 @@ import {
   moderateScale,
   horizontalScale,
   verticalScale,
-} from "../../util/scale";
+} from "../../utils/scale";
 
 const BackButton = ({ onPress }) => {
   return (

@@ -1,6 +1,6 @@
 import React from "react";
 import { TouchableOpacity, Text, StyleSheet, View } from "react-native";
-import { verticalScale, moderateScale } from "../../util/scale";
+import { verticalScale, moderateScale } from "../../utils/scale";
 
 const LoginLink = ({ onPress }) => {
   return (

@@ -4,7 +4,7 @@ import {
   moderateScale,
   verticalScale,
   horizontalScale,
-} from "../../util/scale";
+} from "../../utils/scale";
 
 const SignUpButton = ({ onPress }) => {
   return (

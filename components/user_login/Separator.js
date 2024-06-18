@@ -4,7 +4,7 @@ import {
   horizontalScale,
   verticalScale,
   moderateScale,
-} from "../../util/scale";
+} from "../../utils/scale";
 
 const Separator = () => {
   return (

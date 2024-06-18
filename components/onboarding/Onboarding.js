@@ -6,7 +6,7 @@ import {
   horizontalScale,
   verticalScale,
   moderateScale,
-} from "../../util/scale";
+} from "../../utils/scale";
 import { StatusBar } from "expo-status-bar";
 
 import Header from "./Header";

@@ -18,7 +18,7 @@ import { getDatabase, ref, set, get } from "firebase/database";
 import * as ImagePicker from "expo-image-picker";
 import { useNavigation } from "@react-navigation/native";
 import { MaterialIcons } from "@expo/vector-icons";
-import { verticalScale } from "../../util/scale";
+import { verticalScale } from "../../utils/scale";
 import { StatusBar } from "expo-status-bar";
 import placeholderImage from "../../assets/insert-image.png";
 import { useDispatch, useSelector } from "react-redux";

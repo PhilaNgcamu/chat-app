@@ -1,6 +1,6 @@
 import React from "react";
 import { TouchableOpacity, Text, StyleSheet } from "react-native";
-import { verticalScale, moderateScale } from "../../util/scale";
+import { verticalScale, moderateScale } from "../../utils/scale";
 
 const RegisterLink = ({ onPress }) => {
   return (
