@@ -249,7 +249,7 @@ const PrivateChatScreen = ({ route, navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f4f4f4",
+    backgroundColor: "#FFF",
   },
   searchInput: {
     padding: 10,

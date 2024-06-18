@@ -106,18 +106,19 @@ const ChatInput = ({ chatId }) => {
       <TouchableOpacity onPress={pickImage} style={styles.iconButton}>
         <Feather name="paperclip" size={24} color="#000E08" />
       </TouchableOpacity>
-      <TextInput
-        style={styles.input}
-        value={newMessage}
-        onChangeText={handleTyping}
-        placeholder="Write your message"
-        placeholderTextColor="#888"
-        onSubmitEditing={handleSend}
-        returnKeyType="send"
-      />
-      <TouchableOpacity onPress={handleSend} style={styles.iconButton}>
-        <Ionicons name="send" size={24} color="#000E08" />
-      </TouchableOpacity>
+      <View style={styles.inputWrapper}>
+    <TextInput
+      value={newMessage}
+      onChangeText={handleTyping}
+      placeholder="Write your message"
+      placeholderTextColor="#888"
+      onSubmitEditing={handleSend}
+      returnKeyType="send"
+    />
+    <TouchableOpacity style={styles.documentIcon}>
+    <Ionicons name="documents-outline" size={24} color="black" />
+    </TouchableOpacity>
+   </View>
       <TouchableOpacity style={styles.iconButton}>
         <Feather name="camera" size={24} color="#000E08" />
       </TouchableOpacity>
@@ -150,11 +151,26 @@ const styles = StyleSheet.create({
     backgroundColor: "#f9f9f9",
     marginRight: 8,
   },
+  inputWrapper: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#f9f9f9",
+    borderWidth: 1,
+    borderColor: "#ddd",
+    borderRadius: 25,
+    padding: 7,
+    justifyContent: "space-between",
+  },
   iconButton: {
     padding: 8,
     borderRadius: 16,
     backgroundColor: "#f0f0f0",
     marginHorizontal: 4,
+  },
+  documentIcon: {
+    borderRadius: 16,
+    backgroundColor: "#f0f0f0",
   },
   selectedImage: {
     width: 200,
