@@ -40,6 +40,10 @@ const UserProfile = () => {
     "Poppins-Bold": require("../../assets/fonts/Poppins-Bold.ttf"),
     "Poppins-Regular": require("../../assets/fonts/Poppins-Regular.ttf"),
   });
+
+  if (!fontsLoaded) {
+    return null;
+  }
   useEffect(() => {
     const fetchUserProfile = async () => {
       const db = getDatabase();
