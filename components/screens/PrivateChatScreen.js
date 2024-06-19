@@ -22,15 +22,11 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   setImage,
   setIsTyping,
-  setIsOnline,
-  setOtherUserName,
   setPrivateMessages,
   addNewPrivateMessage,
-  setPrivateFilteredMessages,
 } from "../../redux/actions";
 import ChatHeader from "../../components/chat/individual_chat/ChatHeader";
 import MessageList from "../../components/chat/individual_chat/MessageList";
-import TypingIndicator from "../../components/chat/individual_chat/TypingIndicator";
 import ChatInput from "../../components/chat/individual_chat/ChatInput";
 
 const PrivateChatScreen = ({ route, navigation }) => {

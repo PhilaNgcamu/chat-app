@@ -2,8 +2,17 @@ import React from "react";
 import { View, Text, Image, StyleSheet } from "react-native";
 import { format } from "date-fns";
 import { auth } from "../../../backend/firebaseConfig";
+import { useFonts } from "expo-font";
 
 const MessageItem = ({ item }) => {
+  const [fontsLoaded] = useFonts({
+    "Poppins-Bold": require("../../../assets/fonts/Poppins-Bold.ttf"),
+    "Poppins-SemiBold": require("../../../assets/fonts/Poppins-SemiBold.ttf"),
+    "Poppins-Regular": require("../../../assets/fonts/Poppins-Regular.ttf"),
+  });
+  if (!fontsLoaded) {
+    return null;
+  }
   return (
     <View style={styles.inputContainer}>
       <View
@@ -108,16 +117,17 @@ const styles = StyleSheet.create({
     height: 200,
     borderRadius: 8,
   },
-
   messageTimestamp: {
     fontSize: 12,
     alignSelf: "flex-end",
+    color: "#797C7B",
+    fontFamily: "Poppins-Bold",
   },
   myMessageTimestamp: {
     width: "100%",
     position: "relative",
     top: 32,
-    color: "#000",
+    color: "#797C7B",
   },
   otherMessageTimestamp: {
     color: "#000",

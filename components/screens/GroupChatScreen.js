@@ -1,13 +1,8 @@
 import React, { useEffect, useCallback } from "react";
-import {
-  TextInput,
-  StyleSheet,
-  KeyboardAvoidingView,
-  Platform,
-} from "react-native";
+import { StyleSheet, KeyboardAvoidingView, Platform } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { getDatabase, ref, onValue, update, get } from "firebase/database";
-import { useNavigation, useFocusEffect } from "@react-navigation/native";
+import { useFocusEffect } from "@react-navigation/native";
 
 import { auth } from "../../backend/firebaseConfig";
 import { useTabBarVisibility } from "../chat/custom_hook/useTabBarVisibilityContext";
@@ -15,7 +10,6 @@ import {
   setGroupFilteredMessages,
   setOtherUserTyping,
   setGroupMessages,
-  setSearchQuery,
 } from "../../redux/actions";
 
 import ChatHeader from "../chat/group_chat/ChatHeader";
@@ -33,7 +27,6 @@ const ChatScreen = ({ route }) => {
     (state) => state.groupFilteredMessages
   );
   const otherUserTyping = useSelector((state) => state.otherUserTyping);
-  const navigation = useNavigation();
 
   const { setTabBarVisible } = useTabBarVisibility();
 
