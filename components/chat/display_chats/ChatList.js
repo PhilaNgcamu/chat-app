@@ -58,7 +58,6 @@ const ChatList = ({ navigation }) => {
   }, [dispatch]);
 
   const handleItemPress = (item) => {
-    console.log(JSON.stringify(item, null, 2));
     if (item.type === "group") {
       navigation.navigate("ChatScreen", {
         chatId: item.id,
@@ -116,7 +115,7 @@ const styles = StyleSheet.create({
   listContainer: {
     flex: 1,
     width: "100%",
-    backgroundColor: "#f9f9f9",
+    backgroundColor: "#FFFFFF",
     borderTopLeftRadius: 40,
     borderTopRightRadius: 40,
     overflow: "hidden",

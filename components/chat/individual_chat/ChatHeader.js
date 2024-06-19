@@ -10,9 +10,7 @@ const ChatHeader = ({ contactAvatar, contactName, isOnline, navigation }) => (
     <Image source={{ uri: contactAvatar }} style={styles.avatar} />
     <View style={styles.headerContent}>
       <Text style={styles.chatName}>{contactName}</Text>
-      <Text style={styles.statusText}>
-        {isOnline ? "Active Now" : "Offline"}
-      </Text>
+      <Text style={styles.statusText}>Active Now</Text>
     </View>
     <View style={styles.headerIcons}>
       <TouchableOpacity style={styles.headerIcon}>

@@ -16,6 +16,7 @@ import CreateGroupChat from "../chat/group_chat/CreateGroupChat";
 import PrivateChatScreen from "./PrivateChatScreen";
 import Onboarding from "../onboarding/Onboarding";
 import { useSelector } from "react-redux";
+import { useFonts } from "expo-font";
 
 const Stack = createNativeStackNavigator();
 const MessagesStack = createNativeStackNavigator();
@@ -90,6 +91,9 @@ function SettingsStackNavigator() {
 const Tab = createBottomTabNavigator();
 
 function BottomTabNavigator() {
+  const [fontsLoaded] = useFonts({
+    "Poppins-Regular": require("../../assets/fonts/Poppins-Regular.ttf"),
+  });
   const tabBarVisible = useSelector((state) => state.tabBarVisible);
 
   return (
@@ -106,7 +110,7 @@ function BottomTabNavigator() {
       }}
     >
       <Tab.Screen
-        name="Messages"
+        name="Message"
         component={MessagesStackNavigator}
         options={{
           tabBarIcon: ({ color, size }) => (
@@ -116,11 +120,11 @@ function BottomTabNavigator() {
         }}
       />
       <Tab.Screen
-        name="Profile"
+        name="Calls"
         component={ProfileStackNavigator}
         options={{
           tabBarIcon: ({ color, size }) => (
-            <Feather name="user" color={color} size={size} />
+            <Feather name="phone-call" color={color} size={size} />
           ),
           headerShown: false,
         }}
@@ -208,16 +212,17 @@ export default function NavigationScreens() {
 
 const styles = StyleSheet.create({
   tabBar: {
+    flexDirection: "row",
+    paddingTop: 10,
+    paddingLeft: 10,
+    paddingBottom: 15,
     backgroundColor: "#fff",
-    borderTopWidth: 0,
-    shadowOpacity: 0.1,
-    shadowRadius: 10,
-    shadowOffset: { width: 0, height: 10 },
-    height: 60,
+    borderTopWidth: 1,
+    borderColor: "#EEFAF8",
+    height: 90,
   },
   tabBarLabel: {
-    fontSize: 12,
-    fontWeight: "bold",
-    paddingBottom: 5,
+    fontSize: 16,
+    fontFamily: "Poppins-Regular",
   },
 });

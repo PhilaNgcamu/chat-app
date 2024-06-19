@@ -5,7 +5,6 @@ import {
   ref,
   push,
   onValue,
-  update,
   serverTimestamp,
 } from "firebase/database";
 import {
@@ -14,7 +13,7 @@ import {
   uploadBytes,
   getDownloadURL,
 } from "firebase/storage";
-import { auth } from "../../backend/firebaseConfig";
+import { auth, db } from "../../backend/firebaseConfig";
 import * as ImagePicker from "expo-image-picker";
 import { useTabBarVisibility } from "../chat/custom_hook/useTabBarVisibilityContext";
 import { useFocusEffect } from "@react-navigation/native";
@@ -39,16 +38,12 @@ const PrivateChatScreen = ({ route, navigation }) => {
   const dispatch = useDispatch();
 
   const privateMessages = useSelector((state) => state.privateMessages);
-  const privateFilteredMessages = useSelector(
-    (state) => state.privateFilteredMessages
-  );
   const newMessage = useSelector((state) => state.newMessage);
   const isTyping = useSelector((state) => state.isTyping);
   const otherUserTyping = useSelector((state) => state.otherUserTyping);
   const otherUserName = useSelector((state) => state.otherUserName);
   const isOnline = useSelector((state) => state.isOnline);
   const image = useSelector((state) => state.image);
-  const searchQuery = useSelector((state) => state.searchQuery);
   const inputRef = useRef(null);
 
   const { setTabBarVisible } = useTabBarVisibility();
@@ -57,51 +52,26 @@ const PrivateChatScreen = ({ route, navigation }) => {
     useCallback(() => {
       setTabBarVisible(false);
       return () => setTabBarVisible(true);
-    }, [])
+    }, [setTabBarVisible])
   );
 
   useEffect(() => {
     const db = getDatabase();
     const userId = auth.currentUser.uid;
-    console.log(contactId, "This is a contact ID");
-    const messagesRef = ref(db, `chats/${userId}/messages`);
-    const userRef = ref(db, `users/${userId}`);
+    const messagesRef = ref(db, `chats/${userId}/${contactId}/messages`);
 
     const unsubscribeMessages = onValue(messagesRef, (snapshot) => {
       const messageList = [];
-      console.log(messagesRef);
       snapshot.forEach((childSnapshot) => {
         messageList.push({ id: childSnapshot.key, ...childSnapshot.val() });
       });
       dispatch(setPrivateMessages(messageList));
-      dispatch(setPrivateFilteredMessages(messageList));
-    });
-
-    const unsubscribeUser = onValue(userRef, (snapshot) => {
-      if (snapshot.exists()) {
-        const userData = snapshot.val();
-        dispatch(setOtherUserName(userData.name));
-        dispatch(setIsOnline(userData.online));
-      }
     });
 
     return () => {
       unsubscribeMessages();
-      unsubscribeUser();
     };
-  }, [contactId]);
-
-  useEffect(() => {
-    if (searchQuery) {
-      const filtered = privateMessages.filter((message) => {
-        if (message.text)
-          return message.text.toLowerCase().includes(searchQuery.toLowerCase());
-      });
-      dispatch(setPrivateFilteredMessages(filtered));
-    } else {
-      dispatch(setPrivateFilteredMessages(privateMessages));
-    }
-  }, [searchQuery, privateMessages]);
+  }, [db]);
 
   const handleSend = async () => {
     if (newMessage.trim() === "" && !image) {
@@ -111,38 +81,29 @@ const PrivateChatScreen = ({ route, navigation }) => {
     const db = getDatabase();
     const userId = auth.currentUser.uid;
 
-    if (newMessage.trim() !== "") {
-      await push(ref(db, `chats/${userId}/messages`), {
-        text: newMessage,
-        createdAt: serverTimestamp(),
-        userId,
-        read: false,
-        senderName: auth.currentUser.displayName,
-      });
-      dispatch(addNewPrivateMessage(""));
-    }
+    const messageData = {
+      createdAt: serverTimestamp(),
+      userId,
+      senderName: auth.currentUser.displayName,
+      text: newMessage.trim() !== "" ? newMessage : undefined,
+    };
 
     if (image) {
       const storage = getStorage();
       const imageRef = storageRef(
         storage,
-        `chatImages/${chatId}/${Date.now()}`
+        `chatImages/${userId}/${Date.now()}`
       );
       const response = await fetch(image);
       const blob = await response.blob();
-
       await uploadBytes(imageRef, blob);
       const imageUrl = await getDownloadURL(imageRef);
-
-      await push(ref(db, `chats/${userId}/messages`), {
-        imageUrl,
-        createdAt: serverTimestamp(),
-        userId,
-        senderName: auth.currentUser.displayName,
-      });
+      messageData.imageUrl = imageUrl;
       dispatch(setImage(null));
     }
 
+    await push(ref(db, `chats/${userId}/${contactId}/messages`), messageData);
+    dispatch(addNewPrivateMessage(""));
     dispatch(setIsTyping(false));
   };
 
@@ -160,8 +121,6 @@ const PrivateChatScreen = ({ route, navigation }) => {
   };
 
   const handleTyping = (text) => {
-    const userId = auth.currentUser.uid;
-    console.log(userId);
     dispatch(addNewPrivateMessage(text));
     if (text.trim() !== "" && !isTyping) {
       dispatch(setIsTyping(true));
@@ -182,7 +141,7 @@ const PrivateChatScreen = ({ route, navigation }) => {
         isOnline={isOnline}
         navigation={navigation}
       />
-      <MessageList messages={privateFilteredMessages} inputRef={inputRef} />
+      <MessageList messages={privateMessages} inputRef={inputRef} />
       <TypingIndicator
         otherUserTyping={otherUserTyping}
         otherUserName={otherUserName}
@@ -202,16 +161,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#FFF",
-  },
-  searchInput: {
-    padding: 10,
-    borderRadius: 20,
-    borderWidth: 1,
-    borderColor: "#ddd",
-    margin: 16,
-    backgroundColor: "#fff",
-    fontSize: 16,
-    color: "#000",
   },
 });
 

@@ -54,6 +54,8 @@ const UserSignUp = ({ navigation }) => {
       await set(ref(db, "users/" + user.uid), {
         name: name,
         email: email,
+      }).then((result) => {
+        console.log(result, "This is response");
       });
       navigation.navigate("UserProfile", {
         userId: user.uid,
