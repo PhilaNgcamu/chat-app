@@ -4,73 +4,105 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { format } from "date-fns";
 import { auth } from "../../../backend/firebaseConfig";
 
-const MessageItem = ({ item }) => (
-  <View
-    style={[
-      styles.messageItem,
-      item.userId === auth.currentUser.uid && styles.myMessage,
-    ]}
-  >
-    {item.text && (
-      <Text
+const MessageItem = ({ item }) => {
+  return (
+    <View style={styles.inputContainer}>
+      <View
         style={[
-          styles.messageText,
-          item.userId === auth.currentUser.uid
-            ? styles.myMessageText
-            : styles.otherMessageText,
+          styles.messageItem,
+          item.userId === auth.currentUser.uid && styles.myMessage,
         ]}
       >
-        {item.text.trim()}
-      </Text>
-    )}
-    {item.imageUrl && (
-      <Image
-        source={{ uri: item.imageUrl || "https://via.placeholder.com/150" }}
-        style={styles.image}
-      />
-    )}
-    <View style={styles.messageMeta}>
-      <Text
-        style={[
-          styles.messageTimestamp,
-          item.userId === auth.currentUser.uid
-            ? styles.myMessageTimestamp
-            : styles.otherMessageTimestamp,
-        ]}
-      >
-        {format(new Date(item.createdAt), "HH:mm")}
-      </Text>
-      {item.read && item.userId === auth.currentUser.uid && (
-        <MaterialIcons name="done-all" size={16} color="#4CAF50" />
-      )}
+        <View style={styles.messageMeta}>
+          <View>
+            {item.text && (
+              <Text
+                style={[
+                  styles.messageText,
+                  item.userId === auth.currentUser.uid
+                    ? styles.myMessageText
+                    : styles.otherMessageText,
+                ]}
+              >
+                {item.text.trim()}
+              </Text>
+            )}
+          </View>
+          {item.imageUrl && (
+            <Image
+              source={{
+                uri: item.imageUrl || "https://via.placeholder.com/150",
+              }}
+              style={styles.image}
+            />
+          )}
+        </View>
+        <Text
+          // style={[
+          //   styles.messageTimestamp,
+          //   item.userId === auth.currentUser.uid
+          //     ? styles.myMessageTimestamp
+          //     : styles.otherMessageTimestamp,
+          // ]}
+          style={styles.myMessageTimestamp}
+        >
+          {format(new Date(item.createdAt), "HH:mm")}
+          {/* 12:00 AM */}
+        </Text>
+      </View>
     </View>
-  </View>
-);
+  );
+};
 
 const styles = StyleSheet.create({
-  messageItem: {
-    padding: 12,
-    backgroundColor: "#F2F7FB",
-    borderRadius: 8,
+  inputContainer: {
+    marginBottom: 10,
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "flex-end",
+    backgroundColor: "blue",
+    marginRight: 20,
+    padding: 15,
+  },
+  photoItem: {
+    position: "absolute",
+    width: 50,
+    height: 50,
+    borderRadius: 25,
     marginVertical: 4,
     marginHorizontal: 16,
+    alignSelf: "center",
+  },
+  messageItem: {
+    padding: 10,
+    backgroundColor: "green",
+    borderTopLeftRadius: 8,
+    borderBottomLeftRadius: 8,
+    borderBottomRightRadius: 8,
     alignSelf: "flex-start",
     maxWidth: "75%",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.22,
-    shadowRadius: 2.22,
-    elevation: 3,
   },
   myMessage: {
-    backgroundColor: "#20A090",
+    backgroundColor: "red",
     alignSelf: "flex-end",
+  },
+  senderImage: {
+    position: "absolute",
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    marginRight: 8,
+  },
+  messageMeta: {
+    position: "relative",
+    top: 10,
+    backgroundColor: "yellow",
   },
   messageText: {
     fontSize: 16,
   },
   myMessageText: {
-    color: "#FFF",
+    color: "#000",
   },
   otherMessageText: {
     color: "#000",
@@ -80,16 +112,17 @@ const styles = StyleSheet.create({
     height: 200,
     borderRadius: 8,
   },
-  messageMeta: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginTop: 4,
-  },
+
   messageTimestamp: {
     fontSize: 12,
   },
   myMessageTimestamp: {
-    color: "#FFF",
+    width: "100%",
+    position: "relative",
+    top: 35,
+    right: 10,
+    color: "#000",
+    backgroundColor: "yellow",
   },
   otherMessageTimestamp: {
     color: "#000",
