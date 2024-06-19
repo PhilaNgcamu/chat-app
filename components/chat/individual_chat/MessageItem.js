@@ -72,11 +72,11 @@ const styles = StyleSheet.create({
   messageItem: {
     padding: 10,
     backgroundColor: "green",
-    borderTopLeftRadius: 8,
-    borderBottomLeftRadius: 8,
-    borderBottomRightRadius: 8,
+    borderTopLeftRadius: 16,
+    borderBottomLeftRadius: 16,
+    borderBottomRightRadius: 16,
     alignSelf: "flex-start",
-    maxWidth: "75%",
+    maxWidth: "55%",
   },
   myMessage: {
     backgroundColor: "#20A090",
@@ -97,6 +97,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   myMessageText: {
+    textAlign: "left",
     color: "#FFFFFF",
   },
   otherMessageText: {
