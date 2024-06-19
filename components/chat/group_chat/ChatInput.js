@@ -27,7 +27,7 @@ import {
 
 const ChatInput = ({ chatId }) => {
   const dispatch = useDispatch();
-  // const newMessage = useSelector((state) => state.newMessage);
+  const newMessage = useSelector((state) => state.newMessage);
   // const isTyping = useSelector((state) => state.isTyping);
   // const image = useSelector((state) => state.image);
 
@@ -140,8 +140,6 @@ const styles = StyleSheet.create({
   inputContainer: {
     flexDirection: "row",
     padding: 16,
-    borderTopWidth: 1,
-    borderTopColor: "#ddd",
     backgroundColor: "#fff",
     alignItems: "center",
   },
@@ -150,7 +148,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     backgroundColor: "#f9f9f9",
-    borderWidth: 1,
     borderColor: "#ddd",
     borderRadius: 25,
     padding: 7,

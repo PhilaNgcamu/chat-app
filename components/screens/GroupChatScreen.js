@@ -40,7 +40,6 @@ const ChatScreen = ({ route }) => {
   useEffect(() => {
     const db = getDatabase();
     const messagesRef = ref(db, `groups/${chatId}/messages`);
-    const typingRef = ref(db, `groups/${chatId}/typingStatus`);
 
     const unsubscribeMessages = onValue(messagesRef, (snapshot) => {
       const messageList = [];
@@ -52,31 +51,8 @@ const ChatScreen = ({ route }) => {
       markMessagesAsRead(messageList);
     });
 
-    const unsubscribeTyping = onValue(typingRef, async (snapshot) => {
-      if (snapshot.exists()) {
-        const typingUserIds = [];
-        snapshot.forEach((childSnapshot) => {
-          if (childSnapshot.val().isTyping) {
-            typingUserIds.push(childSnapshot.key);
-          }
-        });
-
-        const userPromises = typingUserIds.map((userId) =>
-          get(ref(db, `users/${userId}`)).then((userSnapshot) => ({
-            id: userId,
-            name: userSnapshot.val().name,
-          }))
-        );
-
-        const users = await Promise.all(userPromises);
-        const userNames = users.map((user) => user.name);
-        dispatch(setOtherUserTyping(userNames));
-      }
-    });
-
     return () => {
       unsubscribeMessages();
-      unsubscribeTyping();
     };
   }, [chatId]);
 
