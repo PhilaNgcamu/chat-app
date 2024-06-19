@@ -20,7 +20,7 @@ This is a professional chat application built using Expo/React Native, Firebase,
 
 2. **Registration Screen**: Enables users to create a new account by providing necessary details.
 
-3. **Profile Screen**: Allows users to view and update their profile information and settings.
+3. **Profile Screen**: Allows users to view and update their profile informati non and settings.
 
 4. **Individual Chat Screen**: Displays private conversations between two users with message timestamps, read receipts, and typing indicators.
 
