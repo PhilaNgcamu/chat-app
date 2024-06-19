@@ -13,7 +13,7 @@ import {
   uploadBytes,
   getDownloadURL,
 } from "firebase/storage";
-import { auth, db } from "../../backend/firebaseConfig";
+import { auth } from "../../backend/firebaseConfig";
 import * as ImagePicker from "expo-image-picker";
 import { useTabBarVisibility } from "../chat/custom_hook/useTabBarVisibilityContext";
 import { useFocusEffect } from "@react-navigation/native";
@@ -36,8 +36,6 @@ const PrivateChatScreen = ({ route, navigation }) => {
   const privateMessages = useSelector((state) => state.privateMessages);
   const newMessage = useSelector((state) => state.newMessage);
   const isTyping = useSelector((state) => state.isTyping);
-  const otherUserTyping = useSelector((state) => state.otherUserTyping);
-  const otherUserName = useSelector((state) => state.otherUserName);
   const isOnline = useSelector((state) => state.isOnline);
   const image = useSelector((state) => state.image);
   const inputRef = useRef(null);
@@ -54,7 +52,9 @@ const PrivateChatScreen = ({ route, navigation }) => {
   useEffect(() => {
     const db = getDatabase();
     const userId = auth.currentUser.uid;
-    const messagesRef = ref(db, `chats/${userId}/${contactId}/messages`);
+    const chatId =
+      userId < contactId ? `${userId}_${contactId}` : `${contactId}_${userId}`;
+    const messagesRef = ref(db, `chats/${chatId}/messages`);
 
     const unsubscribeMessages = onValue(messagesRef, (snapshot) => {
       const messageList = [];
@@ -67,7 +67,7 @@ const PrivateChatScreen = ({ route, navigation }) => {
     return () => {
       unsubscribeMessages();
     };
-  }, [db]);
+  }, [contactId, dispatch]);
 
   const handleSend = async () => {
     if (newMessage.trim() === "" && !image) {
@@ -76,6 +76,7 @@ const PrivateChatScreen = ({ route, navigation }) => {
 
     const db = getDatabase();
     const userId = auth.currentUser.uid;
+    const chatId = [userId, contactId].sort().join("_____");
 
     const messageData = {
       createdAt: serverTimestamp(),
@@ -98,7 +99,7 @@ const PrivateChatScreen = ({ route, navigation }) => {
       dispatch(setImage(null));
     }
 
-    await push(ref(db, `chats/${userId}/${contactId}/messages`), messageData);
+    await push(ref(db, `chats/${chatId}/messages`), messageData);
     dispatch(addNewPrivateMessage(""));
     dispatch(setIsTyping(false));
   };
