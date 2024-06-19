@@ -79,7 +79,10 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
   messageItem: {
-    padding: 10,
+    paddingTop: 3,
+    paddingBottom: 3,
+    paddingLeft: 15,
+    paddingRight: 15,
     backgroundColor: "green",
     borderTopLeftRadius: 16,
     borderBottomLeftRadius: 16,
@@ -100,7 +103,7 @@ const styles = StyleSheet.create({
   },
   messageMeta: {
     position: "relative",
-    top: 8,
+    top: 9,
   },
   messageText: {
     fontSize: 16,
