@@ -25,8 +25,9 @@ const styles = StyleSheet.create({
     marginBottom: verticalScale(20),
   },
   logo: {
-    width: horizontalScale(50),
-    height: horizontalScale(50),
+    width: horizontalScale(30),
+    height: horizontalScale(30),
+    resizeMode: "contain",
   },
   title: {
     fontFamily: "Poppins-Regular",

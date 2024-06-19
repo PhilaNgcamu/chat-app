@@ -1,10 +1,5 @@
 import React, { useEffect, useRef, useCallback } from "react";
-import {
-  TextInput,
-  KeyboardAvoidingView,
-  Platform,
-  StyleSheet,
-} from "react-native";
+import { KeyboardAvoidingView, Platform, StyleSheet } from "react-native";
 import {
   getDatabase,
   ref,
@@ -29,9 +24,7 @@ import {
   setImage,
   setIsTyping,
   setIsOnline,
-  setSearchQuery,
   setOtherUserName,
-  setOtherUserTyping,
   setPrivateMessages,
   addNewPrivateMessage,
   setPrivateFilteredMessages,
@@ -76,6 +69,7 @@ const PrivateChatScreen = ({ route, navigation }) => {
 
     const unsubscribeMessages = onValue(messagesRef, (snapshot) => {
       const messageList = [];
+      console.log(messagesRef);
       snapshot.forEach((childSnapshot) => {
         messageList.push({ id: childSnapshot.key, ...childSnapshot.val() });
       });
@@ -144,14 +138,12 @@ const PrivateChatScreen = ({ route, navigation }) => {
         imageUrl,
         createdAt: serverTimestamp(),
         userId,
-        read: false,
         senderName: auth.currentUser.displayName,
       });
       dispatch(setImage(null));
     }
 
     dispatch(setIsTyping(false));
-    await updateTypingStatus(false, chatId);
   };
 
   const pickImage = async () => {
