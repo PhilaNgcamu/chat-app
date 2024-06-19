@@ -44,7 +44,7 @@ const MessageItem = ({ item }) => {
               : styles.otherMessageTimestamp,
           ]}
         >
-          {format(new Date(item.createdAt), "HH:mm")}
+          {format(new Date(item.createdAt), "HH:mm")} AM
         </Text>
       </View>
     </View>
@@ -110,12 +110,12 @@ const styles = StyleSheet.create({
 
   messageTimestamp: {
     fontSize: 12,
+    alignSelf: "flex-end",
   },
   myMessageTimestamp: {
     width: "100%",
     position: "relative",
     top: 32,
-    right: 8,
     color: "#000",
   },
   otherMessageTimestamp: {
