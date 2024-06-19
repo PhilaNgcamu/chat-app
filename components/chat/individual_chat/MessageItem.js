@@ -1,6 +1,5 @@
 import React from "react";
 import { View, Text, Image, StyleSheet } from "react-native";
-import { MaterialIcons } from "@expo/vector-icons";
 import { format } from "date-fns";
 import { auth } from "../../../backend/firebaseConfig";
 
@@ -38,16 +37,14 @@ const MessageItem = ({ item }) => {
           )}
         </View>
         <Text
-          // style={[
-          //   styles.messageTimestamp,
-          //   item.userId === auth.currentUser.uid
-          //     ? styles.myMessageTimestamp
-          //     : styles.otherMessageTimestamp,
-          // ]}
-          style={styles.myMessageTimestamp}
+          style={[
+            styles.messageTimestamp,
+            item.userId === auth.currentUser.uid
+              ? styles.myMessageTimestamp
+              : styles.otherMessageTimestamp,
+          ]}
         >
           {format(new Date(item.createdAt), "HH:mm")}
-          {/* 12:00 AM */}
         </Text>
       </View>
     </View>
@@ -60,7 +57,6 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "column",
     alignItems: "flex-end",
-    backgroundColor: "blue",
     marginRight: 20,
     padding: 15,
   },
@@ -83,7 +79,7 @@ const styles = StyleSheet.create({
     maxWidth: "75%",
   },
   myMessage: {
-    backgroundColor: "red",
+    backgroundColor: "#20A090",
     alignSelf: "flex-end",
   },
   senderImage: {
@@ -95,14 +91,13 @@ const styles = StyleSheet.create({
   },
   messageMeta: {
     position: "relative",
-    top: 10,
-    backgroundColor: "yellow",
+    top: 8,
   },
   messageText: {
     fontSize: 16,
   },
   myMessageText: {
-    color: "#000",
+    color: "#FFFFFF",
   },
   otherMessageText: {
     color: "#000",
@@ -119,10 +114,9 @@ const styles = StyleSheet.create({
   myMessageTimestamp: {
     width: "100%",
     position: "relative",
-    top: 35,
-    right: 10,
+    top: 32,
+    right: 8,
     color: "#000",
-    backgroundColor: "yellow",
   },
   otherMessageTimestamp: {
     color: "#000",

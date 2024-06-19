@@ -142,10 +142,6 @@ const PrivateChatScreen = ({ route, navigation }) => {
         navigation={navigation}
       />
       <MessageList messages={privateMessages} inputRef={inputRef} />
-      <TypingIndicator
-        otherUserTyping={otherUserTyping}
-        otherUserName={otherUserName}
-      />
       <ChatInput
         newMessage={newMessage}
         handleTyping={handleTyping}
