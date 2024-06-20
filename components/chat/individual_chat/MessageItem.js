@@ -19,7 +19,9 @@ const MessageItem = ({ item }) => {
       <View
         style={[
           styles.messageItem,
-          item.userId === auth.currentUser.uid && styles.myMessage,
+          item.userId === auth.currentUser.uid
+            ? styles.myMessage
+            : styles.otherMessage,
         ]}
       >
         <View style={styles.messageMeta}>
@@ -29,7 +31,7 @@ const MessageItem = ({ item }) => {
                 style={[
                   styles.messageText,
                   item.userId === auth.currentUser.uid
-                    ? styles.myessageText
+                    ? styles.myMessageText
                     : styles.otherMessageText,
                 ]}
               >
@@ -84,16 +86,23 @@ const styles = StyleSheet.create({
     paddingBottom: 3,
     paddingLeft: 15,
     paddingRight: 15,
-    backgroundColor: "yellow",
-    borderTopLeftRadius: 16,
-    borderBottomLeftRadius: 16,
-    borderBottomRightRadius: 16,
+    backgroundColor: "#F2F7FB",
     alignSelf: "flex-start",
     maxWidth: "55%",
   },
   myMessage: {
+    borderTopLeftRadius: 16,
+    borderBottomLeftRadius: 16,
+    borderBottomRightRadius: 16,
     backgroundColor: "#20A090",
     alignSelf: "flex-end",
+  },
+  otherMessage: {
+    borderTopRightRadius: 16,
+    borderBottomLeftRadius: 16,
+    borderBottomRightRadius: 16,
+    backgroundColor: "#F2F7FB",
+    alignSelf: "flex-start",
   },
   senderImage: {
     position: "absolute",
@@ -122,21 +131,18 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   messageTimestamp: {
+    width: "100%",
+    position: "relative",
+    top: 32,
     fontSize: 12,
     alignSelf: "flex-end",
     color: "#797C7B",
     fontFamily: "Poppins-Bold",
   },
   myMessageTimestamp: {
-    width: "100%",
-    position: "relative",
-    top: 32,
     color: "#797C7B",
   },
   otherMessageTimestamp: {
-    width: "100%",
-    position: "relative",
-    top: 32,
     color: "#797C7B",
   },
 });
