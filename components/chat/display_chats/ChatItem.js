@@ -14,9 +14,10 @@ const ChatItem = ({ item, onPress }) => {
         <View style={styles.itemDetails}>
           <Text style={styles.itemTitle}>{item.name || "Chat"}</Text>
           <Text style={styles.itemLastMessage}>
-            {"Click here to see messages..."}
+            Click here to see messages...
           </Text>
         </View>
+        <Text styles={styles.lastTimeMessageSent}>2 min ago</Text>
         <NotificationStatus />
       </View>
     </TouchableOpacity>
@@ -51,6 +52,12 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: "#888",
     marginTop: 4,
+  },
+  lastTimeMessageSent: {
+    backgroundColor: "black",
+    height: 60,
+    width: 60,
+    marginBottom: 25,
   },
 });
 
