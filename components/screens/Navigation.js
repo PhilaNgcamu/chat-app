@@ -17,7 +17,8 @@ import PrivateChatScreen from "./PrivateChatScreen";
 import Onboarding from "../onboarding/Onboarding";
 import { useSelector } from "react-redux";
 import { useFonts } from "expo-font";
-import GroupIcon from "../../utils/icons/Group";
+import GroupIcon from "../../utils/icons/GroupIcon";
+import MessageIcon from "../../utils/icons/MessageIcon";
 
 const Stack = createNativeStackNavigator();
 const MessagesStack = createNativeStackNavigator();
@@ -95,6 +96,10 @@ function BottomTabNavigator() {
   const [fontsLoaded] = useFonts({
     "Poppins-Regular": require("../../assets/fonts/Poppins-Regular.ttf"),
   });
+
+  if (!fontsLoaded) {
+    return null;
+  }
   const tabBarVisible = useSelector((state) => state.tabBarVisible);
 
   return (
@@ -115,7 +120,7 @@ function BottomTabNavigator() {
         component={MessagesStackNavigator}
         options={{
           tabBarIcon: ({ color, size }) => (
-            <AntDesign name="message1" color={color} size={size} />
+            <MessageIcon color={color} size={size} />
           ),
           headerShown: false,
         }}
@@ -134,7 +139,9 @@ function BottomTabNavigator() {
         name="Group"
         component={GroupStackNavigator}
         options={{
-          tabBarIcon: ({ color, size }) => <GroupIcon />,
+          tabBarIcon: ({ color, size }) => (
+            <GroupIcon color={color} size={size} />
+          ),
           headerShown: false,
         }}
       />
