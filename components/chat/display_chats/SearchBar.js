@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
-import { View, TextInput, StyleSheet, Image, Text } from "react-native";
+import React, { useEffect } from "react";
+import { View, StyleSheet, Image, Text } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import { useDispatch, useSelector } from "react-redux";
-import { setProfilePicture, setSearchQuery } from "../../../redux/actions";
+import { setProfilePicture } from "../../../redux/actions";
 import { auth } from "../../../backend/firebaseConfig";
 import { getDatabase, ref, get } from "firebase/database";
 import { useFonts } from "expo-font";

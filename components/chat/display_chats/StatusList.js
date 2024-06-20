@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   FlatList,
@@ -13,10 +13,14 @@ import { auth } from "../../../backend/firebaseConfig";
 import { getDatabase, ref, get } from "firebase/database";
 import { setProfilePicture } from "../../../redux/actions";
 
+const PEXELS_API_KEY =
+  "HOQhlLoeml32OchQuDRqmxSjfoRpbqBvwX8zpTVxnS65mKmPbXlZQl5s";
+
 const StatusList = () => {
   const dispatch = useDispatch();
-
+  const [pexelsPhotos, setPexelsPhotos] = useState([]);
   const statuses = useSelector((state) => state.statuses);
+  const filterForImages = statuses.filter((status) => status.photoUrl !== null);
   const profilePicture = useSelector((state) => state.profilePicture);
 
   useEffect(() => {
@@ -38,6 +42,34 @@ const StatusList = () => {
       fetchUserProfilePicture();
     }
   }, [auth.currentUser]);
+
+  const fetchImages = async () => {
+    try {
+      const response = await fetch(
+        `https://api.pexels.com/v1/search?query=people&per_page=5`,
+        {
+          headers: {
+            Authorization: PEXELS_API_KEY,
+          },
+        }
+      );
+      const data = await response.json();
+      const photos = data.photos.map((photo) => ({
+        id: photo.id.toString(),
+        photoUrl: photo.src.small,
+        name: photo.photographer,
+      }));
+      setPexelsPhotos(photos);
+    } catch (error) {
+      console.error("Error fetching images from Pexels:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchImages();
+  }, []);
+
+  const dummyData = [...filterForImages, ...pexelsPhotos];
 
   const renderStatusItem = ({ item }) => {
     return (
@@ -61,11 +93,11 @@ const StatusList = () => {
         <Text style={styles.myStatusText}>My Status</Text>
       </View>
       <FlatList
-        data={statuses}
+        data={dummyData}
         horizontal
         renderItem={renderStatusItem}
         keyExtractor={(item) => item.id}
-        showsHorizontalScrollIndicator={false}
+        showsHorizontalScrollIndicator={true}
       />
     </View>
   );

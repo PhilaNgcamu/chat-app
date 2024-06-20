@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   View,
   Text,
@@ -16,7 +16,7 @@ import { getAuth, updateProfile, updateEmail } from "firebase/auth";
 import { getDatabase, ref, set, get } from "firebase/database";
 
 import * as ImagePicker from "expo-image-picker";
-import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { Feather, MaterialIcons } from "@expo/vector-icons";
 import { verticalScale } from "../../utils/scale";
 import { StatusBar } from "expo-status-bar";
@@ -26,6 +26,7 @@ import { setProfilePicture } from "../../redux/actions";
 import MessageIcon from "../../utils/icons/MessageIcon";
 import MoreIcon from "../../utils/icons/MoreIcon";
 import PhoneIcon from "../../utils/icons/PhoneIcon";
+import { useTabBarVisibility } from "../chat/custom_hook/useTabBarVisibilityContext";
 
 const UserProfile = () => {
   const auth = getAuth();
@@ -38,6 +39,15 @@ const UserProfile = () => {
 
   const dispatch = useDispatch();
   const profilePicture = useSelector((state) => state.profilePicture);
+
+  const { setTabBarVisible } = useTabBarVisibility();
+
+  useFocusEffect(
+    useCallback(() => {
+      setTabBarVisible(false);
+      return () => setTabBarVisible(true);
+    }, [setTabBarVisible])
+  );
 
   const [fontsLoaded] = useFonts({
     "Poppins-Bold": require("../../assets/fonts/Poppins-Bold.ttf"),
@@ -131,7 +141,7 @@ const UserProfile = () => {
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
-      style={styles.container}
+      style={styles.keyboardContainer}
     >
       <StatusBar style="light" />
       <ScrollView contentContainerStyle={styles.scrollContainer}>
@@ -220,9 +230,20 @@ const UserProfile = () => {
               placeholderTextColor="#AAAAAA"
             />
           </View>
-          <TouchableOpacity style={styles.button} onPress={handleSave}>
+          <View style={styles.inputContainer}>
+            <Text style={styles.label}>Media Shared</Text>
+            <Text style={styles.viewAllText}>View All</Text>
+            <Image
+              source={
+                profilePicture ? { uri: profilePicture } : placeholderImage
+              }
+              alt="Profile Picture"
+              style={styles.profilePicture}
+            />
+          </View>
+          {/* <TouchableOpacity style={styles.button} onPress={handleSave}>
             <Text style={styles.buttonText}>Save Changes</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
       </View>
     </KeyboardAvoidingView>
@@ -233,7 +254,7 @@ const styles = StyleSheet.create({
   scrollContainer: {
     flexGrow: 1,
   },
-  container: {
+  keyboardContainer: {
     flex: 1,
     backgroundColor: "#000",
   },
@@ -285,7 +306,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   infoContainer: {
-    backgroundColor: "red",
+    backgroundColor: "#FFFFFF",
     borderTopLeftRadius: 40,
     borderTopRightRadius: 40,
   },
@@ -315,9 +336,15 @@ const styles = StyleSheet.create({
     fontFamily: "Poppins-Bold",
     fontSize: 14,
     color: "#797C7B",
-    marginBottom: 4,
   },
-
+  viewAllText: {
+    position: "relative",
+    bottom: 24,
+    textAlign: "right",
+    fontFamily: "Poppins-Bold",
+    fontSize: 14,
+    color: "#24786D",
+  },
   buttonText: {
     fontFamily: "Poppins-Bold",
     fontSize: 16,
