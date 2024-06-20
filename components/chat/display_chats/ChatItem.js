@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
   },
   itemTitle: {
     fontSize: 18,
-    fontWeight: "bold",
+    fontFamily: "Poppins-SemiBold",
   },
   itemLastMessage: {
     fontSize: 14,
