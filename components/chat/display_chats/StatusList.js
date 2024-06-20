@@ -20,7 +20,7 @@ const StatusList = () => {
   const dispatch = useDispatch();
   const [pexelsPhotos, setPexelsPhotos] = useState([]);
   const statuses = useSelector((state) => state.statuses);
-  const filterForImages = statuses.filter((status) => status.photoUrl !== null);
+  const filterForImages = statuses.filter((status) => status.photoURL !== null);
   const profilePicture = useSelector((state) => state.profilePicture);
 
   useEffect(() => {

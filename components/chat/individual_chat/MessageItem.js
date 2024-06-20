@@ -13,6 +13,7 @@ const MessageItem = ({ item }) => {
   if (!fontsLoaded) {
     return null;
   }
+  console.log(JSON.stringify(item, null, 2));
   return (
     <View style={styles.inputContainer}>
       <View
@@ -21,7 +22,7 @@ const MessageItem = ({ item }) => {
         }
       >
         {item.userId !== auth.currentUser.uid && (
-          <Image source={{ uri: item.photoUrl }} style={styles.photoItem} />
+          <Image source={{ uri: item.photoURL }} style={styles.photoItem} />
         )}
         <View
           style={[
@@ -46,14 +47,6 @@ const MessageItem = ({ item }) => {
                 </Text>
               )}
             </View>
-            {item.imageUrl && (
-              <Image
-                source={{
-                  uri: item.imageUrl || "https://via.placeholder.com/150",
-                }}
-                style={styles.image}
-              />
-            )}
           </View>
           <Text
             style={[
@@ -79,10 +72,8 @@ const styles = StyleSheet.create({
     marginRight: 20,
     marginBottom: 40,
     padding: 15,
-    backgroundColor: "yellow",
   },
   messageItemContainer: {
-    backgroundColor: "blue",
     display: "flex",
     flexDirection: "row",
     alignSelf: "flex-start",
