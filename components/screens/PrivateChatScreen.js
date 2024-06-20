@@ -76,7 +76,7 @@ const PrivateChatScreen = ({ route, navigation }) => {
 
     const db = getDatabase();
     const userId = auth.currentUser.uid;
-    const chatId = [userId, contactId].sort().join("_____");
+    const chatId = [userId, contactId].sort().join("_");
 
     const messageData = {
       createdAt: serverTimestamp(),

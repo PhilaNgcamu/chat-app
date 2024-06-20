@@ -29,7 +29,7 @@ const MessageItem = ({ item }) => {
                 style={[
                   styles.messageText,
                   item.userId === auth.currentUser.uid
-                    ? styles.myMessageText
+                    ? styles.myessageText
                     : styles.otherMessageText,
                 ]}
               >
@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
     paddingBottom: 3,
     paddingLeft: 15,
     paddingRight: 15,
-    backgroundColor: "green",
+    backgroundColor: "yellow",
     borderTopLeftRadius: 16,
     borderBottomLeftRadius: 16,
     borderBottomRightRadius: 16,
@@ -134,7 +134,10 @@ const styles = StyleSheet.create({
     color: "#797C7B",
   },
   otherMessageTimestamp: {
-    color: "#000",
+    width: "100%",
+    position: "relative",
+    top: 32,
+    color: "#797C7B",
   },
 });
 

@@ -17,6 +17,7 @@ import PrivateChatScreen from "./PrivateChatScreen";
 import Onboarding from "../onboarding/Onboarding";
 import { useSelector } from "react-redux";
 import { useFonts } from "expo-font";
+import GroupIcon from "../../utils/icons/Group";
 
 const Stack = createNativeStackNavigator();
 const MessagesStack = createNativeStackNavigator();
@@ -133,9 +134,7 @@ function BottomTabNavigator() {
         name="Group"
         component={GroupStackNavigator}
         options={{
-          tabBarIcon: ({ color, size }) => (
-            <FontAwesome name="group" color={color} size={size} />
-          ),
+          tabBarIcon: ({ color, size }) => <GroupIcon />,
           headerShown: false,
         }}
       />
