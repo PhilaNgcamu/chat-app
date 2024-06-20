@@ -15,51 +15,57 @@ const MessageItem = ({ item }) => {
   }
   return (
     <View style={styles.inputContainer}>
-      {item.userId !== auth.currentUser.uid && (
-        <Image source={{ uri: item.photoUrl }} style={styles.photoItem} />
-      )}
       <View
-        style={[
-          styles.messageItem,
-          item.userId === auth.currentUser.uid
-            ? styles.myMessage
-            : styles.otherMessage,
-        ]}
+        style={
+          item.userId !== auth.currentUser.uid && styles.messageItemContainer
+        }
       >
-        <View style={styles.messageMeta}>
-          <View>
-            {item.text && (
-              <Text
-                style={[
-                  styles.messageText,
-                  item.userId === auth.currentUser.uid
-                    ? styles.myMessageText
-                    : styles.otherMessageText,
-                ]}
-              >
-                {item.text.trim()}
-              </Text>
-            )}
-          </View>
-          {item.imageUrl && (
-            <Image
-              source={{
-                uri: item.imageUrl || "https://via.placeholder.com/150",
-              }}
-              style={styles.image}
-            />
-          )}
-        </View>
-        <Text
+        {item.userId !== auth.currentUser.uid && (
+          <Image source={{ uri: item.photoUrl }} style={styles.photoItem} />
+        )}
+        <View
           style={[
-            styles.messageTimestamp,
+            styles.messageItem,
             item.userId === auth.currentUser.uid
-              ? styles.myMessageTimestamp
-              : styles.otherMessageTimestamp,
+              ? styles.myMessage
+              : styles.otherMessage,
           ]}
         >
-          {format(new Date(item.createdAt), "HH:mm")} AM
-        </Text>
+          <View style={styles.messageMeta}>
+            <View>
+              {item.text && (
+                <Text
+                  style={[
+                    styles.messageText,
+                    item.userId === auth.currentUser.uid
+                      ? styles.myMessageText
+                      : styles.otherMessageText,
+                  ]}
+                >
+                  {item.text.trim()}
+                </Text>
+              )}
+            </View>
+            {item.imageUrl && (
+              <Image
+                source={{
+                  uri: item.imageUrl || "https://via.placeholder.com/150",
+                }}
+                style={styles.image}
+              />
+            )}
+          </View>
+          <Text
+            style={[
+              styles.messageTimestamp,
+              item.userId === auth.currentUser.uid
+                ? styles.myMessageTimestamp
+                : styles.otherMessageTimestamp,
+            ]}
+          >
+            {format(new Date(item.createdAt), "HH:mm")} AM
+          </Text>
+        </View>
       </View>
     </View>
   );
@@ -70,28 +76,31 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     display: "flex",
     flexDirection: "column",
-    alignItems: "flex-end",
     marginRight: 20,
     marginBottom: 40,
     padding: 15,
+    backgroundColor: "yellow",
+  },
+  messageItemContainer: {
+    backgroundColor: "blue",
+    display: "flex",
+    flexDirection: "row",
+    alignSelf: "flex-start",
   },
   photoItem: {
     alignSelf: "flex-start",
-    position: "absolute",
-    top: 10,
     width: 40,
     height: 40,
     borderRadius: 20,
     marginRight: 8,
     borderRadius: 25,
-    marginVertical: 4,
     marginHorizontal: 16,
     backgroundColor: "red",
   },
   messageItem: {
     paddingLeft: 15,
     paddingRight: 15,
-    marginLeft: 50,
+    marginLeft: 15,
     backgroundColor: "#F2F7FB",
     alignSelf: "flex-start",
     maxWidth: "55%",
@@ -134,15 +143,15 @@ const styles = StyleSheet.create({
     position: "relative",
     top: 32,
     fontSize: 12,
-    alignSelf: "flex-end",
     color: "#797C7B",
     fontFamily: "Poppins-Bold",
   },
   myMessageTimestamp: {
+    alignSelf: "flex-end",
     color: "#797C7B",
   },
   otherMessageTimestamp: {
-    left: 10,
+    textAlign: "right",
     color: "#797C7B",
   },
 });
