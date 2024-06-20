@@ -2,11 +2,12 @@ import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet, Image } from "react-native";
 
 const ChatItem = ({ item, onPress }) => {
+  console.log(item.photoURL);
   return (
     <TouchableOpacity style={styles.item} onPress={onPress}>
       <View style={styles.itemInfo}>
         <Image
-          source={{ uri: item.photoUrl || "https://via.placeholder.com/150" }}
+          source={{ uri: item.photoURL || "https://via.placeholder.com/150" }}
           style={styles.itemImage}
         />
         <View style={styles.itemDetails}>

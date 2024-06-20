@@ -20,7 +20,6 @@ import {
   uploadBytes,
   getDownloadURL,
 } from "firebase/storage";
-import storage from "firebase/storage";
 
 import * as ImagePicker from "expo-image-picker";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";

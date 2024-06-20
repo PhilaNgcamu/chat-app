@@ -32,7 +32,7 @@ const StatusList = () => {
         const userData = snapshot.val();
         dispatch(
           setProfilePicture(
-            userData.photoUrl || "https://via.placeholder.com/150"
+            userData.photoURL || "https://via.placeholder.com/150"
           )
         );
       }
@@ -56,7 +56,7 @@ const StatusList = () => {
       const data = await response.json();
       const photos = data.photos.map((photo) => ({
         id: photo.id.toString(),
-        photoUrl: photo.src.small,
+        photoURL: photo.src.small,
         name: photo.photographer,
       }));
       setPexelsPhotos(photos);
@@ -75,7 +75,7 @@ const StatusList = () => {
     return (
       <TouchableOpacity style={styles.statusItem}>
         <Image
-          source={{ uri: item.photoUrl || "https://via.placeholder.com/150" }}
+          source={{ uri: item.photoURL || "https://via.placeholder.com/150" }}
           style={styles.statusImage}
         />
         <Text style={styles.statusName}>{item.name}</Text>
