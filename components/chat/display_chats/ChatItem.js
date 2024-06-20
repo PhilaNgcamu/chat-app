@@ -1,5 +1,6 @@
 import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet, Image } from "react-native";
+import NotificationStatus from "./NotificationStatus";
 
 const ChatItem = ({ item, onPress }) => {
   console.log(item.photoURL);
@@ -16,6 +17,7 @@ const ChatItem = ({ item, onPress }) => {
             {"Click here to see messages..."}
           </Text>
         </View>
+        <NotificationStatus />
       </View>
     </TouchableOpacity>
   );
