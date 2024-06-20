@@ -1,9 +1,17 @@
 import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet, Image } from "react-native";
 import NotificationStatus from "./NotificationStatus";
+import { useFonts } from "expo-font";
 
 const ChatItem = ({ item, onPress }) => {
-  console.log(item.photoURL);
+  const [fontsLoaded] = useFonts({
+    "Poppins-Bold": require("../../../assets/fonts/Poppins-Bold.ttf"),
+    "Poppins-SemiBold": require("../../../assets/fonts/Poppins-SemiBold.ttf"),
+    "Poppins-Regular": require("../../../assets/fonts/Poppins-Regular.ttf"),
+  });
+  if (!fontsLoaded) {
+    return null;
+  }
   return (
     <TouchableOpacity style={styles.item} onPress={onPress}>
       <View style={styles.itemInfo}>
@@ -51,6 +59,7 @@ const styles = StyleSheet.create({
   itemLastMessage: {
     fontSize: 14,
     color: "#888",
+    fontFamily: "Poppins-SemiBold",
     marginTop: 4,
   },
   lastTimeMessageSent: {
