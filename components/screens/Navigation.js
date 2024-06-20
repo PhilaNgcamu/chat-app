@@ -2,7 +2,7 @@ import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { AntDesign, Feather, FontAwesome } from "@expo/vector-icons";
+import { Feather } from "@expo/vector-icons";
 import { StyleSheet } from "react-native";
 
 import { TabBarVisibilityProvider } from "../chat/custom_hook/useTabBarVisibilityContext";
@@ -22,7 +22,6 @@ import MessageIcon from "../../utils/icons/MessageIcon";
 
 const Stack = createNativeStackNavigator();
 const MessagesStack = createNativeStackNavigator();
-const CallsStack = createNativeStackNavigator();
 const GroupStack = createNativeStackNavigator();
 const SettingsStack = createNativeStackNavigator();
 
@@ -51,18 +50,6 @@ function MessagesStackNavigator() {
         options={{ headerShown: false }}
       />
     </MessagesStack.Navigator>
-  );
-}
-
-function ProfileStackNavigator() {
-  return (
-    <CallsStack.Navigator>
-      <CallsStack.Screen
-        name="UserProfile"
-        component={UserProfile}
-        options={{ headerShown: false }}
-      />
-    </CallsStack.Navigator>
   );
 }
 

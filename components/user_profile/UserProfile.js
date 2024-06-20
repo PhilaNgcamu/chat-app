@@ -14,6 +14,13 @@ import {
 import { useFonts } from "expo-font";
 import { getAuth, updateProfile, updateEmail } from "firebase/auth";
 import { getDatabase, ref, set, get } from "firebase/database";
+import {
+  getStorage,
+  ref as storageRef,
+  uploadBytes,
+  getDownloadURL,
+} from "firebase/storage";
+import storage from "firebase/storage";
 
 import * as ImagePicker from "expo-image-picker";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
@@ -57,6 +64,7 @@ const UserProfile = () => {
   if (!fontsLoaded) {
     return null;
   }
+
   useEffect(() => {
     const fetchUserProfile = async () => {
       const db = getDatabase();
@@ -88,21 +96,21 @@ const UserProfile = () => {
       );
       return;
     } else if (phoneNumber.length !== 10) {
-      Alert.alert("Oops!", "A phone number must be 10-digit number.");
+      Alert.alert("Oops!", "A phone number must be a 10-digit number.");
       return;
     }
 
     try {
       await updateProfile(user, {
         displayName: name,
-        photoUrl: profilePicture,
+        photoURL: profilePicture,
       });
 
       await updateEmail(user, email);
 
       const db = getDatabase();
       await set(ref(db, "users/" + user.uid), {
-        photoUrl: profilePicture,
+        photoURL: profilePicture,
         name: name,
         email: email,
         statusMessage: statusMessage,
@@ -124,9 +132,28 @@ const UserProfile = () => {
       aspect: [4, 3],
       quality: 1,
     });
-
+    const storage = getStorage();
     if (!result.canceled) {
-      dispatch(setProfilePicture(result.assets[0].uri));
+      const imageUri = result.assets[0].uri;
+      const response = await fetch(imageUri);
+      const blob = await response.blob();
+      const fileName = imageUri.split("/").pop();
+      console.log(JSON.stringify(result, null, 2));
+      console.log(fileName);
+
+      const storeRef = storageRef(
+        storage,
+        `profile_pictures/${user.uid}/${fileName}`
+      );
+      console.log("This is a blob", blob);
+
+      try {
+        await uploadBytes(storeRef, blob);
+        const downloadUrl = await getDownloadURL(storeRef);
+        dispatch(setProfilePicture(downloadUrl));
+      } catch (e) {
+        console.error("Upload failed: ", e);
+      }
     }
   };
 
@@ -237,13 +264,13 @@ const UserProfile = () => {
               source={
                 profilePicture ? { uri: profilePicture } : placeholderImage
               }
-              alt="Profile Picture"
+              alt="Media Shared"
               style={styles.profilePicture}
             />
           </View>
-          {/* <TouchableOpacity style={styles.button} onPress={handleSave}>
+          <TouchableOpacity style={styles.button} onPress={handleSave}>
             <Text style={styles.buttonText}>Save Changes</Text>
-          </TouchableOpacity> */}
+          </TouchableOpacity>
         </View>
       </View>
     </KeyboardAvoidingView>
@@ -251,10 +278,11 @@ const UserProfile = () => {
 };
 
 const styles = StyleSheet.create({
-  scrollContainer: {
-    flexGrow: 1,
-  },
   keyboardContainer: {
+    flex: 1,
+    backgroundColor: "#000",
+  },
+  scrollContainer: {
     flex: 1,
     backgroundColor: "#000",
   },
