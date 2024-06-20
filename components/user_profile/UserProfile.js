@@ -17,12 +17,15 @@ import { getDatabase, ref, set, get } from "firebase/database";
 
 import * as ImagePicker from "expo-image-picker";
 import { useNavigation } from "@react-navigation/native";
-import { MaterialIcons } from "@expo/vector-icons";
+import { Feather, MaterialIcons } from "@expo/vector-icons";
 import { verticalScale } from "../../utils/scale";
 import { StatusBar } from "expo-status-bar";
 import placeholderImage from "../../assets/insert-image.png";
 import { useDispatch, useSelector } from "react-redux";
 import { setProfilePicture } from "../../redux/actions";
+import MessageIcon from "../../utils/icons/MessageIcon";
+import MoreIcon from "../../utils/icons/MoreIcon";
+import PhoneIcon from "../../utils/icons/PhoneIcon";
 
 const UserProfile = () => {
   const auth = getAuth();
@@ -130,95 +133,96 @@ const UserProfile = () => {
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       style={styles.container}
     >
-      <View style={styles.container}>
-        <StatusBar style="light" />
-
-        <ScrollView contentContainerStyle={styles.scrollContainer}>
-          <View style={styles.headerContainer}>
-            <TouchableOpacity
-              onPress={() => navigation.goBack()}
-              style={styles.backButton}
-            >
-              <MaterialIcons name="arrow-back" size={24} color="#FFFFFF" />
-            </TouchableOpacity>
-            <TouchableOpacity onPress={pickImage}>
-              <Image
-                source={
-                  profilePicture ? { uri: profilePicture } : placeholderImage
-                }
-                alt="Profile Picture"
-                style={styles.profilePicture}
-              />
-            </TouchableOpacity>
-            <Text style={styles.profileName}>{name}</Text>
-            <Text style={styles.hashtag}>
-              {name && `@${name.toLowerCase().replace(/\s/g, "")}`}
-            </Text>
-            <View style={styles.iconContainer}>
+      <StatusBar style="light" />
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+        <View style={styles.headerContainer}>
+          <TouchableOpacity
+            onPress={() => navigation.goBack()}
+            style={styles.backButton}
+          >
+            <MaterialIcons name="arrow-back" size={24} color="#FFFFFF" />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={pickImage}>
+            <Image
+              source={
+                profilePicture ? { uri: profilePicture } : placeholderImage
+              }
+              alt="Profile Picture"
+              style={styles.profilePicture}
+            />
+          </TouchableOpacity>
+          <Text style={styles.profileName}>{name}</Text>
+          <Text style={styles.hashtag}>
+            {name && `@${name.toLowerCase().replace(/\s/g, "")}`}
+          </Text>
+          <View style={styles.iconContainer}>
+            <View style={styles.iconGroup}>
+              <MessageIcon color="#FFFFFF" />
+            </View>
+            <View style={styles.iconGroup}>
               <TouchableOpacity>
-                <MaterialIcons name="message" size={24} color="#24786D" />
+                <Feather name="video" size={24} color="#FFFFFF" />
               </TouchableOpacity>
-              <TouchableOpacity>
-                <MaterialIcons name="videocam" size={24} color="#24786D" />
-              </TouchableOpacity>
-              <TouchableOpacity>
-                <MaterialIcons name="call" size={24} color="#24786D" />
-              </TouchableOpacity>
-              <TouchableOpacity>
-                <MaterialIcons name="more-vert" size={24} color="#24786D" />
-              </TouchableOpacity>
+            </View>
+            <View style={styles.iconGroup}>
+              <PhoneIcon />
+            </View>
+            <View style={styles.iconGroup}>
+              <MoreIcon />
             </View>
           </View>
-        </ScrollView>
-        <View style={styles.infoContainer}>
-          <View style={styles.dragger} />
-          <View style={styles.infoContent}>
-            <View style={styles.inputContainer}>
-              <Text style={styles.label}>Name</Text>
-              <TextInput
-                style={styles.input}
-                value={name}
-                onChangeText={setName}
-                placeholder="Enter your name"
-                placeholderTextColor="#AAAAAA"
-              />
-            </View>
-            <View style={styles.inputContainer}>
-              <Text style={styles.label}>Email</Text>
-              <TextInput
-                style={styles.input}
-                value={email}
-                onChangeText={setEmail}
-                keyboardType="email-address"
-                placeholder="Enter your email"
-                placeholderTextColor="#AAAAAA"
-              />
-            </View>
-            <View style={styles.inputContainer}>
-              <Text style={styles.label}>Status Message</Text>
-              <TextInput
-                style={styles.input}
-                value={statusMessage}
-                onChangeText={setStatusMessage}
-                placeholder="Enter a status message"
-                placeholderTextColor="#AAAAAA"
-              />
-            </View>
-            <View style={styles.inputContainer}>
-              <Text style={styles.label}>Phone Number</Text>
-              <TextInput
-                style={styles.input}
-                value={phoneNumber}
-                onChangeText={setPhoneNumber}
-                keyboardType="phone-pad"
-                placeholder="Enter your phone number"
-                placeholderTextColor="#AAAAAA"
-              />
-            </View>
-            <TouchableOpacity style={styles.button} onPress={handleSave}>
-              <Text style={styles.buttonText}>Save Changes</Text>
-            </TouchableOpacity>
+        </View>
+      </ScrollView>
+      <View style={styles.infoContainer}>
+        <View style={styles.dragger} />
+        <View style={styles.infoContent}>
+          <View style={styles.inputContainer}>
+            <Text style={styles.label}>Display Name</Text>
+            <TextInput
+              style={styles.input}
+              value={name}
+              onChangeText={setName}
+              placeholder="Enter your name"
+              placeholderTextColor="#AAAAAA"
+            />
           </View>
+          <View style={styles.inputContainer}>
+            <Text style={styles.label}>Email Address</Text>
+            <TextInput
+              style={styles.input}
+              value={email}
+              onChangeText={setEmail}
+              keyboardType="email-address"
+              placeholder="Enter your email"
+              placeholderTextColor="#AAAAAA"
+            />
+          </View>
+          <View style={styles.inputContainer}>
+            <Text style={styles.label}>Status</Text>
+            <TextInput
+              style={styles.input}
+              value={statusMessage}
+              onChangeText={setStatusMessage}
+              placeholder="Enter a status message"
+              placeholderTextColor="#AAAAAA"
+            />
+          </View>
+          <View style={styles.inputContainer}>
+            <Text style={styles.label}>Phone Number</Text>
+            <TextInput
+              style={styles.input}
+              value={phoneNumber
+                .replace(/\D+/g, "")
+                .replace(/(\d{3})(\d{3})(\d{4})/, "($1) $2-$3")}
+              onChangeText={setPhoneNumber}
+              keyboardType="phone-pad"
+              placeholder="Enter your phone number"
+              placeholderTextColor="#AAAAAA"
+            />
+          </View>
+          <TouchableOpacity style={styles.button} onPress={handleSave}>
+            <Text style={styles.buttonText}>Save Changes</Text>
+          </TouchableOpacity>
         </View>
       </View>
     </KeyboardAvoidingView>
@@ -228,10 +232,10 @@ const UserProfile = () => {
 const styles = StyleSheet.create({
   scrollContainer: {
     flexGrow: 1,
-    backgroundColor: "#000",
   },
   container: {
     flex: 1,
+    backgroundColor: "#000",
   },
   loadingContainer: {
     flex: 1,
@@ -254,9 +258,9 @@ const styles = StyleSheet.create({
     color: "#FFFFFF",
   },
   hashtag: {
-    fontFamily: "Poppins-Regular",
+    fontFamily: "Poppins-Bold",
     fontSize: 14,
-    color: "#FFFFFF",
+    color: "#797C7B",
   },
   profilePicture: {
     width: 100,
@@ -268,17 +272,22 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-around",
     width: "100%",
+    height: 44,
     marginTop: 10,
   },
+  iconGroup: {
+    backgroundColor: "#051D13",
+    padding: 10,
+    borderRadius: 50,
+    width: 44,
+    height: 44,
+    justifyContent: "center",
+    alignItems: "center",
+  },
   infoContainer: {
-    position: "absolute",
-    width: "100%",
-    bottom: 0,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: "red",
     borderTopLeftRadius: 40,
     borderTopRightRadius: 40,
-    height: verticalScale(500),
-    paddingTop: 20,
   },
   dragger: {
     alignSelf: "center",
@@ -294,22 +303,21 @@ const styles = StyleSheet.create({
     paddingBottom: 16,
   },
   inputContainer: {
+    paddingTop: 15,
+    paddingLeft: 10,
     marginBottom: 16,
+  },
+  input: {
+    fontSize: 16,
+    color: "#000",
   },
   label: {
     fontFamily: "Poppins-Bold",
     fontSize: 14,
-    color: "#24786D",
+    color: "#797C7B",
     marginBottom: 4,
   },
-  input: {
-    borderBottomWidth: 1,
-    borderBottomColor: "#24786D",
-    paddingBottom: 8,
-    fontFamily: "Poppins-Regular",
-    fontSize: 16,
-    color: "#000",
-  },
+
   buttonText: {
     fontFamily: "Poppins-Bold",
     fontSize: 16,
