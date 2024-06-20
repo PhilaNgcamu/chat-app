@@ -16,6 +16,9 @@ const MessageItem = ({ item }) => {
   console.log(item);
   return (
     <View style={styles.inputContainer}>
+      {item.userId !== auth.currentUser.uid && (
+        <Image source={{ uri: item.photoUrl }} style={styles.photoItem} />
+      )}
       <View
         style={[
           styles.messageItem,
@@ -70,22 +73,26 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     alignItems: "flex-end",
     marginRight: 20,
+    marginBottom: 40,
     padding: 15,
   },
   photoItem: {
+    alignSelf: "flex-start",
     position: "absolute",
-    width: 50,
-    height: 50,
+    top: 10,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    marginRight: 8,
     borderRadius: 25,
     marginVertical: 4,
     marginHorizontal: 16,
-    alignSelf: "center",
+    backgroundColor: "red",
   },
   messageItem: {
-    paddingTop: 3,
-    paddingBottom: 3,
     paddingLeft: 15,
     paddingRight: 15,
+    marginLeft: 50,
     backgroundColor: "#F2F7FB",
     alignSelf: "flex-start",
     maxWidth: "55%",
@@ -103,13 +110,6 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 16,
     backgroundColor: "#F2F7FB",
     alignSelf: "flex-start",
-  },
-  senderImage: {
-    position: "absolute",
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    marginRight: 8,
   },
   messageMeta: {
     position: "relative",
@@ -143,6 +143,7 @@ const styles = StyleSheet.create({
     color: "#797C7B",
   },
   otherMessageTimestamp: {
+    left: 10,
     color: "#797C7B",
   },
 });
