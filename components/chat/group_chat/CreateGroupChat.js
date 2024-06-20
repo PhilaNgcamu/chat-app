@@ -98,7 +98,6 @@ const CreateGroupChat = () => {
 
   return (
     <View style={styles.container}>
-      <StatusBar style="dark" />
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <MaterialIcons name="arrow-back" size={24} color="#000" />

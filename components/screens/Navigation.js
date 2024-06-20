@@ -2,7 +2,6 @@ import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { Feather } from "@expo/vector-icons";
 import { StyleSheet } from "react-native";
 
 import { TabBarVisibilityProvider } from "../chat/custom_hook/useTabBarVisibilityContext";
@@ -19,6 +18,8 @@ import { useSelector } from "react-redux";
 import { useFonts } from "expo-font";
 import GroupIcon from "../../utils/icons/GroupIcon";
 import MessageIcon from "../../utils/icons/MessageIcon";
+import SettingsIcon from "../../utils/icons/SettingsIcon";
+import CallsIcon from "../../utils/icons/CallsIcon";
 
 const Stack = createNativeStackNavigator();
 const MessagesStack = createNativeStackNavigator();
@@ -116,9 +117,7 @@ function BottomTabNavigator() {
         name="Calls"
         component={SettingsStackNavigator}
         options={{
-          tabBarIcon: ({ color, size }) => (
-            <Feather name="phone-call" color={color} size={size} />
-          ),
+          tabBarIcon: ({ color, size }) => <CallsIcon color={color} />,
           headerShown: false,
         }}
       />
@@ -136,9 +135,7 @@ function BottomTabNavigator() {
         name="Settings"
         component={SettingsStackNavigator}
         options={{
-          tabBarIcon: ({ color, size }) => (
-            <Feather name="settings" color={color} size={size} />
-          ),
+          tabBarIcon: ({ color, size }) => <SettingsIcon color={color} />,
           headerShown: false,
         }}
       />
