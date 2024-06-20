@@ -23,7 +23,6 @@ const ChatItem = ({ item, onPress }) => {
 const styles = StyleSheet.create({
   item: {
     padding: 16,
-    borderBottomWidth: 1,
     borderBottomColor: "#ddd",
     flexDirection: "row",
     alignItems: "center",

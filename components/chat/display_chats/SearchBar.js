@@ -1,15 +1,18 @@
 import React, { useEffect } from "react";
-import { View, StyleSheet, Image, Text } from "react-native";
+import { View, StyleSheet, Image, Text, TouchableOpacity } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import { useDispatch, useSelector } from "react-redux";
 import { setProfilePicture } from "../../../redux/actions";
 import { auth } from "../../../backend/firebaseConfig";
 import { getDatabase, ref, get } from "firebase/database";
 import { useFonts } from "expo-font";
+import { useNavigation } from "@react-navigation/native";
 
 const SearchBar = () => {
   const dispatch = useDispatch();
   const profilePicture = useSelector((state) => state.profilePicture);
+
+  const navigation = useNavigation();
 
   const [fontsLoaded] = useFonts({
     "Poppins-SemiBold": require("../../../assets/fonts/Poppins-Bold.ttf"),
@@ -48,7 +51,9 @@ const SearchBar = () => {
         </View>
       </View>
       <Text style={styles.homeText}>Home</Text>
-      <Image source={{ uri: profilePicture }} style={styles.userProfile} />
+      <TouchableOpacity onPress={() => navigation.navigate("UserProfile")}>
+        <Image source={{ uri: profilePicture }} style={styles.userProfile} />
+      </TouchableOpacity>
     </View>
   );
 };

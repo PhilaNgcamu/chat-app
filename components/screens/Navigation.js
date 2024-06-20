@@ -127,7 +127,7 @@ function BottomTabNavigator() {
       />
       <Tab.Screen
         name="Calls"
-        component={ProfileStackNavigator}
+        component={SettingsStackNavigator}
         options={{
           tabBarIcon: ({ color, size }) => (
             <Feather name="phone-call" color={color} size={size} />
