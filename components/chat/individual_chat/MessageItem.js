@@ -13,7 +13,6 @@ const MessageItem = ({ item }) => {
   if (!fontsLoaded) {
     return null;
   }
-  console.log(item);
   return (
     <View style={styles.inputContainer}>
       {item.userId !== auth.currentUser.uid && (
