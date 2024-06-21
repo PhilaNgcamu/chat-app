@@ -21,6 +21,7 @@ import { StatusBar } from "expo-status-bar";
 const ChatScreen = ({ route }) => {
   const dispatch = useDispatch();
   const { chatId, chatName } = route.params;
+  console.log(route.params, "These are route params");
   const groupMessages = useSelector((state) => state.groupMessages);
   const searchQuery = useSelector((state) => state.searchQuery);
   const groupFilteredMessages = useSelector(

@@ -31,6 +31,7 @@ import ChatInput from "../../components/chat/individual_chat/ChatInput";
 
 const PrivateChatScreen = ({ route, navigation }) => {
   const { contactId, contactName, contactAvatar } = route.params;
+  console.log(contactAvatar, "This is contact avatar");
   const dispatch = useDispatch();
 
   const privateMessages = useSelector((state) => state.privateMessages);
