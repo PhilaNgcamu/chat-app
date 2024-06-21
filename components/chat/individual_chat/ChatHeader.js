@@ -1,5 +1,12 @@
 import React from "react";
-import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  StyleSheet,
+  ActivityIndicator,
+} from "react-native";
 import { Ionicons, Feather } from "@expo/vector-icons";
 import { useFonts } from "expo-font";
 import CallIcon from "../../../utils/icons/CallIcon";
@@ -82,9 +89,9 @@ const styles = StyleSheet.create({
     borderRadius: 20,
   },
   chatName: {
-    fontSize: 20,
-    fontWeight: "bold",
-    color: "#000",
+    fontSize: 16,
+    fontWeight: "Poppins-SemiBold",
+    color: "#000E08",
   },
   statusText: {
     fontFamily: "Poppins-SemiBold",
