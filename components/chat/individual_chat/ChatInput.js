@@ -13,6 +13,10 @@ import {
   FontAwesome6,
 } from "@expo/vector-icons";
 import { useFonts } from "expo-font";
+import PaperclipIcon from "../../../utils/icons/PaperclipIcon";
+import DocumentsOutlineIcon from "../../../utils/icons/documentsOutlineIcon";
+import CameraIcon from "../../../utils/icons/CameraIcon";
+import MicrophoneIcon from "../../../utils/icons/MicrophoneIcon";
 
 const ChatInput = ({
   newMessage,
@@ -26,13 +30,17 @@ const ChatInput = ({
     "Poppins-SemiBold": require("../../../assets/fonts/Poppins-SemiBold.ttf"),
     "Poppins-Regular": require("../../../assets/fonts/Poppins-Regular.ttf"),
   });
+  if (!fontsLoaded) {
+    return null;
+  }
   return (
     <View style={styles.inputContainer}>
       <TouchableOpacity onPress={pickImage} style={styles.iconButton}>
-        <FontAwesome6 name="paperclip" size={24} color="#000E08" />
+        <PaperclipIcon />
       </TouchableOpacity>
       <View style={styles.inputWrapper}>
         <TextInput
+          style={styles.input}
           value={newMessage}
           onChangeText={handleTyping}
           placeholder="Write your message"
@@ -41,14 +49,14 @@ const ChatInput = ({
           returnKeyType="send"
         />
         <TouchableOpacity style={styles.documentIcon}>
-          <Ionicons name="documents-outline" size={24} color="black" />
+          <DocumentsOutlineIcon />
         </TouchableOpacity>
       </View>
       <TouchableOpacity style={styles.iconButton}>
-        <Feather name="camera" size={24} color="#000E08" />
+        <CameraIcon />
       </TouchableOpacity>
       <TouchableOpacity style={styles.iconButton}>
-        <MaterialIcons name="keyboard-voice" size={24} color="#000E08" />
+        <MicrophoneIcon />
       </TouchableOpacity>
       {image && <Image source={{ uri: image }} style={styles.selectedImage} />}
     </View>
@@ -63,7 +71,6 @@ const styles = StyleSheet.create({
     borderTopColor: "#ddd",
     backgroundColor: "#FFFFFF",
     alignItems: "center",
-    marginBottom: 10,
     height: 90,
   },
   inputWrapper: {
@@ -74,6 +81,12 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     padding: 7,
     justifyContent: "space-between",
+  },
+  input: {
+    flex: 1,
+    color: "#333",
+    marginRight: 8,
+    fontFamily: "Poppins-Bold",
   },
   iconButton: {
     padding: 8,

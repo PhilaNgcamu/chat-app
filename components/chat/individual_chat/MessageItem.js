@@ -13,7 +13,6 @@ const MessageItem = ({ item }) => {
   if (!fontsLoaded) {
     return null;
   }
-  console.log(JSON.stringify(item, null, 2));
   return (
     <View style={styles.inputContainer}>
       <View
@@ -69,7 +68,6 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     display: "flex",
     flexDirection: "column",
-    marginRight: 20,
     marginBottom: 40,
     padding: 15,
   },
@@ -132,7 +130,7 @@ const styles = StyleSheet.create({
   messageTimestamp: {
     width: "100%",
     position: "relative",
-    top: 32,
+    top: 28,
     fontSize: 12,
     color: "#797C7B",
     fontFamily: "Poppins-Bold",
