@@ -1,9 +1,24 @@
 import React from "react";
 import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
 import { Ionicons, Feather } from "@expo/vector-icons";
+import { useFonts } from "expo-font";
+import CallIcon from "../../../utils/icons/CallIcon";
+import VideoIcon from "../../../utils/icons/VideoIcon";
 
 const ChatHeader = ({ contactAvatar, contactName, isOnline, navigation }) => {
-  console.log(contactAvatar);
+  const [fontsLoaded] = useFonts({
+    "Poppins-Bold": require("../../../assets/fonts/Poppins-Bold.ttf"),
+    "Poppins-SemiBold": require("../../../assets/fonts/Poppins-SemiBold.ttf"),
+    "Poppins-Regular": require("../../../assets/fonts/Poppins-Regular.ttf"),
+  });
+
+  if (!fontsLoaded) {
+    return (
+      <View style={styles.loading}>
+        <ActivityIndicator size="large" color="#FFF" />
+      </View>
+    );
+  }
   return (
     <View style={styles.header}>
       <TouchableOpacity onPress={() => navigation.goBack()}>
@@ -24,10 +39,10 @@ const ChatHeader = ({ contactAvatar, contactName, isOnline, navigation }) => {
       </View>
       <View style={styles.headerIcons}>
         <TouchableOpacity style={styles.headerIcon}>
-          <Feather name="phone" size={24} color="#000" />
+          <CallIcon />
         </TouchableOpacity>
         <TouchableOpacity style={styles.headerIcon}>
-          <Feather name="video" size={24} color="#000" />
+          <VideoIcon />
         </TouchableOpacity>
       </View>
     </View>
@@ -50,6 +65,7 @@ const styles = StyleSheet.create({
   avatarContainer: {
     flexDirection: "row",
     alignItems: "center",
+    marginLeft: 20,
   },
   status: {
     position: "relative",
@@ -71,14 +87,15 @@ const styles = StyleSheet.create({
     color: "#000",
   },
   statusText: {
-    fontSize: 14,
-    color: "#000",
+    fontFamily: "Poppins-SemiBold",
+    fontSize: 12,
+    color: "#797C7B",
   },
   headerIcons: {
     flexDirection: "row",
   },
   headerIcon: {
-    marginLeft: 15,
+    marginLeft: 25,
   },
 });
 
