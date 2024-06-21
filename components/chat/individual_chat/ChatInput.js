@@ -6,15 +6,10 @@ import {
   Image,
   StyleSheet,
 } from "react-native";
-import {
-  Ionicons,
-  Feather,
-  MaterialIcons,
-  FontAwesome6,
-} from "@expo/vector-icons";
+
 import { useFonts } from "expo-font";
 import PaperclipIcon from "../../../utils/icons/PaperclipIcon";
-import DocumentsOutlineIcon from "../../../utils/icons/documentsOutlineIcon";
+import DocumentsOutlineIcon from "../../../utils/icons/DocumentsOutlineIcon";
 import CameraIcon from "../../../utils/icons/CameraIcon";
 import MicrophoneIcon from "../../../utils/icons/MicrophoneIcon";
 

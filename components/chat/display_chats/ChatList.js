@@ -13,7 +13,6 @@ import ChatItem from "./ChatItem";
 const ChatList = ({ navigation }) => {
   const dispatch = useDispatch();
   const items = useSelector((state) => state.items);
-  const searchQuery = useSelector((state) => state.searchQuery);
 
   useEffect(() => {
     const db = getDatabase();
@@ -24,17 +23,6 @@ const ChatList = ({ navigation }) => {
     const fetchItems = () => {
       const chatList = [];
       const contactsList = [];
-      onValue(chatsRef, (snapshot) => {
-        chatList.length = 0;
-        snapshot.forEach((childSnapshot) => {
-          const chatData = childSnapshot.val();
-          if (chatData.users && chatData.users[currentUserID]) {
-            chatList.push({ id: childSnapshot.key, ...chatData });
-          }
-        });
-
-        dispatch(setItems([...chatList, ...contactsList]));
-      });
 
       onValue(contactsRef, (snapshot) => {
         contactsList.length = 0;
@@ -45,7 +33,27 @@ const ChatList = ({ navigation }) => {
         });
 
         dispatch(setStatuses(contactsList));
-        dispatch(setItems([...chatList, ...contactsList]));
+        dispatch(setItems([...contactsList, ...chatList]));
+      });
+
+      onValue(chatsRef, (snapshot) => {
+        chatList.length = 0;
+
+        snapshot.forEach((childSnapshot) => {
+          const chatData = childSnapshot.val();
+          const chats = Object.values(chatData);
+          const messages = chats[chats.length - 1];
+          const lastMessage =
+            Object.values(messages)[Object.values(messages).length - 1].text;
+
+          chatList.push({
+            id: childSnapshot.key,
+            lastMessage: lastMessage ? lastMessage : "No messages yet",
+            ...contactsList["0"],
+          });
+        });
+
+        dispatch(setItems([...contactsList, ...chatList]));
       });
 
       return () => {
@@ -68,14 +76,23 @@ const ChatList = ({ navigation }) => {
       navigation.navigate("PrivateChat", {
         contactId: item.id,
         contactName: item.name,
-        contactAvatar: item.photoUrl,
+        contactAvatar: item.photoURL,
+        contactLastMessage: item.lastMessage,
       });
     }
   };
 
-  const filteredItems = items.filter((item) =>
-    item.name?.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const renderItem = ({ item }) => {
+    return (
+      <ChatItem
+        item={item}
+        onPress={() => {
+          console.log("Item pressed:", item);
+          handleItemPress(item);
+        }}
+      />
+    );
+  };
 
   return (
     <View style={styles.container}>
@@ -84,7 +101,7 @@ const ChatList = ({ navigation }) => {
       <StatusList />
       <View style={styles.listContainer}>
         <View style={styles.dragger}></View>
-        {filteredItems.length === 0 ? (
+        {items.length === 0 ? (
           <View style={styles.emptyStateContainer}>
             <MaterialIcons name="chat-bubble-outline" size={80} color="#ddd" />
             <Text style={styles.emptyStateText}>
@@ -93,10 +110,8 @@ const ChatList = ({ navigation }) => {
           </View>
         ) : (
           <FlatList
-            data={filteredItems}
-            renderItem={({ item }) => (
-              <ChatItem item={item} onPress={() => handleItemPress(item)} />
-            )}
+            data={items}
+            renderItem={renderItem}
             keyExtractor={(item) => item.id}
             style={styles.list}
             showsVerticalScrollIndicator={true}

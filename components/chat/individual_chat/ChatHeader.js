@@ -7,7 +7,7 @@ import {
   StyleSheet,
   ActivityIndicator,
 } from "react-native";
-import { Ionicons, Feather } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 import { useFonts } from "expo-font";
 import CallIcon from "../../../utils/icons/CallIcon";
 import VideoIcon from "../../../utils/icons/VideoIcon";
@@ -32,10 +32,7 @@ const ChatHeader = ({ contactAvatar, contactName, isOnline, navigation }) => {
         <Ionicons name="arrow-back" size={24} color="#000" />
       </TouchableOpacity>
       <View style={styles.avatarContainer}>
-        <Image
-          source={{ uri: "https://via.placeholder.com/150" }}
-          style={styles.avatar}
-        />
+        <Image source={{ uri: contactAvatar }} style={styles.avatar} />
         <View style={styles.status} />
       </View>
       <View style={styles.headerContent}>

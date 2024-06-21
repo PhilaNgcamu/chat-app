@@ -12,6 +12,7 @@ const ChatItem = ({ item, onPress }) => {
   if (!fontsLoaded) {
     return null;
   }
+  console.log("Itemzz: ", JSON.stringify(item, null, 2));
   return (
     <TouchableOpacity style={styles.item} onPress={onPress}>
       <View style={styles.itemInfo}>
@@ -21,9 +22,7 @@ const ChatItem = ({ item, onPress }) => {
         />
         <View style={styles.itemDetails}>
           <Text style={styles.itemTitle}>{item.name || "Chat"}</Text>
-          <Text style={styles.itemLastMessage}>
-            Click here to see messages...
-          </Text>
+          <Text style={styles.itemLastMessage}>{item.lastMessage}</Text>
         </View>
         <Text styles={styles.lastTimeMessageSent}>2 min ago</Text>
         <NotificationStatus />
