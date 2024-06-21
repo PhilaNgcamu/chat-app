@@ -52,12 +52,14 @@ const ChatInput = ({
           <DocumentsOutlineIcon />
         </TouchableOpacity>
       </View>
-      <TouchableOpacity style={styles.iconButton}>
-        <CameraIcon />
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.iconButton}>
-        <MicrophoneIcon />
-      </TouchableOpacity>
+      <View style={styles.iconButtons}>
+        <TouchableOpacity style={styles.iconButton}>
+          <CameraIcon />
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.iconButton}>
+          <MicrophoneIcon />
+        </TouchableOpacity>
+      </View>
       {image && <Image source={{ uri: image }} style={styles.selectedImage} />}
     </View>
   );
@@ -78,15 +80,19 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     backgroundColor: "#f9f9f9",
-    borderRadius: 25,
+    borderRadius: 15,
     padding: 7,
-    justifyContent: "space-between",
   },
   input: {
     flex: 1,
     color: "#333",
     marginRight: 8,
     fontFamily: "Poppins-Bold",
+  },
+  iconButtons: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginLeft: 2,
   },
   iconButton: {
     padding: 8,
