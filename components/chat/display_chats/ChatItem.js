@@ -21,8 +21,10 @@ const ChatItem = ({ item, onPress }) => {
           style={styles.itemImage}
         />
         <View style={styles.itemDetails}>
-          <Text style={styles.itemTitle}>{item.name || "Chat"}</Text>
-          <Text style={styles.itemLastMessage}>{item.lastMessage}</Text>
+          <Text style={styles.itemTitle}>{item.name}</Text>
+          {item.lastMessage && (
+            <Text style={styles.itemLastMessage}>{item.lastMessage}</Text>
+          )}
         </View>
         <Text styles={styles.lastTimeMessageSent}>2 min ago</Text>
         <NotificationStatus />

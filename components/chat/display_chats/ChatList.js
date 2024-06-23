@@ -27,13 +27,13 @@ const ChatList = ({ navigation }) => {
       onValue(contactsRef, (snapshot) => {
         contactsList.length = 0;
         Object.entries(snapshot.val()).forEach(([id, data]) => {
+          console.log(id, "This is id");
           if (id !== currentUserID) {
             contactsList.push({ id, ...data });
           }
         });
 
         dispatch(setStatuses(contactsList));
-        dispatch(setItems([...contactsList, ...chatList]));
       });
 
       onValue(chatsRef, (snapshot) => {
@@ -41,19 +41,21 @@ const ChatList = ({ navigation }) => {
 
         snapshot.forEach((childSnapshot) => {
           const chatData = childSnapshot.val();
+
+          console.log(chatData, "This is chat data");
           const chats = Object.values(chatData);
           const messages = chats[chats.length - 1];
           const lastMessage =
             Object.values(messages)[Object.values(messages).length - 1].text;
-
-          chatList.push({
-            id: childSnapshot.key,
-            lastMessage: lastMessage ? lastMessage : "No messages yet",
-            ...contactsList["0"],
-          });
+          if (
+            Object.values(messages)[Object.values(messages).length - 1].userId
+          ) {
+            chatList.push({
+              lastMessage: lastMessage ? lastMessage : "No messages yet",
+            });
+          }
+          dispatch(setItems([...contactsList, ...chatList]));
         });
-
-        dispatch(setItems([...contactsList, ...chatList]));
       });
 
       return () => {
@@ -66,6 +68,7 @@ const ChatList = ({ navigation }) => {
   }, [dispatch]);
 
   const handleItemPress = (item) => {
+    console.log("Item pressed:", item);
     if (item.type === "group") {
       navigation.navigate("ChatScreen", {
         chatId: item.id,
@@ -83,14 +86,20 @@ const ChatList = ({ navigation }) => {
   };
 
   const renderItem = ({ item }) => {
+    const reItems = items.reduce((obj, value) => {
+      return { ...obj, ...value };
+    }, {});
+    console.log(item, "itemss");
+    console.log(reItems, item.id, "reItems");
     return (
-      <ChatItem
-        item={item}
-        onPress={() => {
-          console.log("Item pressed:", item);
-          handleItemPress(item);
-        }}
-      />
+      item.id && (
+        <ChatItem
+          item={reItems}
+          onPress={() => {
+            handleItemPress(reItems);
+          }}
+        />
+      )
     );
   };
 

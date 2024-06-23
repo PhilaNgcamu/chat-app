@@ -99,10 +99,8 @@ const PrivateChatScreen = ({ route, navigation }) => {
       messageData.imageUrl = imageUrl;
       dispatch(setImage(null));
     }
-
-    await push(ref(db, `chats/${chatId}/messages`), messageData);
     dispatch(addNewPrivateMessage(""));
-    dispatch(setIsTyping(false));
+    await push(ref(db, `chats/${chatId}/messages`), messageData);
   };
 
   const pickImage = async () => {
@@ -120,11 +118,6 @@ const PrivateChatScreen = ({ route, navigation }) => {
 
   const handleTyping = (text) => {
     dispatch(addNewPrivateMessage(text));
-    if (text.trim() !== "" && !isTyping) {
-      dispatch(setIsTyping(true));
-    } else if (text.trim() === "" && isTyping) {
-      dispatch(setIsTyping(false));
-    }
   };
 
   return (
