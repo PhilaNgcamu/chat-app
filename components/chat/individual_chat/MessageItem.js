@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, Image, StyleSheet } from "react-native";
 import { format } from "date-fns";
+import { getDatabase, ref, onValue, off } from "firebase/database";
 import { auth } from "../../../backend/firebaseConfig";
 import { useFonts } from "expo-font";
 
@@ -10,9 +11,34 @@ const MessageItem = ({ item }) => {
     "Poppins-SemiBold": require("../../../assets/fonts/Poppins-SemiBold.ttf"),
     "Poppins-Regular": require("../../../assets/fonts/Poppins-Regular.ttf"),
   });
+
+  const [photoURL, setPhotoURL] = useState(null);
+
+  useEffect(() => {
+    const db = getDatabase();
+    const contactsRef = ref(db, "users");
+
+    const fetchUserPhoto = () => {
+      onValue(contactsRef, (snapshot) => {
+        const usersData = snapshot.val();
+        const user = usersData[item.userId];
+        if (user && user.photoURL) {
+          setPhotoURL(user.photoURL);
+        }
+      });
+
+      return () => {
+        off(contactsRef);
+      };
+    };
+
+    fetchUserPhoto();
+  }, [item.userId]);
+
   if (!fontsLoaded) {
     return null;
   }
+
   return (
     <View style={styles.inputContainer}>
       <View
@@ -20,8 +46,8 @@ const MessageItem = ({ item }) => {
           item.userId !== auth.currentUser.uid && styles.messageItemContainer
         }
       >
-        {item.userId !== auth.currentUser.uid && (
-          <Image source={{ uri: item.photoURL }} style={styles.photoItem} />
+        {item.userId !== auth.currentUser.uid && photoURL && (
+          <Image source={{ uri: photoURL }} style={styles.photoItem} />
         )}
         <View
           style={[
@@ -82,8 +108,6 @@ const styles = StyleSheet.create({
     height: 40,
     borderRadius: 20,
     marginRight: 8,
-    borderRadius: 25,
-    marginHorizontal: 16,
     backgroundColor: "red",
   },
   messageItem: {
