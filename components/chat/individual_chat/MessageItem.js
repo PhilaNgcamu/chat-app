@@ -39,6 +39,8 @@ const MessageItem = ({ item }) => {
     return null;
   }
 
+  const isGroup = item.senderName !== undefined;
+
   return (
     <View style={styles.inputContainer}>
       <View
@@ -49,10 +51,48 @@ const MessageItem = ({ item }) => {
         {item.userId !== auth.currentUser.uid && photoURL && (
           <Image source={{ uri: photoURL }} style={styles.photoItem} />
         )}
-        <View style={styles.groupMemberContainer}>
-          <Text style={styles.groupMemberName}>
-            {item.userId !== auth.currentUser.uid && item.senderName}
-          </Text>
+        {isGroup ? (
+          <View style={styles.groupMemberContainer}>
+            <Text style={styles.groupMemberName}>
+              {item.userId !== auth.currentUser.uid && item.senderName}
+            </Text>
+            <View
+              style={[
+                styles.messageItem,
+                item.userId === auth.currentUser.uid
+                  ? styles.myMessage
+                  : styles.otherMessage,
+              ]}
+            >
+              <View style={styles.messageMeta}>
+                <View>
+                  {item.text && (
+                    <Text
+                      style={[
+                        styles.messageText,
+                        item.userId === auth.currentUser.uid
+                          ? styles.myMessageText
+                          : styles.otherMessageText,
+                      ]}
+                    >
+                      {item.text.trim()}
+                    </Text>
+                  )}
+                </View>
+              </View>
+              <Text
+                style={[
+                  styles.messageTimestamp,
+                  item.userId === auth.currentUser.uid
+                    ? styles.myMessageTimestamp
+                    : styles.otherMemberMessageTimestamp,
+                ]}
+              >
+                {format(new Date(item.createdAt), "HH:mm")} AM
+              </Text>
+            </View>
+          </View>
+        ) : (
           <View
             style={[
               styles.messageItem,
@@ -82,13 +122,13 @@ const MessageItem = ({ item }) => {
                 styles.messageTimestamp,
                 item.userId === auth.currentUser.uid
                   ? styles.myMessageTimestamp
-                  : styles.otherMemberMessageTimestamp,
+                  : styles.otherMessageTimestamp,
               ]}
             >
               {format(new Date(item.createdAt), "HH:mm")} AM
             </Text>
           </View>
-        </View>
+        )}
       </View>
     </View>
   );
@@ -101,6 +141,11 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     marginBottom: 40,
     padding: 15,
+  },
+  messageItemContainer: {
+    display: "flex",
+    flexDirection: "row",
+    alignSelf: "flex-start",
   },
   groupMemberContainer: {
     width: "100%",
@@ -121,18 +166,6 @@ const styles = StyleSheet.create({
     alignSelf: "flex-start",
     maxWidth: "55%",
   },
-  messageItemContainer: {
-    display: "flex",
-    flexDirection: "row",
-    alignSelf: "flex-start",
-  },
-  groupMemberName: {
-    position: "relative",
-    top: 0,
-    fontSize: 14,
-    color: "#000E08",
-    fontFamily: "Poppins-Regular",
-  },
   myMessage: {
     borderTopLeftRadius: 16,
     borderBottomLeftRadius: 16,
@@ -146,6 +179,13 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 16,
     backgroundColor: "#F2F7FB",
     alignSelf: "flex-start",
+  },
+  groupMemberName: {
+    position: "relative",
+    top: 0,
+    fontSize: 14,
+    color: "#000E08",
+    fontFamily: "Poppins-Regular",
   },
   messageMeta: {
     position: "relative",
@@ -179,6 +219,7 @@ const styles = StyleSheet.create({
     color: "#797C7B",
   },
   otherMessageTimestamp: {
+    textAlign: "right",
     color: "#797C7B",
   },
   otherMemberMessageTimestamp: {
