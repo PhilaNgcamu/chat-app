@@ -12,6 +12,7 @@ const ChatItem = ({ item, onPress }) => {
   if (!fontsLoaded) {
     return null;
   }
+  console.log(item, "itemzzz");
   return (
     <TouchableOpacity style={styles.item} onPress={onPress}>
       <View style={styles.itemInfo}>

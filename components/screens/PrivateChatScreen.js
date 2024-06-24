@@ -25,7 +25,7 @@ import {
   setGroupMessages,
   setPrivateMessages,
   addNewPrivateMessage,
-  setGroupFilteredMessages,
+  setgroupMessages,
 } from "../../redux/actions";
 import ChatHeader from "../../components/chat/individual_chat/ChatHeader";
 import MessageList from "../../components/chat/individual_chat/MessageList";
@@ -42,10 +42,6 @@ const ChatScreen = ({ route, navigation }) => {
   const isOnline = useSelector((state) => state.isOnline);
   const image = useSelector((state) => state.image);
   const inputRef = useRef(null);
-  const searchQuery = useSelector((state) => state.searchQuery);
-  const groupFilteredMessages = useSelector(
-    (state) => state.groupFilteredMessages
-  );
 
   const { setTabBarVisible } = useTabBarVisibility();
 
@@ -148,6 +144,8 @@ const ChatScreen = ({ route, navigation }) => {
     dispatch(addNewPrivateMessage(text));
   };
 
+  console.log(contactName, "contactNames");
+
   return (
     <KeyboardAvoidingView
       style={styles.container}
@@ -162,9 +160,7 @@ const ChatScreen = ({ route, navigation }) => {
         navigation={navigation}
       />
       <MessageList
-        messages={
-          chatType === "group" ? groupFilteredMessages : privateMessages
-        }
+        messages={chatType === "group" ? groupMessages : privateMessages}
         inputRef={inputRef}
       />
       <ChatInput

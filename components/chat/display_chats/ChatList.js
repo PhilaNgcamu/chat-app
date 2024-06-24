@@ -34,6 +34,7 @@ const ChatList = ({ navigation }) => {
         });
 
         dispatch(setStatuses(contactsList));
+        dispatch(setItems([...contactsList, ...chatList]));
       });
 
       onValue(chatsRef, (snapshot) => {
@@ -53,7 +54,7 @@ const ChatList = ({ navigation }) => {
             chatList.push({
               lastMessage: lastMessage ? lastMessage : "No messages yet",
             });
-          } else if (chatData.type !== "group") {
+          } else {
             chatList.push({
               id: childSnapshot.key,
               name: chatData.name,
@@ -77,7 +78,7 @@ const ChatList = ({ navigation }) => {
   const handleItemPress = (item) => {
     console.log("Item pressed:", item);
     if (item.type === "group") {
-      navigation.navigate("ChatScreen", {
+      navigation.navigate("PrivateChat", {
         chatId: item.id,
         chatName: item.name,
         chatLastMessage: item.lastMessage,
@@ -96,12 +97,13 @@ const ChatList = ({ navigation }) => {
     const reItems = items.reduce((obj, value) => {
       return { ...obj, ...value };
     }, {});
-    console.log(items, "itemss");
-    console.log(reItems, item.id, "reItems");
+    const groupItems = items.filter((item) => item.type !== "group");
+    console.log(groupItems[0], "itemss");
+    console.log(JSON.stringify(items, null, 2), "reItems");
     return (
       item.id && (
         <ChatItem
-          item={item.group ? item : reItems}
+          item={reItems}
           onPress={() => {
             handleItemPress(reItems);
           }}
