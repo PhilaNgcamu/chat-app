@@ -148,6 +148,7 @@ const PrivateChatScreen = ({ route, navigation }) => {
         contactAvatar={contactAvatar}
         contactName={contactName}
         isOnline={isOnline}
+        type={"private" || "group"}
         navigation={navigation}
       />
       <MessageList messages={privateMessages} inputRef={inputRef} />

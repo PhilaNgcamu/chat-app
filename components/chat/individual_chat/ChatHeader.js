@@ -25,7 +25,7 @@ const ChatHeader = ({
     "Poppins-Regular": require("../../../assets/fonts/Poppins-Regular.ttf"),
   });
 
-  const isNotGroup = type === "group";
+  const isPrivate = type === "private";
 
   if (!fontsLoaded) {
     return (
@@ -45,7 +45,7 @@ const ChatHeader = ({
       </View>
       <View style={styles.headerContent}>
         <Text style={styles.chatName}>{contactName}</Text>
-        {isNotGroup && (
+        {isPrivate && (
           <Text style={styles.statusText}>
             {isOnline ? "Active now" : "Offline"}
           </Text>
