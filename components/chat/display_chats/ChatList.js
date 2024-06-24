@@ -74,25 +74,6 @@ const ChatList = ({ navigation }) => {
     fetchItems();
   }, [dispatch]);
 
-  // useEffect(() => {
-  //   const db = getDatabase();
-  //   const messagesRef = ref(db, `groups/${chatId}/messages`);
-
-  //   const unsubscribeMessages = onValue(messagesRef, (snapshot) => {
-  //     const messageList = [];
-  //     snapshot.forEach((childSnapshot) => {
-  //       messageList.push({ id: childSnapshot.key, ...childSnapshot.val() });
-  //     });
-  //     dispatch(setGroupMessages(messageList));
-  //     dispatch(setGroupFilteredMessages(messageList));
-  //     markMessagesAsRead(messageList);
-  //   });
-
-  //   return () => {
-  //     unsubscribeMessages();
-  //   };
-  // }, [chatId]);
-
   const handleItemPress = (item) => {
     console.log("Item pressed:", item);
     if (item.type === "group") {

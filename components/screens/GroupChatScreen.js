@@ -18,8 +18,7 @@ import { StatusBar } from "expo-status-bar";
 
 const ChatScreen = ({ route }) => {
   const dispatch = useDispatch();
-  const { chatId, chatName } = route.params;
-  console.log(route.params, "These are route params");
+  const { chatId, chatName, chatLastMessage } = route.params;
   console.log(route.params, "These are route params");
   const groupMessages = useSelector((state) => state.groupMessages);
   const searchQuery = useSelector((state) => state.searchQuery);
@@ -89,7 +88,7 @@ const ChatScreen = ({ route }) => {
       behavior={Platform.OS === "ios" ? "padding" : undefined}
     >
       <StatusBar style="dark" />
-      <ChatHeader chatName={chatName} />
+      <ChatHeader chatName={chatLastMessage} />
       <MessageList messages={groupFilteredMessages} />
       <ChatInput chatId={chatId} />
     </KeyboardAvoidingView>
