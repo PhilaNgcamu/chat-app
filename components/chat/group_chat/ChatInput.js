@@ -28,8 +28,7 @@ import {
 const ChatInput = ({ chatId }) => {
   const dispatch = useDispatch();
   const newMessage = useSelector((state) => state.newMessage);
-  // const isTyping = useSelector((state) => state.isTyping);
-  // const image = useSelector((state) => state.image);
+  const image = useSelector((state) => state.image);
 
   const pickImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
@@ -45,43 +44,43 @@ const ChatInput = ({ chatId }) => {
   };
 
   const handleSend = async () => {
-    // if (newMessage.trim() === "" && !image) return;
-    // const db = getDatabase();
-    // const userId = auth.currentUser.uid;
+    if (newMessage.trim() === "" && !image) return;
+    const db = getDatabase();
+    const userId = auth.currentUser.uid;
 
-    // if (newMessage.trim() !== "") {
-    //   await push(ref(db, `groups/${chatId}/messages`), {
-    //     text: newMessage,
-    //     createdAt: serverTimestamp(),
-    //     userId,
-    //     readBy: { [userId]: true },
-    //     senderName: auth.currentUser.displayName,
-    //   });
-    //   dispatch(addGroupMessage(""));
-    // }
+    if (newMessage.trim() !== "") {
+      await push(ref(db, `groups/${chatId}/messages`), {
+        text: newMessage,
+        createdAt: serverTimestamp(),
+        userId,
+        readBy: { [userId]: true },
+        senderName: auth.currentUser.displayName,
+      });
+      dispatch(addGroupMessage(""));
+    }
 
-    // if (image) {
-    //   const storage = getStorage();
-    //   const imageRef = storageRef(
-    //     storage,
-    //     `chatImages/${chatId}/${Date.now()}`
-    //   );
-    //   const response = await fetch(image);
-    //   const blob = await response.blob();
+    if (image) {
+      const storage = getStorage();
+      const imageRef = storageRef(
+        storage,
+        `chatImages/${chatId}/${Date.now()}`
+      );
+      const response = await fetch(image);
+      const blob = await response.blob();
 
-    //   await uploadBytes(imageRef, blob);
-    //   const downloadURL = await getDownloadURL(imageRef);
+      await uploadBytes(imageRef, blob);
+      const downloadURL = await getDownloadURL(imageRef);
 
-    //   await push(ref(db, `groups/${chatId}/messages`), {
-    //     imageUrl: downloadURL,
-    //     createdAt: serverTimestamp(),
-    //     userId,
-    //     readBy: { [userId]: true },
-    //     senderName: auth.currentUser.displayName,
-    //   });
+      await push(ref(db, `groups/${chatId}/messages`), {
+        imageUrl: downloadURL,
+        createdAt: serverTimestamp(),
+        userId,
+        readBy: { [userId]: true },
+        senderName: auth.currentUser.displayName,
+      });
 
-    //   dispatch(setImage(null));
-    // }
+      dispatch(setImage(null));
+    }
 
     dispatch(setIsTyping(false));
     await updateTypingStatus(false);
@@ -89,21 +88,6 @@ const ChatInput = ({ chatId }) => {
 
   const handleTyping = (text) => {
     dispatch(addGroupMessage(text));
-    if (text.trim() !== "" && !isTyping) {
-      dispatch(setIsTyping(true));
-      updateTypingStatus(true);
-    } else if (text.trim() === "" && isTyping) {
-      dispatch(setIsTyping(false));
-      updateTypingStatus(false);
-    }
-  };
-
-  const updateTypingStatus = async (status) => {
-    const db = getDatabase();
-    const userId = auth.currentUser.uid;
-    await update(ref(db, `groups/${chatId}/typingStatus/${userId}`), {
-      isTyping: status,
-    });
   };
 
   return (
@@ -131,7 +115,7 @@ const ChatInput = ({ chatId }) => {
       <TouchableOpacity style={styles.iconButton}>
         <MaterialIcons name="keyboard-voice" size={24} color="#000E08" />
       </TouchableOpacity>
-      {/* {image && <Image source={{ uri: image }} style={styles.selectedImage} />} */}
+      {image && <Image source={{ uri: image }} style={styles.selectedImage} />}
     </View>
   );
 };

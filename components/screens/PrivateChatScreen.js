@@ -22,6 +22,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   setImage,
   setIsTyping,
+  setGroupMessages,
   setPrivateMessages,
   addNewPrivateMessage,
 } from "../../redux/actions";
@@ -59,8 +60,6 @@ const PrivateChatScreen = ({ route, navigation }) => {
   //       messageList.push({ id: childSnapshot.key, ...childSnapshot.val() });
   //     });
   //     dispatch(setGroupMessages(messageList));
-  //     dispatch(setGroupFilteredMessages(messageList));
-  //     markMessagesAsRead(messageList);
   //   });
 
   //   return () => {

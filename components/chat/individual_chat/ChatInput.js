@@ -29,33 +29,39 @@ const ChatInput = ({
     return null;
   }
   return (
-    <View style={styles.inputContainer}>
-      <TouchableOpacity onPress={pickImage} style={styles.iconButton}>
-        <PaperclipIcon />
-      </TouchableOpacity>
-      <View style={styles.inputWrapper}>
-        <TextInput
-          style={styles.input}
-          value={newMessage}
-          onChangeText={handleTyping}
-          placeholder="Write your message"
-          placeholderTextColor="#888"
-          onSubmitEditing={handleSend}
-          returnKeyType="send"
-        />
-        <TouchableOpacity style={styles.documentIcon}>
-          <DocumentsOutlineIcon />
+    <View>
+      <View style={styles.inputContainer}>
+        <TouchableOpacity onPress={pickImage} style={styles.iconButton}>
+          <PaperclipIcon />
         </TouchableOpacity>
+        <View style={styles.inputWrapper}>
+          <TextInput
+            style={styles.input}
+            value={newMessage}
+            onChangeText={handleTyping}
+            placeholder="Write your message"
+            placeholderTextColor="#888"
+            onSubmitEditing={handleSend}
+            returnKeyType="send"
+          />
+          <TouchableOpacity style={styles.documentIcon}>
+            <DocumentsOutlineIcon />
+          </TouchableOpacity>
+        </View>
+        <View style={styles.iconButtons}>
+          <TouchableOpacity style={styles.iconButton}>
+            <CameraIcon />
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.iconButton}>
+            <MicrophoneIcon />
+          </TouchableOpacity>
+        </View>
       </View>
-      <View style={styles.iconButtons}>
-        <TouchableOpacity style={styles.iconButton}>
-          <CameraIcon />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.iconButton}>
-          <MicrophoneIcon />
-        </TouchableOpacity>
-      </View>
-      {image && <Image source={{ uri: image }} style={styles.selectedImage} />}
+      {image && (
+        <View style={styles.imageContainer}>
+          <Image source={{ uri: image }} style={styles.selectedImage} />
+        </View>
+      )}
     </View>
   );
 };
@@ -98,10 +104,14 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     backgroundColor: "#f0f0f0",
   },
+  imageContainer: {
+    alignItems: "center",
+  },
   selectedImage: {
-    width: 200,
-    height: 200,
-    margin: 16,
+    width: 100,
+    height: 100,
+    borderRadius: 10,
+    marginBottom: 10,
     alignSelf: "center",
   },
 });
