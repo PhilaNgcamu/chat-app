@@ -5,7 +5,7 @@ import { getDatabase, ref, onValue, off } from "firebase/database";
 import { auth } from "../../../backend/firebaseConfig";
 import { useFonts } from "expo-font";
 
-const MessageItem = ({ item }) => {
+const MessageItem = ({ item, type }) => {
   const [fontsLoaded] = useFonts({
     "Poppins-Bold": require("../../../assets/fonts/Poppins-Bold.ttf"),
     "Poppins-SemiBold": require("../../../assets/fonts/Poppins-SemiBold.ttf"),
@@ -39,7 +39,7 @@ const MessageItem = ({ item }) => {
     return null;
   }
 
-  const isGroup = item.senderName === undefined;
+  const isGroup = type === "group";
 
   return (
     <View style={styles.inputContainer}>

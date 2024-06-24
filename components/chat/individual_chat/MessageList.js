@@ -5,10 +5,9 @@ import MessageItem from "./MessageItem";
 const MessageList = ({ messages, inputRef }) => {
   return (
     <View style={styles.messageList}>
-      <Text style={styles.date}>Today</Text>
       <FlatList
         data={messages}
-        renderItem={({ item }) => <MessageItem item={item} />}
+        renderItem={({ item }) => <MessageItem item={item} type={"private"} />}
         keyExtractor={(item) => item.id}
         ref={inputRef}
         onContentSizeChange={() =>
