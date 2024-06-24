@@ -24,7 +24,11 @@ import {
 import * as ImagePicker from "expo-image-picker";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { Feather, MaterialIcons } from "@expo/vector-icons";
-import { verticalScale } from "../../utils/scale";
+import {
+  horizontalScale,
+  moderateScale,
+  verticalScale,
+} from "../../utils/scale";
 import { StatusBar } from "expo-status-bar";
 import placeholderImage from "../../assets/insert-image.png";
 import { useDispatch, useSelector } from "react-redux";
@@ -33,6 +37,7 @@ import MessageIcon from "../../utils/icons/MessageIcon";
 import MoreIcon from "../../utils/icons/MoreIcon";
 import PhoneIcon from "../../utils/icons/PhoneIcon";
 import { useTabBarVisibility } from "../chat/custom_hook/useTabBarVisibilityContext";
+import VideoIcon from "../../utils/icons/VideoIcon";
 
 const UserProfile = () => {
   const auth = getAuth();
@@ -196,9 +201,7 @@ const UserProfile = () => {
               <MessageIcon color="#FFFFFF" />
             </View>
             <View style={styles.iconGroup}>
-              <TouchableOpacity>
-                <Feather name="video" size={24} color="#FFFFFF" />
-              </TouchableOpacity>
+              <VideoIcon color="#FFFFFF" />
             </View>
             <View style={styles.iconGroup}>
               <PhoneIcon />
@@ -336,6 +339,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFFFFF",
     borderTopLeftRadius: 40,
     borderTopRightRadius: 40,
+    height: verticalScale(500),
   },
   dragger: {
     alignSelf: "center",
@@ -347,12 +351,11 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   infoContent: {
-    paddingHorizontal: 16,
-    paddingBottom: 16,
+    paddingHorizontal: horizontalScale(15),
   },
   inputContainer: {
-    paddingTop: 15,
-    paddingLeft: 10,
+    paddingTop: moderateScale(15),
+    paddingLeft: moderateScale(10),
   },
   input: {
     fontFamily: "Poppins-Regular",
