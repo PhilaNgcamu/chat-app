@@ -30,13 +30,12 @@ import MessageList from "../../components/chat/individual_chat/MessageList";
 import ChatInput from "../../components/chat/individual_chat/ChatInput";
 
 const PrivateChatScreen = ({ route, navigation }) => {
-  const { contactId, contactName, contactAvatar } = route.params;
+  const { contactId, contactName, contactAvatar, chatId } = route.params;
   console.log(contactAvatar, "This is contact avatar");
   const dispatch = useDispatch();
 
   const privateMessages = useSelector((state) => state.privateMessages);
   const newMessage = useSelector((state) => state.newMessage);
-  const isTyping = useSelector((state) => state.isTyping);
   const isOnline = useSelector((state) => state.isOnline);
   const image = useSelector((state) => state.image);
   const inputRef = useRef(null);
@@ -49,6 +48,25 @@ const PrivateChatScreen = ({ route, navigation }) => {
       return () => setTabBarVisible(true);
     }, [setTabBarVisible])
   );
+
+  // useEffect(() => {
+  //   const db = getDatabase();
+  //   const messagesRef = ref(db, `groups/${chatId}/messages`);
+
+  //   const unsubscribeMessages = onValue(messagesRef, (snapshot) => {
+  //     const messageList = [];
+  //     snapshot.forEach((childSnapshot) => {
+  //       messageList.push({ id: childSnapshot.key, ...childSnapshot.val() });
+  //     });
+  //     dispatch(setGroupMessages(messageList));
+  //     dispatch(setGroupFilteredMessages(messageList));
+  //     markMessagesAsRead(messageList);
+  //   });
+
+  //   return () => {
+  //     unsubscribeMessages();
+  //   };
+  // }, [chatId]);
 
   useEffect(() => {
     const db = getDatabase();

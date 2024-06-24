@@ -8,26 +8,24 @@ import { auth } from "../../backend/firebaseConfig";
 import { useTabBarVisibility } from "../chat/custom_hook/useTabBarVisibilityContext";
 import {
   setGroupFilteredMessages,
-  setOtherUserTyping,
   setGroupMessages,
 } from "../../redux/actions";
 
 import ChatHeader from "../chat/group_chat/ChatHeader";
 import MessageList from "../chat/group_chat/MessageList";
 import ChatInput from "../chat/group_chat/ChatInput";
-import TypingIndicator from "../chat/group_chat/TypingIndicator";
 import { StatusBar } from "expo-status-bar";
 
 const ChatScreen = ({ route }) => {
   const dispatch = useDispatch();
   const { chatId, chatName } = route.params;
   console.log(route.params, "These are route params");
+  console.log(route.params, "These are route params");
   const groupMessages = useSelector((state) => state.groupMessages);
   const searchQuery = useSelector((state) => state.searchQuery);
   const groupFilteredMessages = useSelector(
     (state) => state.groupFilteredMessages
   );
-  const otherUserTyping = useSelector((state) => state.otherUserTyping);
 
   const { setTabBarVisible } = useTabBarVisibility();
 
@@ -93,7 +91,6 @@ const ChatScreen = ({ route }) => {
       <StatusBar style="dark" />
       <ChatHeader chatName={chatName} />
       <MessageList messages={groupFilteredMessages} />
-      <TypingIndicator otherUserTyping={otherUserTyping} />
       <ChatInput chatId={chatId} />
     </KeyboardAvoidingView>
   );

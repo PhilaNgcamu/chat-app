@@ -53,6 +53,13 @@ const ChatList = ({ navigation }) => {
             chatList.push({
               lastMessage: lastMessage ? lastMessage : "No messages yet",
             });
+          } else if (chatData.type !== "group") {
+            chatList.push({
+              id: childSnapshot.key,
+              name: chatData.name,
+              type: chatData.type,
+              lastMessage: lastMessage,
+            });
           }
           dispatch(setItems([...contactsList, ...chatList]));
         });
@@ -66,6 +73,25 @@ const ChatList = ({ navigation }) => {
 
     fetchItems();
   }, [dispatch]);
+
+  // useEffect(() => {
+  //   const db = getDatabase();
+  //   const messagesRef = ref(db, `groups/${chatId}/messages`);
+
+  //   const unsubscribeMessages = onValue(messagesRef, (snapshot) => {
+  //     const messageList = [];
+  //     snapshot.forEach((childSnapshot) => {
+  //       messageList.push({ id: childSnapshot.key, ...childSnapshot.val() });
+  //     });
+  //     dispatch(setGroupMessages(messageList));
+  //     dispatch(setGroupFilteredMessages(messageList));
+  //     markMessagesAsRead(messageList);
+  //   });
+
+  //   return () => {
+  //     unsubscribeMessages();
+  //   };
+  // }, [chatId]);
 
   const handleItemPress = (item) => {
     console.log("Item pressed:", item);
@@ -89,12 +115,12 @@ const ChatList = ({ navigation }) => {
     const reItems = items.reduce((obj, value) => {
       return { ...obj, ...value };
     }, {});
-    console.log(item, "itemss");
+    console.log(items, "itemss");
     console.log(reItems, item.id, "reItems");
     return (
       item.id && (
         <ChatItem
-          item={reItems}
+          item={item.group ? item : reItems}
           onPress={() => {
             handleItemPress(reItems);
           }}

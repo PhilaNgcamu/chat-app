@@ -11,7 +11,6 @@ import { getDatabase, ref, push, get, set } from "firebase/database";
 import { auth } from "../../../backend/firebaseConfig";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-import { StatusBar } from "expo-status-bar";
 import { useDispatch, useSelector } from "react-redux";
 import {
   setContacts,
@@ -83,18 +82,21 @@ const CreateGroupChat = () => {
     }
   };
 
-  const renderItem = ({ item }) => (
-    <TouchableOpacity
-      style={[
-        styles.contactItem,
-        selectedContacts.some((c) => c.id === item.id) &&
-          styles.selectedContactItem,
-      ]}
-      onPress={() => toggleContactSelection(item)}
-    >
-      <Text style={styles.contactName}>{item.name}</Text>
-    </TouchableOpacity>
-  );
+  const renderItem = ({ item }) => {
+    console.log(contacts, "groupsssi");
+    return (
+      <TouchableOpacity
+        style={[
+          styles.contactItem,
+          selectedContacts.some((c) => c.id === item.id) &&
+            styles.selectedContactItem,
+        ]}
+        onPress={() => toggleContactSelection(item)}
+      >
+        <Text style={styles.contactName}>{item.name}</Text>
+      </TouchableOpacity>
+    );
+  };
 
   return (
     <View style={styles.container}>
