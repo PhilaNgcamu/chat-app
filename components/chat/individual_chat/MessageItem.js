@@ -82,7 +82,7 @@ const MessageItem = ({ item }) => {
                 styles.messageTimestamp,
                 item.userId === auth.currentUser.uid
                   ? styles.myMessageTimestamp
-                  : styles.otherMessageTimestamp,
+                  : styles.otherMemberMessageTimestamp,
               ]}
             >
               {format(new Date(item.createdAt), "HH:mm")} AM
@@ -179,7 +179,12 @@ const styles = StyleSheet.create({
     color: "#797C7B",
   },
   otherMessageTimestamp: {
-    textAlign: "right",
+    color: "#797C7B",
+  },
+  otherMemberMessageTimestamp: {
+    alignSelf: "flex-end",
+    position: "relative",
+    left: 50,
     color: "#797C7B",
   },
 });
