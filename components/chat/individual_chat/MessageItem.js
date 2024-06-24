@@ -39,7 +39,7 @@ const MessageItem = ({ item }) => {
     return null;
   }
 
-  const isGroup = item.senderName !== undefined;
+  const isGroup = item.senderName === undefined;
 
   return (
     <View style={styles.inputContainer}>
