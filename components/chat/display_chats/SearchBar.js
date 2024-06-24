@@ -19,10 +19,6 @@ const SearchBar = () => {
     "Poppins-Regular": require("../../../assets/fonts/Poppins-Regular.ttf"),
   });
 
-  if (!fontsLoaded) {
-    return null;
-  }
-
   useEffect(() => {
     const fetchUserProfilePicture = async () => {
       const db = getDatabase();
@@ -41,7 +37,11 @@ const SearchBar = () => {
     if (auth.currentUser) {
       fetchUserProfilePicture();
     }
-  }, [auth.currentUser]);
+  }, [auth.currentUser, dispatch]);
+
+  if (!fontsLoaded) {
+    return null;
+  }
 
   return (
     <View style={styles.header}>

@@ -85,10 +85,11 @@ function BottomTabNavigator() {
     "Poppins-Regular": require("../../assets/fonts/Poppins-Regular.ttf"),
   });
 
+  const tabBarVisible = useSelector((state) => state.tabBarVisible);
+
   if (!fontsLoaded) {
     return null;
   }
-  const tabBarVisible = useSelector((state) => state.tabBarVisible);
 
   return (
     <Tab.Navigator
@@ -143,11 +144,11 @@ function BottomTabNavigator() {
   );
 }
 
-export default function NavigationScreens() {
+export default function NavigationScreens({ user }) {
   return (
     <TabBarVisibilityProvider>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Onboarding">
+        <Stack.Navigator initialRouteName={user ? "Home" : "Onboarding"}>
           <Stack.Screen
             name="Onboarding"
             component={Onboarding}
