@@ -25,8 +25,10 @@ const ChatItem = ({ item, onPress }) => {
             <Text style={styles.itemLastMessage}>{item.lastMessage}</Text>
           )}
         </View>
-        <Text styles={styles.lastTimeMessageSent}>2 min ago</Text>
-        <NotificationStatus />
+        <View style={styles.extraInfo}>
+          <Text style={styles.lastTimeMessageSent}>2 min ago</Text>
+          <NotificationStatus />
+        </View>
       </View>
     </TouchableOpacity>
   );
@@ -62,11 +64,13 @@ const styles = StyleSheet.create({
     fontFamily: "Poppins-SemiBold",
     marginTop: 4,
   },
+  extraInfo: {
+    alignItems: "flex-end",
+    justifyContent: "center",
+  },
   lastTimeMessageSent: {
-    backgroundColor: "black",
-    height: 60,
-    width: 60,
-    marginBottom: 25,
+    position: "relative",
+    color: "#797C7B",
   },
 });
 

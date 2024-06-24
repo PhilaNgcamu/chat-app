@@ -8,7 +8,7 @@ const NotificationStatus = () => {
 const styles = StyleSheet.create({
   numberOfMessages: {
     textAlign: "center",
-    marginTop: 25,
+    marginTop: 10,
     width: 21.81,
     height: 21.81,
     borderRadius: 10.3,
