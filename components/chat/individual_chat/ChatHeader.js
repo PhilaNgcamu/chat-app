@@ -12,12 +12,20 @@ import { useFonts } from "expo-font";
 import CallIcon from "../../../utils/icons/CallIcon";
 import VideoIcon from "../../../utils/icons/VideoIcon";
 
-const ChatHeader = ({ contactAvatar, contactName, isOnline, navigation }) => {
+const ChatHeader = ({
+  contactAvatar,
+  contactName,
+  type,
+  isOnline,
+  navigation,
+}) => {
   const [fontsLoaded] = useFonts({
     "Poppins-Bold": require("../../../assets/fonts/Poppins-Bold.ttf"),
     "Poppins-SemiBold": require("../../../assets/fonts/Poppins-SemiBold.ttf"),
     "Poppins-Regular": require("../../../assets/fonts/Poppins-Regular.ttf"),
   });
+
+  const isNotGroup = type === "group";
 
   if (!fontsLoaded) {
     return (
@@ -37,9 +45,11 @@ const ChatHeader = ({ contactAvatar, contactName, isOnline, navigation }) => {
       </View>
       <View style={styles.headerContent}>
         <Text style={styles.chatName}>{contactName}</Text>
-        <Text style={styles.statusText}>
-          {isOnline ? "Active now" : "Offline"}
-        </Text>
+        {isNotGroup && (
+          <Text style={styles.statusText}>
+            {isOnline ? "Active now" : "Offline"}
+          </Text>
+        )}
       </View>
       <View style={styles.headerIcons}>
         <TouchableOpacity style={styles.headerIcon}>
