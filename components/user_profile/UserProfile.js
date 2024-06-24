@@ -264,7 +264,7 @@ const UserProfile = () => {
                 profilePicture ? { uri: profilePicture } : placeholderImage
               }
               alt="Media Shared"
-              style={styles.profilePicture}
+              style={styles.mediaShared}
             />
           </View>
           <TouchableOpacity style={styles.button} onPress={handleSave}>
@@ -353,9 +353,9 @@ const styles = StyleSheet.create({
   inputContainer: {
     paddingTop: 15,
     paddingLeft: 10,
-    marginBottom: 16,
   },
   input: {
+    fontFamily: "Poppins-Regular",
     fontSize: 16,
     color: "#000",
   },
@@ -363,6 +363,11 @@ const styles = StyleSheet.create({
     fontFamily: "Poppins-Bold",
     fontSize: 14,
     color: "#797C7B",
+  },
+  mediaShared: {
+    width: 92,
+    height: 92,
+    borderRadius: 16,
   },
   viewAllText: {
     position: "relative",
