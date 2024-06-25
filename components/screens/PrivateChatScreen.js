@@ -150,8 +150,6 @@ const ChatScreen = ({ route, navigation }) => {
     dispatch(addNewPrivateMessage(text));
   };
 
-  console.log(contactName, "contactNames");
-
   return (
     <KeyboardAvoidingView
       style={styles.container}

@@ -47,7 +47,7 @@ const ChatList = ({ navigation }) => {
         snapshot.forEach((childSnapshot) => {
           const chatData = childSnapshot.val();
           const groupChats = childSnapshot;
-          console.log("groupChats", JSON.stringify(groupChats, null, 2));
+          //  console.log("groupChats", JSON.stringify(grou;
 
           console.log(JSON.stringify(chatData, null, 2), "This is chat data");
           const chats = Object.values(chatData);
@@ -65,6 +65,7 @@ const ChatList = ({ navigation }) => {
             chatType: "private",
             lastIndividualMessage: lastIndividualMessage,
             ...chatData,
+            ...contactsList["0"],
           });
 
           dispatch(
@@ -86,19 +87,21 @@ const ChatList = ({ navigation }) => {
           console.log(
             "groupChats",
             JSON.stringify(
-              Object.values(Object.values(childSnapshot.val())[0])[0]?.text,
+              Object.values(Object.values(childSnapshot.val())[0])[0],
               null,
               2
             )
           );
-          const lastGroupMessage = Object.values(
-            Object.values(childSnapshot.val())[0]
-          )[0]?.text;
+          const lastGroupMessage = JSON.stringify(
+            Object.values(Object.values(childSnapshot.val())[0])[0]?.text,
+            null,
+            2
+          );
           console.log(lastGroupMessage, "last message");
 
           groupChatsList.push({
             id: childSnapshot.key,
-            lastGroupMessage: lastGroupMessage,
+            lastGroupMessage: `${lastGroupMessage}` || lastGroupMessage,
             ...childSnapshot.val(),
           });
           dispatch(
@@ -107,11 +110,6 @@ const ChatList = ({ navigation }) => {
               ...individualChatsList,
               ...groupChatsList,
             ])
-          );
-
-          console.log(
-            "These are items",
-            JSON.stringify(groupChatsList[0], null, 2)
           );
         });
       });
@@ -153,12 +151,12 @@ const ChatList = ({ navigation }) => {
     );
     const groupItems = items.filter((item) => item.type !== "group");
     // console.log(groupItems[0], "itemss");
-    console.log(JSON.stringify(reItems, null, 2), "reItems");
-    // console.log(item, "groupItems");
+    console.log(JSON.stringify(item, null, 2), "reItems");
+    console.log(item.text, "groupItems");
     return (
       item.id && (
         <ChatItem
-          item={reItems}
+          item={item}
           onPress={() => {
             handleItemPress(item);
           }}
@@ -166,6 +164,10 @@ const ChatList = ({ navigation }) => {
       )
     );
   };
+
+  const filteredItems = items.filter(
+    (item) => item.lastIndividualMessage || item.groupName
+  );
 
   return (
     <View style={styles.container}>
@@ -183,7 +185,7 @@ const ChatList = ({ navigation }) => {
           </View>
         ) : (
           <FlatList
-            data={items}
+            data={filteredItems}
             renderItem={renderItem}
             keyExtractor={(item) => item.id}
             style={styles.list}
