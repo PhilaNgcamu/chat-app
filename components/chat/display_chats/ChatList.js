@@ -120,7 +120,7 @@ const ChatList = ({ navigation }) => {
       return () => {
         off(individualChats);
         off(contactsRef);
-        off(groupChats);
+        off(groupsRef);
       };
     };
 
