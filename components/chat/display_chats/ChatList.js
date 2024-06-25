@@ -90,25 +90,28 @@ const ChatList = ({ navigation }) => {
       });
 
       onValue(groupChats, (snapshot) => {
-        groupChats.length = 0;
-
         snapshot.forEach((childSnapshot) => {
           console.log(
             "groupChats",
-            JSON.stringify(childSnapshot.val(), null, 2)
+            JSON.stringify(
+              Object.values(Object.values(childSnapshot.val())[0])[0]?.text,
+              null,
+              2
+            )
           );
+          const lastGroupMessage = Object.values(
+            Object.values(childSnapshot.val())[0]
+          )[0]?.text;
+          console.log(lastGroupMessage, "last message");
 
           groupChatsList.push({
             id: childSnapshot.key,
+            lastGroupMessage: lastGroupMessage
+              ? lastGroupMessage
+              : "No messages yet",
             ...childSnapshot.val(),
           });
-          dispatch(
-            setItems([
-              ...contactsList,
-              ...individualChatsList,
-              ...groupChatsList,
-            ])
-          );
+          dispatch(setItems([...groupChatsList]));
           console.log("These are items", JSON.stringify(items, null, 2));
         });
       });
@@ -147,16 +150,15 @@ const ChatList = ({ navigation }) => {
     }, {});
     const groupItems = items.filter((item) => item.type !== "group");
     console.log(groupItems[0], "itemss");
-    console.log(JSON.stringify(items, null, 2), "reItems");
+    console.log(JSON.stringify(reItems, null, 2), "reItems");
+    console.log(items, "groupItems");
     return (
-      item.id && (
-        <ChatItem
-          item={item}
-          onPress={() => {
-            handleItemPress(item);
-          }}
-        />
-      )
+      <ChatItem
+        item={reItems}
+        onPress={() => {
+          handleItemPress(item);
+        }}
+      />
     );
   };
 

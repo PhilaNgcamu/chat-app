@@ -12,7 +12,7 @@ const ChatItem = ({ item, onPress }) => {
   if (!fontsLoaded) {
     return null;
   }
-  console.log(item, "itemzzz");
+  console.log(JSON.stringify(item, null, 2), "itemzzz");
   return (
     <TouchableOpacity style={styles.item} onPress={onPress}>
       <View style={styles.itemInfo}>
@@ -21,9 +21,11 @@ const ChatItem = ({ item, onPress }) => {
           style={styles.itemImage}
         />
         <View style={styles.itemDetails}>
-          <Text style={styles.itemTitle}>{item.name}</Text>
-          {item.lastMessage && (
-            <Text style={styles.itemLastMessage}>{item.lastMessage}</Text>
+          <Text style={styles.itemTitle}>{item.name || item.groupName}</Text>
+          {(item.lastIndividualMessage || item.lastGroupMessage) && (
+            <Text style={styles.itemLastMessage}>
+              {item.lastIndividualMessage || item.lastGroupMessage}
+            </Text>
           )}
         </View>
         <View style={styles.extraInfo}>
