@@ -53,7 +53,6 @@ const ChatInput = ({ chatId }) => {
         text: newMessage,
         createdAt: serverTimestamp(),
         userId,
-        readBy: { [userId]: true },
         senderName: auth.currentUser.displayName,
       });
       dispatch(addGroupMessage(""));
@@ -75,7 +74,6 @@ const ChatInput = ({ chatId }) => {
         imageUrl: downloadURL,
         createdAt: serverTimestamp(),
         userId,
-        readBy: { [userId]: true },
         senderName: auth.currentUser.displayName,
       });
 

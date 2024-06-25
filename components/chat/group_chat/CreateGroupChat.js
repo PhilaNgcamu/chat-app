@@ -57,9 +57,9 @@ const CreateGroupChat = () => {
   const handleCreateGroup = async () => {
     if (groupName.trim() === "" || selectedContacts.length === 0) return;
     const db = getDatabase();
-    const newGroupChatRef = push(ref(db, "chats"));
+    const newGroupChatRef = push(ref(db, "groups"));
     await set(newGroupChatRef, {
-      name: groupName,
+      groupName: groupName,
       users: selectedContacts.reduce(
         (acc, contact) => {
           acc[contact.id] = true;

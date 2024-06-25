@@ -88,7 +88,7 @@ const ChatScreen = ({ route }) => {
       behavior={Platform.OS === "ios" ? "padding" : undefined}
     >
       <StatusBar style="dark" />
-      <ChatHeader chatName={chatLastMessage} />
+      <ChatHeader chatName={chatName} />
       <MessageList messages={groupFilteredMessages} />
       <ChatInput chatId={chatId} />
     </KeyboardAvoidingView>

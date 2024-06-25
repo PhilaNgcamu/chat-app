@@ -40,10 +40,9 @@ const MessageItem = ({ item }) => (
       >
         {format(new Date(item.createdAt), "HH:mm")}{" "}
       </Text>
-      {item.readBy?.[auth.currentUser.uid] &&
-        item.userId === auth.currentUser.uid && (
-          <MaterialIcons name="done-all" size={16} color="#4CAF50" />
-        )}
+      {item.userId === auth.currentUser.uid && (
+        <MaterialIcons name="done-all" size={16} color="#4CAF50" />
+      )}
     </View>
   </View>
 );

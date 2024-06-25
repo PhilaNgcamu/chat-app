@@ -16,13 +16,15 @@ const ChatList = ({ navigation }) => {
 
   useEffect(() => {
     const db = getDatabase();
-    const chatsRef = ref(db, "chats");
+    const individualChats = ref(db, "chats");
     const contactsRef = ref(db, "users");
+    const groupChats = ref(db, "groups");
     const currentUserID = auth.currentUser.uid;
 
     const fetchItems = () => {
-      const chatList = [];
+      const individualChatsList = [];
       const contactsList = [];
+      const groupChatsList = [];
 
       onValue(contactsRef, (snapshot) => {
         contactsList.length = 0;
@@ -34,41 +36,87 @@ const ChatList = ({ navigation }) => {
         });
 
         dispatch(setStatuses(contactsList));
-        dispatch(setItems([...contactsList, ...chatList]));
+        dispatch(setItems([...contactsList, ...individualChatsList]));
       });
 
-      onValue(chatsRef, (snapshot) => {
-        chatList.length = 0;
+      onValue(individualChats, (snapshot) => {
+        individualChatsList.length = 0;
 
         snapshot.forEach((childSnapshot) => {
           const chatData = childSnapshot.val();
+          const groupChats = childSnapshot;
+          console.log("groupChats", JSON.stringify(groupChats, null, 2));
 
-          console.log(chatData, "This is chat data");
-          const chats = Object.values(chatData);
-          const messages = chats[chats.length - 1];
-          const lastMessage =
-            Object.values(messages)[Object.values(messages).length - 1].text;
-          if (
-            Object.values(messages)[Object.values(messages).length - 1].userId
-          ) {
-            chatList.push({
-              lastMessage: lastMessage ? lastMessage : "No messages yet",
-            });
-          } else {
-            chatList.push({
-              id: childSnapshot.key,
-              name: chatData.name,
-              type: chatData.type,
-              lastMessage: lastMessage,
-            });
-          }
-          dispatch(setItems([...contactsList, ...chatList]));
+          // console.log(JSON.stringify(chatData, null, 2), "This is chat data");
+          // const chats = Object.values(chatData);
+          // const messages = chats[chats.length - 1];
+          // const lastIndividualMessage =
+          //   Object.values(messages)[Object.values(messages).length - 1].text;
+          // individualChatsList.push({
+          //   id: childSnapshot.key,
+          //   lastIndividualMessage: lastIndividualMessage
+          //     ? lastIndividualMessage
+          //     : "No messages yet",
+          //   ...chatData,
+          // });
+          // console.log(
+          //   JSON.stringify(chatData, null, 2),
+          //   "These are contacts and chats"
+          // );
+
+          // if (chatData.type === "group") {
+          //   individualChatsList.push({
+          //     id: childSnapshot.key,
+          //     lastIndividualMessage: lastIndividualMessage
+          //       ? lastIndividualMessage
+          //       : "No messages yet",
+          //     ...chatData,
+          //   });
+          // } else {
+          //   individualChatsList.push({
+          //     id: childSnapshot.key,
+          //     lastIndividualMessage: lastIndividualMessage
+          //       ? lastIndividualMessage
+          //       : "No messages yet",
+          //     ...chatData,
+          //   });
+          // }
+          dispatch(setItems([...contactsList, ...individualChatsList]));
+          console.log(
+            JSON.stringify(chatData, null, 2),
+            "These are contacts and chats"
+          );
+        });
+      });
+
+      onValue(groupChats, (snapshot) => {
+        groupChats.length = 0;
+
+        snapshot.forEach((childSnapshot) => {
+          console.log(
+            "groupChats",
+            JSON.stringify(childSnapshot.val(), null, 2)
+          );
+
+          groupChatsList.push({
+            id: childSnapshot.key,
+            ...childSnapshot.val(),
+          });
+          dispatch(
+            setItems([
+              ...contactsList,
+              ...individualChatsList,
+              ...groupChatsList,
+            ])
+          );
+          console.log("These are items", JSON.stringify(items, null, 2));
         });
       });
 
       return () => {
-        off(chatsRef);
+        off(individualChats);
         off(contactsRef);
+        off(groupChats);
       };
     };
 
@@ -76,19 +124,19 @@ const ChatList = ({ navigation }) => {
   }, [dispatch]);
 
   const handleItemPress = (item) => {
-    console.log("Item pressed:", item);
+    console.log("Item pressed:", JSON.stringify(item, null, 2));
     if (item.type === "group") {
       navigation.navigate("PrivateChat", {
         chatId: item.id,
-        chatName: item.name,
-        chatLastMessage: item.lastMessage,
+        chatType: item.type,
+        chatName: item.groupName,
+        chatAvatar: item.photoURL || "https://via.placeholder.com/150",
       });
     } else {
       navigation.navigate("PrivateChat", {
         contactId: item.id,
         contactName: item.name,
         contactAvatar: item.photoURL,
-        contactLastMessage: item.lastMessage,
       });
     }
   };
@@ -103,9 +151,9 @@ const ChatList = ({ navigation }) => {
     return (
       item.id && (
         <ChatItem
-          item={reItems}
+          item={item}
           onPress={() => {
-            handleItemPress(reItems);
+            handleItemPress(item);
           }}
         />
       )

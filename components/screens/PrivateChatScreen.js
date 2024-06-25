@@ -32,8 +32,15 @@ import MessageList from "../../components/chat/individual_chat/MessageList";
 import ChatInput from "../../components/chat/individual_chat/ChatInput";
 
 const ChatScreen = ({ route, navigation }) => {
-  const { contactId, contactName, contactAvatar, chatId, chatType } =
-    route.params;
+  const {
+    contactId,
+    contactName,
+    contactAvatar,
+    chatId,
+    chatType,
+    chatName,
+    chatAvatar,
+  } = route.params;
   const dispatch = useDispatch();
 
   const privateMessages = useSelector((state) => state.privateMessages);
@@ -153,8 +160,8 @@ const ChatScreen = ({ route, navigation }) => {
     >
       <StatusBar style="dark" />
       <ChatHeader
-        contactAvatar={contactAvatar}
-        contactName={contactName}
+        contactAvatar={chatType === "group" ? chatAvatar : contactAvatar}
+        contactName={chatType === "group" ? chatName : contactName}
         isOnline={isOnline}
         type={chatType}
         navigation={navigation}
