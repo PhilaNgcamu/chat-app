@@ -18,7 +18,7 @@ const ChatList = ({ navigation }) => {
     const db = getDatabase();
     const individualChats = ref(db, "chats");
     const contactsRef = ref(db, "users");
-    const groupChats = ref(db, "groups");
+    const groupsRef = ref(db, "groups");
     const currentUserID = auth.currentUser.uid;
 
     const fetchItems = () => {
@@ -82,7 +82,7 @@ const ChatList = ({ navigation }) => {
         });
       });
 
-      onValue(groupChats, (snapshot) => {
+      onValue(groupsRef, (snapshot) => {
         snapshot.forEach((childSnapshot) => {
           console.log(
             "groupChats",
@@ -92,12 +92,15 @@ const ChatList = ({ navigation }) => {
               2
             )
           );
-          const lastGroupMessage = JSON.stringify(
-            Object.values(Object.values(childSnapshot.val())[0])[0]?.text,
-            null,
-            2
+          const lastGroupMessage = Object.values(childSnapshot.val().messages)[
+            Object.values(childSnapshot.val().messages).length - 1
+          ].text;
+          console.log(
+            Object.values(childSnapshot.val().messages)[
+              Object.values(childSnapshot.val().messages).length - 1
+            ].text,
+            "last message"
           );
-          console.log(lastGroupMessage, "last message");
 
           groupChatsList.push({
             id: childSnapshot.key,
