@@ -25,7 +25,6 @@ import {
   setGroupMessages,
   setPrivateMessages,
   addNewPrivateMessage,
-  setgroupMessages,
 } from "../../redux/actions";
 import ChatHeader from "../../components/chat/individual_chat/ChatHeader";
 import MessageList from "../../components/chat/individual_chat/MessageList";

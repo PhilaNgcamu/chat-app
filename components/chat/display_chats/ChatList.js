@@ -36,7 +36,9 @@ const ChatList = ({ navigation }) => {
         });
 
         dispatch(setStatuses(contactsList));
-        dispatch(setItems([...contactsList, ...individualChatsList]));
+        dispatch(
+          setItems([...contactsList, ...individualChatsList, ...groupChatsList])
+        );
       });
 
       onValue(individualChats, (snapshot) => {
@@ -47,43 +49,33 @@ const ChatList = ({ navigation }) => {
           const groupChats = childSnapshot;
           console.log("groupChats", JSON.stringify(groupChats, null, 2));
 
-          // console.log(JSON.stringify(chatData, null, 2), "This is chat data");
-          // const chats = Object.values(chatData);
-          // const messages = chats[chats.length - 1];
-          // const lastIndividualMessage =
-          //   Object.values(messages)[Object.values(messages).length - 1].text;
-          // individualChatsList.push({
-          //   id: childSnapshot.key,
-          //   lastIndividualMessage: lastIndividualMessage
-          //     ? lastIndividualMessage
-          //     : "No messages yet",
-          //   ...chatData,
-          // });
-          // console.log(
-          //   JSON.stringify(chatData, null, 2),
-          //   "These are contacts and chats"
-          // );
+          console.log(JSON.stringify(chatData, null, 2), "This is chat data");
+          const chats = Object.values(chatData);
+          const messages = chats[chats.length - 1];
+          const lastIndividualMessage =
+            Object.values(messages)[Object.values(messages).length - 1].text;
 
-          // if (chatData.type === "group") {
-          //   individualChatsList.push({
-          //     id: childSnapshot.key,
-          //     lastIndividualMessage: lastIndividualMessage
-          //       ? lastIndividualMessage
-          //       : "No messages yet",
-          //     ...chatData,
-          //   });
-          // } else {
-          //   individualChatsList.push({
-          //     id: childSnapshot.key,
-          //     lastIndividualMessage: lastIndividualMessage
-          //       ? lastIndividualMessage
-          //       : "No messages yet",
-          //     ...chatData,
-          //   });
-          // }
-          dispatch(setItems([...contactsList, ...individualChatsList]));
           console.log(
             JSON.stringify(chatData, null, 2),
+            "These are contacts and chats"
+          );
+
+          individualChatsList.push({
+            id: childSnapshot.key,
+            chatType: "private",
+            lastIndividualMessage: lastIndividualMessage,
+            ...chatData,
+          });
+
+          dispatch(
+            setItems([
+              ...contactsList,
+              ...individualChatsList,
+              ...groupChatsList,
+            ])
+          );
+          console.log(
+            JSON.stringify(individualChatsList, null, 2),
             "These are contacts and chats"
           );
         });
@@ -106,13 +98,21 @@ const ChatList = ({ navigation }) => {
 
           groupChatsList.push({
             id: childSnapshot.key,
-            lastGroupMessage: lastGroupMessage
-              ? lastGroupMessage
-              : "No messages yet",
+            lastGroupMessage: lastGroupMessage,
             ...childSnapshot.val(),
           });
-          dispatch(setItems([...groupChatsList]));
-          console.log("These are items", JSON.stringify(items, null, 2));
+          dispatch(
+            setItems([
+              ...contactsList,
+              ...individualChatsList,
+              ...groupChatsList,
+            ])
+          );
+
+          console.log(
+            "These are items",
+            JSON.stringify(groupChatsList[0], null, 2)
+          );
         });
       });
 
@@ -145,20 +145,25 @@ const ChatList = ({ navigation }) => {
   };
 
   const renderItem = ({ item }) => {
-    const reItems = items.reduce((obj, value) => {
-      return { ...obj, ...value };
-    }, {});
+    const reItems = [item].reduce(
+      (obj, value) => {
+        return { ...obj, ...value };
+      },
+      { ...item }
+    );
     const groupItems = items.filter((item) => item.type !== "group");
-    console.log(groupItems[0], "itemss");
+    // console.log(groupItems[0], "itemss");
     console.log(JSON.stringify(reItems, null, 2), "reItems");
-    console.log(items, "groupItems");
+    // console.log(item, "groupItems");
     return (
-      <ChatItem
-        item={reItems}
-        onPress={() => {
-          handleItemPress(item);
-        }}
-      />
+      item.id && (
+        <ChatItem
+          item={reItems}
+          onPress={() => {
+            handleItemPress(item);
+          }}
+        />
+      )
     );
   };
 

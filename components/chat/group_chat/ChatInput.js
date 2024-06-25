@@ -79,9 +79,6 @@ const ChatInput = ({ chatId }) => {
 
       dispatch(setImage(null));
     }
-
-    dispatch(setIsTyping(false));
-    await updateTypingStatus(false);
   };
 
   const handleTyping = (text) => {
