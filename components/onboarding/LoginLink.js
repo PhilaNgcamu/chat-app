@@ -1,5 +1,6 @@
 import React from "react";
 import { TouchableOpacity, Text, StyleSheet, View } from "react-native";
+
 import { verticalScale, moderateScale } from "../../utils/scale";
 
 const LoginLink = ({ onPress }) => {
@@ -22,9 +23,10 @@ const styles = StyleSheet.create({
     color: "#FFF",
     fontSize: moderateScale(16),
     textAlign: "center",
+    fontWeight: "500",
   },
   loginText: {
-    fontFamily: "Poppins-SemiBold",
+    fontWeight: "600",
   },
 });
 

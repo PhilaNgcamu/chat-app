@@ -1,12 +1,8 @@
 import React from "react";
-import { View, Text, ActivityIndicator, StyleSheet } from "react-native";
+import { View, ActivityIndicator, StyleSheet } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { useFonts } from "expo-font";
-import {
-  horizontalScale,
-  verticalScale,
-  moderateScale,
-} from "../../utils/scale";
+import { horizontalScale, verticalScale } from "../../utils/scale";
 import { StatusBar } from "expo-status-bar";
 
 import Header from "./Header";
