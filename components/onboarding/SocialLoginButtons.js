@@ -31,9 +31,9 @@ const styles = StyleSheet.create({
     marginVertical: verticalScale(20),
   },
   socialLogoWrapper: {
-    width: horizontalScale(42),
-    height: horizontalScale(42),
-    borderRadius: horizontalScale(21),
+    width: horizontalScale(46),
+    height: horizontalScale(46),
+    borderRadius: horizontalScale(23),
     borderWidth: 1,
     borderColor: "#FFFFFF",
     backgroundColor: "#000000",

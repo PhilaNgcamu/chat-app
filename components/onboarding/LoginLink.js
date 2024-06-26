@@ -16,7 +16,7 @@ const LoginLink = ({ onPress }) => {
 
 const styles = StyleSheet.create({
   link: {
-    marginTop: verticalScale(10),
+    marginTop: verticalScale(25),
   },
   linkText: {
     color: "#FFF",

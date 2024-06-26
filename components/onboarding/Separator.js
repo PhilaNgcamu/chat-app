@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
   orText: {
     fontSize: moderateScale(14),
     fontFamily: "Poppins-Bold",
-    color: "#FFF",
+    color: "#D6E4E0",
     marginHorizontal: horizontalScale(15),
   },
 });

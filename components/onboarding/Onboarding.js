@@ -42,10 +42,12 @@ const Onboarding = ({ navigation }) => {
       <Subtitle />
       <View style={styles.content}>
         <Description />
-        <SocialLoginButtons />
-        <Separator />
-        <SignUpButton onPress={() => navigation.navigate("UserSignUp")} />
-        <LoginLink onPress={() => navigation.navigate("UserLogin")} />
+        <View style={styles.loginOrRegisterOptions}>
+          <SocialLoginButtons />
+          <Separator />
+          <SignUpButton onPress={() => navigation.navigate("UserSignUp")} />
+          <LoginLink onPress={() => navigation.navigate("UserLogin")} />
+        </View>
       </View>
     </LinearGradient>
   );
@@ -65,9 +67,13 @@ const styles = StyleSheet.create({
   },
   content: {
     position: "absolute",
-    top: verticalScale(424),
+    top: verticalScale(434),
     width: "100%",
     paddingHorizontal: horizontalScale(20),
+  },
+  loginOrRegisterOptions: {
+    position: "relative",
+    top: verticalScale(50),
   },
 });
 

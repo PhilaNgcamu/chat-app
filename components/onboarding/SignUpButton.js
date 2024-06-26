@@ -16,7 +16,7 @@ const SignUpButton = ({ onPress }) => {
 
 const styles = StyleSheet.create({
   button: {
-    backgroundColor: "#FFF",
+    backgroundColor: "#FFFFFF",
     paddingVertical: verticalScale(12),
     paddingHorizontal: horizontalScale(25),
     borderRadius: 25,
