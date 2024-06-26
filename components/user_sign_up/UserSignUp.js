@@ -238,7 +238,7 @@ const styles = StyleSheet.create({
   },
   chooseOptions: {
     position: "relative",
-    top: verticalScale(58),
+    top: verticalScale(57),
   },
   error: {
     color: "red",
