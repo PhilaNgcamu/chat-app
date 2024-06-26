@@ -12,7 +12,7 @@ const RegisterLink = ({ onPress }) => {
 
 const styles = StyleSheet.create({
   link: {
-    marginTop: verticalScale(50),
+    marginTop: verticalScale(30),
   },
   registerText: {
     fontSize: moderateScale(16),

@@ -15,8 +15,8 @@ const BackButton = ({ onPress }) => {
 const styles = StyleSheet.create({
   backButton: {
     position: "relative",
-    bottom: verticalScale(61),
-    left: horizontalScale(24),
+    bottom: verticalScale(45),
+    left: horizontalScale(15),
   },
 });
 

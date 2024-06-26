@@ -24,10 +24,12 @@ import Title from "./Title";
 import InputField from "./InputField";
 import LoginButton from "./LoginButton";
 import RegisterLink from "./RegisterLink";
-import LoginSubtitle from "./LoginSubtitle";
+import LoginSubtitle from "./SignupOrLoginSubtitle";
 import SocialLoginButtons from "../onboarding/SocialLoginButtons";
 import AppleBlackIcon from "../../utils/icons/AppleBlackIcon";
 import Separator from "../onboarding/Separator";
+import SignUpOrLoginButton from "../onboarding/SignUpLoginButton";
+import SignUpOrLoginSubtitle from "./SignupOrLoginSubtitle";
 
 const UserLogin = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -73,7 +75,10 @@ const UserLogin = ({ navigation }) => {
       <View style={styles.content}>
         <BackButton onPress={() => navigation.goBack()} />
         <Title />
-        <LoginSubtitle />
+        <SignUpOrLoginSubtitle
+          paragraphOne="Welcome back! Sign in using your"
+          paragraphTwo="social account or email to continue with us"
+        />
         <SocialLoginButtons
           AppleIcon={AppleBlackIcon}
           borderColor="#000000"
@@ -92,11 +97,14 @@ const UserLogin = ({ navigation }) => {
           onChangeText={(text) => dispatch(setPassword(text))}
           secureTextEntry
         />
-        <TouchableOpacity>
-          <Text style={styles.forgotPasswordText}>Forgot password?</Text>
-        </TouchableOpacity>
+        <Text style={styles.forgotPasswordText}>Forgot password?</Text>
         <View style={styles.chooseOptions}>
-          <LoginButton onPress={handleLogin} loading={loading} />
+          <SignUpOrLoginButton
+            onPress={handleLogin}
+            text="Login"
+            backgroundColor="#24786D"
+            color="#FFFFFF"
+          />
           <RegisterLink onPress={() => navigation.navigate("UserSignUp")} />
         </View>
       </View>
@@ -129,8 +137,9 @@ const styles = StyleSheet.create({
   },
   forgotPasswordText: {
     fontSize: moderateScale(14),
-    fontFamily: "Poppins-SemiBold",
+    fontWeight: "600",
     color: "#075BC9",
+    letterSpacing: 0.1,
   },
   chooseOptions: {
     position: "relative",

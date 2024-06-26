@@ -10,9 +10,7 @@ import {
   setPassword,
 } from "../../redux/actions";
 
-import BackButton from "./BackButton";
 import InputField from "./InputField";
-import SignUpButton from "./SignUpButton";
 import ExistingAccountButton from "./ExistingAccountButton";
 import {
   horizontalScale,
@@ -21,6 +19,9 @@ import {
 } from "../../utils/scale";
 import { createUserWithEmailAndPassword, getAuth } from "firebase/auth";
 import { getDatabase, ref, set } from "firebase/database";
+import BackButton from "../user_login/BackButton";
+import SignUpOrLoginButton from "../onboarding/SignUpLoginButton";
+import SignUpOrLoginSubtitle from "../user_login/SignupOrLoginSubtitle";
 
 const UserSignUp = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -80,9 +81,9 @@ const UserSignUp = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <StatusBar backgroundColor="#000" style="light" />
-      <BackButton onPress={() => navigation.goBack()} />
+      <StatusBar style="dark" />
       <View style={styles.content}>
+        <BackButton onPress={() => navigation.goBack()} />
         <View style={styles.titleContainer}>
           <Text style={styles.title}>Sign up with </Text>
           <View style={styles.emailContainer}>
@@ -90,12 +91,10 @@ const UserSignUp = ({ navigation }) => {
             <View style={styles.stroke} />
           </View>
         </View>
-
-        <Text style={styles.subtitle}>
-          Get chatting with friends and family today by signing up for our chat
-          app!
-        </Text>
-
+        <SignUpOrLoginSubtitle
+          paragraphOne="Get chatting with friends and family"
+          paragraphTwo="today by signing up for our chat app!"
+        />
         <InputField
           label="Your Name"
           value={name}
@@ -125,8 +124,12 @@ const UserSignUp = ({ navigation }) => {
           secureTextEntry={true}
         />
         <View style={styles.chooseOptions}>
-          <SignUpButton onPress={handleSignUp} />
-
+          <SignUpOrLoginButton
+            onPress={handleSignUp}
+            text="Create an account"
+            backgroundColor={"#24786D"}
+            color={"#fff"}
+          />
           <ExistingAccountButton
             onPress={() => navigation.navigate("UserLogin")}
           />
@@ -240,7 +243,7 @@ const styles = StyleSheet.create({
   },
   chooseOptions: {
     position: "relative",
-    top: verticalScale(76),
+    top: verticalScale(56),
   },
   error: {
     color: "red",

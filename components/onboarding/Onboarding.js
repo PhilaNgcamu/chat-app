@@ -10,9 +10,9 @@ import Header from "./Header";
 import Subtitle from "./Subtitle";
 import SocialLoginButtons from "./SocialLoginButtons";
 import Separator from "./Separator";
-import SignUpButton from "./SignUpButton";
 import LoginLink from "./LoginLink";
 import Description from "./Description";
+import SignUpOrLoginButton from "./SignUpLoginButton";
 
 const Onboarding = ({ navigation }) => {
   const [fontsLoaded] = useFonts({
@@ -46,7 +46,12 @@ const Onboarding = ({ navigation }) => {
             backgroundColor="#000000"
           />
           <Separator color="#D6E4E0" />
-          <SignUpButton onPress={() => navigation.navigate("UserSignUp")} />
+          <SignUpOrLoginButton
+            onPress={() => navigation.navigate("UserSignUp")}
+            text="Sign up"
+            backgroundColor="#FFFFFF"
+            color="#000000"
+          />
           <LoginLink onPress={() => navigation.navigate("UserLogin")} />
         </View>
       </View>

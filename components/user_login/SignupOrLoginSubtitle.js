@@ -3,12 +3,13 @@ import { StyleSheet, View, Text } from "react-native";
 
 import { moderateScale, verticalScale } from "../../utils/scale";
 
-const LoginSubtitle = () => {
+const SignUpOrLoginSubtitle = ({ paragraphOne, paragraphTwo }) => {
   return (
     <View style={styles.subtitleContainer}>
       <Text style={styles.subtitle}>
-        Welcome back! Sign in using your{"\n"}social account or email to
-        continue with us
+        {paragraphOne}
+        {"\n"}
+        {paragraphTwo}
       </Text>
     </View>
   );
@@ -29,4 +30,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LoginSubtitle;
+export default SignUpOrLoginSubtitle;

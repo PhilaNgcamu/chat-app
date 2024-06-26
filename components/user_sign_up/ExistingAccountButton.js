@@ -22,7 +22,6 @@ const styles = StyleSheet.create({
     paddingVertical: verticalScale(12),
     paddingHorizontal: horizontalScale(25),
     borderRadius: moderateScale(20),
-    marginTop: verticalScale(16),
   },
   loginButtonText: {
     marginTop: verticalScale(20),
