@@ -13,6 +13,7 @@ import Separator from "./Separator";
 import LoginLink from "./LoginLink";
 import Description from "./Description";
 import SignUpOrLoginButton from "./SignUpLoginButton";
+import ExistingOrCreateAccountButton from "../user_sign_up/ExistingOrCreateAccountButton";
 
 const Onboarding = ({ navigation }) => {
   const [fontsLoaded] = useFonts({
@@ -52,7 +53,11 @@ const Onboarding = ({ navigation }) => {
             backgroundColor="#FFFFFF"
             color="#000000"
           />
-          <LoginLink onPress={() => navigation.navigate("UserLogin")} />
+          <ExistingOrCreateAccountButton
+            onPress={() => navigation.navigate("UserLogin")}
+            text="Existing account?"
+            color="#FFFFFF"
+          />
         </View>
       </View>
     </LinearGradient>

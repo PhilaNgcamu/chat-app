@@ -6,13 +6,32 @@ import {
   horizontalScale,
 } from "../../utils/scale";
 
-const ExistingOrCreateAccountButton = ({ onPress, text }) => {
+const ExistingOrCreateAccountButton = ({ onPress, text, color }) => {
   return (
-    <TouchableOpacity style={styles.loginButton} onPress={onPress}>
-      <Text style={styles.loginButtonText}>
+    <TouchableOpacity
+      style={
+        color
+          ? [styles.loginButton, { bottom: verticalScale(15) }]
+          : styles.loginButton
+      }
+      onPress={onPress}
+    >
+      <Text
+        style={
+          color
+            ? [styles.loginButtonText, { color: color }]
+            : styles.loginButtonText
+        }
+      >
         {text}{" "}
         {text === "Existing account?" && (
-          <Text style={styles.loginText}>Log in</Text>
+          <Text
+            style={
+              color ? [styles.loginText, { color: color }] : styles.loginText
+            }
+          >
+            Log in
+          </Text>
         )}
       </Text>
     </TouchableOpacity>
