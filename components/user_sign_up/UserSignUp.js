@@ -90,31 +90,33 @@ const UserSignUp = ({ navigation }) => {
           paragraphOne="Get chatting with friends and family"
           paragraphTwo="today by signing up for our chat app!"
         />
-        <InputField
-          label="Your Name"
-          value={name}
-          onChangeText={(text) => dispatch(setName(text))}
-          keyboardType="default"
-        />
-        <InputField
-          label="Your email"
-          value={email}
-          onChangeText={(text) => dispatch(setEmail(text))}
-          keyboardType="email-address"
-          autoCapitalize="none"
-        />
-        <InputField
-          label="Password"
-          value={password}
-          onChangeText={(text) => dispatch(setPassword(text))}
-          secureTextEntry
-        />
-        <InputField
-          label="Confirm Password"
-          value={confirmedPassword}
-          onChangeText={(text) => dispatch(setConfirmedPassword(text))}
-          secureTextEntry
-        />
+        <View style={styles.formContainer}>
+          <InputField
+            label="Your Name"
+            value={name}
+            onChangeText={(text) => dispatch(setName(text))}
+            keyboardType="default"
+          />
+          <InputField
+            label="Your email"
+            value={email}
+            onChangeText={(text) => dispatch(setEmail(text))}
+            keyboardType="email-address"
+            autoCapitalize="none"
+          />
+          <InputField
+            label="Password"
+            value={password}
+            onChangeText={(text) => dispatch(setPassword(text))}
+            secureTextEntry
+          />
+          <InputField
+            label="Confirm Password"
+            value={confirmedPassword}
+            onChangeText={(text) => dispatch(setConfirmedPassword(text))}
+            secureTextEntry
+          />
+        </View>
         <View style={styles.chooseOptions}>
           <SignUpOrLoginButton
             onPress={handleSignUp}
@@ -146,7 +148,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     position: "relative",
-    top: verticalScale(3),
+    top: verticalScale(4),
     padding: horizontalScale(16),
   },
   titleContainer: {
@@ -154,6 +156,10 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     marginBottom: verticalScale(8),
+  },
+  formContainer: {
+    position: "relative",
+    top: verticalScale(24),
   },
   title: {
     textAlign: "center",
