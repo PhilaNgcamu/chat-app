@@ -50,8 +50,6 @@ const ChatList = ({ navigation }) => {
 
         snapshot.forEach((childSnapshot) => {
           const chatData = childSnapshot.val();
-          const groupChats = childSnapshot;
-          //  console.log("groupChats", JSON.stringify(grou;
 
           console.log(JSON.stringify(chatData, null, 2), "This is chat data");
           const chats = Object.values(chatData);

@@ -25,9 +25,9 @@ import {
   setPrivateMessages,
   addNewPrivateMessage,
 } from "../../redux/actions";
-import ChatHeader from "../chat/individual_chat/ChatHeader";
-import MessageList from "../chat/individual_chat/MessageList";
-import ChatInput from "../chat/individual_chat/ChatInput";
+import ChatHeader from "../chat/chat_screen/ChatHeader";
+import MessageList from "../chat/chat_screen/MessageList";
+import ChatInput from "../chat/chat_screen/ChatInput";
 
 const ChatScreen = ({ route, navigation }) => {
   const {
