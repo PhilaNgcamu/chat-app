@@ -13,7 +13,7 @@ const Title = () => {
         <Text style={styles.loginText}>Log in </Text>
         <View style={styles.stroke} />
       </View>
-      <Text style={styles.title}>to Chatbox</Text>
+      <Text style={styles.chatboxText}>to Chatbox</Text>
     </View>
   );
 };
@@ -23,29 +23,27 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    marginBottom: verticalScale(8),
+    width: "100%",
   },
   loginContainer: {
-    position: "relative",
     marginBottom: verticalScale(16),
   },
   loginText: {
     fontFamily: "Poppins-Bold",
-    fontSize: moderateScale(24),
+    fontSize: moderateScale(21),
     zIndex: 1,
   },
-  title: {
+  chatboxText: {
     fontFamily: "Poppins-Bold",
-    fontSize: moderateScale(24),
-    marginBottom: verticalScale(16),
+    fontSize: moderateScale(21),
+    marginBottom: verticalScale(26),
   },
   stroke: {
-    position: "absolute",
-    zIndex: 0,
-    width: horizontalScale(70),
-    top: verticalScale(21),
-    right: horizontalScale(2),
+    position: "relative",
     height: verticalScale(10),
+    width: horizontalScale(60),
+    right: horizontalScale(1),
+    bottom: verticalScale(16),
     backgroundColor: "#58C3B6",
   },
 });

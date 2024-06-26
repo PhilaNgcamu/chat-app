@@ -2,21 +2,35 @@ import React from "react";
 import { View, StyleSheet } from "react-native";
 
 import { horizontalScale, verticalScale } from "../../utils/scale";
-import AppleWhiteIcon from "../../utils/icons/AppleWhiteIcon";
 import GoogleIcon from "../../utils/icons/GoogleIcon";
 import FacebookIcon from "../../utils/icons/FacebookIcon";
 
-const SocialLoginButtons = () => {
+const SocialLoginButtons = ({ AppleIcon, borderColor, backgroundColor }) => {
   return (
     <View style={styles.socialLogos}>
-      <View style={styles.socialLogoWrapper}>
+      <View
+        style={[
+          styles.socialLogoWrapper,
+          { borderColor: borderColor, backgroundColor: backgroundColor },
+        ]}
+      >
         <FacebookIcon />
       </View>
-      <View style={styles.socialLogoWrapper}>
+      <View
+        style={[
+          styles.socialLogoWrapper,
+          { borderColor: borderColor, backgroundColor: backgroundColor },
+        ]}
+      >
         <GoogleIcon />
       </View>
-      <View style={styles.socialLogoWrapper}>
-        <AppleWhiteIcon />
+      <View
+        style={[
+          styles.socialLogoWrapper,
+          { borderColor: borderColor, backgroundColor: backgroundColor },
+        ]}
+      >
+        <AppleIcon />
       </View>
     </View>
   );
@@ -35,8 +49,6 @@ const styles = StyleSheet.create({
     height: horizontalScale(46),
     borderRadius: horizontalScale(23),
     borderWidth: 1,
-    borderColor: "#FFFFFF",
-    backgroundColor: "#000000",
     justifyContent: "center",
     alignItems: "center",
     marginHorizontal: horizontalScale(10),

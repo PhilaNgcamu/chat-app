@@ -26,6 +26,9 @@ import Separator from "./Separator";
 import InputField from "./InputField";
 import LoginButton from "./LoginButton";
 import RegisterLink from "./RegisterLink";
+import LoginSubtitle from "./LoginSubtitle";
+import SocialLoginButtons from "../onboarding/SocialLoginButtons";
+import AppleBlackIcon from "../../utils/icons/AppleBlackIcon";
 
 const UserLogin = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -67,14 +70,16 @@ const UserLogin = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <StatusBar backgroundColor="#000" style="light" />
-      <BackButton onPress={() => navigation.goBack()} />
+      <StatusBar style="light" />
       <View style={styles.content}>
+        <BackButton onPress={() => navigation.goBack()} />
         <Title />
-        <Text style={styles.subtitle}>
-          Welcome back! Sign in using your social account or email to continue
-        </Text>
-        <SocialLogin />
+        <LoginSubtitle />
+        <SocialLoginButtons
+          AppleIcon={AppleBlackIcon}
+          borderColor="#000000"
+          backgroundColor="#FFFFFF"
+        />
         <Separator />
         <InputField
           label="Your email"

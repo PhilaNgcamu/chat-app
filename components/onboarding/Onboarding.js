@@ -2,6 +2,7 @@ import React from "react";
 import { View, ActivityIndicator, StyleSheet } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { useFonts } from "expo-font";
+import AppleWhiteIcon from "../../utils/icons/AppleWhiteIcon";
 import { horizontalScale, verticalScale } from "../../utils/scale";
 import { StatusBar } from "expo-status-bar";
 
@@ -39,7 +40,11 @@ const Onboarding = ({ navigation }) => {
       <View style={styles.content}>
         <Description />
         <View style={styles.loginOrRegisterOptions}>
-          <SocialLoginButtons />
+          <SocialLoginButtons
+            AppleIcon={AppleWhiteIcon}
+            borderColor="#FFFFFF"
+            backgroundColor="#000000"
+          />
           <Separator />
           <SignUpButton onPress={() => navigation.navigate("UserSignUp")} />
           <LoginLink onPress={() => navigation.navigate("UserLogin")} />

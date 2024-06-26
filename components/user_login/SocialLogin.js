@@ -1,22 +1,24 @@
 import React from "react";
-import { View, TouchableOpacity, Image, StyleSheet } from "react-native";
-import fbLogo from "../../assets/facebook.png";
-import googleLogo from "../../assets/google.png";
-import appleLogo from "../../assets/apple-black.png";
+import { View, StyleSheet } from "react-native";
+
 import { horizontalScale, verticalScale } from "../../utils/scale";
+
+import GoogleIcon from "../../utils/icons/GoogleIcon";
+import AppleBlackIcon from "../../utils/icons/AppleBlackIcon";
+import FacebookIcon from "../../utils/icons/FacebookIcon";
 
 const SocialLogin = () => {
   return (
     <View style={styles.socialLogos}>
-      <TouchableOpacity style={styles.socialLogoWrapper}>
-        <Image source={fbLogo} style={styles.socialLogo} />
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.socialLogoWrapper}>
-        <Image source={googleLogo} style={styles.socialLogo} />
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.socialLogoWrapper}>
-        <Image source={appleLogo} style={styles.socialLogo} />
-      </TouchableOpacity>
+      <View style={styles.socialLogoWrapper}>
+        <FacebookIcon />
+      </View>
+      <View style={styles.socialLogoWrapper}>
+        <GoogleIcon />
+      </View>
+      <View style={styles.socialLogoWrapper}>
+        <AppleBlackIcon />
+      </View>
     </View>
   );
 };
@@ -30,12 +32,12 @@ const styles = StyleSheet.create({
     marginVertical: verticalScale(20),
   },
   socialLogoWrapper: {
-    width: horizontalScale(70),
-    height: horizontalScale(70),
-    borderRadius: horizontalScale(35),
+    width: horizontalScale(46),
+    height: horizontalScale(46),
+    borderRadius: horizontalScale(23),
     borderWidth: 1,
-    borderColor: "#000E08",
-    backgroundColor: "#FFF",
+    borderColor: "#000000",
+    backgroundColor: "#FFFFFF",
     justifyContent: "center",
     alignItems: "center",
     marginHorizontal: horizontalScale(10),
