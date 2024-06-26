@@ -141,14 +141,12 @@ const ChatList = ({ navigation }) => {
     console.log("reItems", JSON.stringify(filteredItems, null, 2));
 
     return (
-      item.id && (
-        <ChatItem
-          item={item}
-          onPress={() => {
-            handleItemPress(item);
-          }}
-        />
-      )
+      <ChatItem
+        item={item}
+        onPress={() => {
+          handleItemPress(item);
+        }}
+      />
     );
   };
 

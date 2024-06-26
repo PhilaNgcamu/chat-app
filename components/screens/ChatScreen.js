@@ -77,7 +77,10 @@ const ChatScreen = ({ route, navigation }) => {
     const unsubscribeMessages = onValue(messagesRef, (snapshot) => {
       const messageList = [];
       snapshot.forEach((childSnapshot) => {
-        messageList.push({ id: childSnapshot.key, ...childSnapshot.val() });
+        messageList.push({
+          id: childSnapshot.key,
+          ...childSnapshot.val(),
+        });
       });
       if (isGroupChat) {
         dispatch(setGroupMessages(messageList));
