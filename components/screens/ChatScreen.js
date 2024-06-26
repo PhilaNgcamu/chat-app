@@ -6,7 +6,6 @@ import {
   push,
   onValue,
   serverTimestamp,
-  update,
 } from "firebase/database";
 import {
   getStorage,
@@ -26,9 +25,9 @@ import {
   setPrivateMessages,
   addNewPrivateMessage,
 } from "../../redux/actions";
-import ChatHeader from "../../components/chat/individual_chat/ChatHeader";
-import MessageList from "../../components/chat/individual_chat/MessageList";
-import ChatInput from "../../components/chat/individual_chat/ChatInput";
+import ChatHeader from "../chat/individual_chat/ChatHeader";
+import MessageList from "../chat/individual_chat/MessageList";
+import ChatInput from "../chat/individual_chat/ChatInput";
 
 const ChatScreen = ({ route, navigation }) => {
   const {
@@ -166,6 +165,7 @@ const ChatScreen = ({ route, navigation }) => {
       <MessageList
         messages={chatType === "group" ? groupMessages : privateMessages}
         inputRef={inputRef}
+        chatType={chatType}
       />
       <ChatInput
         newMessage={newMessage}

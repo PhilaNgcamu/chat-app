@@ -2,12 +2,12 @@ import React from "react";
 import { FlatList, StyleSheet, View } from "react-native";
 import MessageItem from "./MessageItem";
 
-const MessageList = ({ messages, inputRef }) => {
+const MessageList = ({ messages, inputRef, chatType }) => {
   return (
     <View style={styles.messageList}>
       <FlatList
         data={messages}
-        renderItem={({ item }) => <MessageItem item={item} type={"private"} />}
+        renderItem={({ item }) => <MessageItem item={item} type={chatType} />}
         keyExtractor={(item) => item.id}
         ref={inputRef}
         onContentSizeChange={() =>

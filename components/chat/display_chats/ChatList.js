@@ -39,6 +39,10 @@ const ChatList = ({ navigation }) => {
         dispatch(
           setItems([...contactsList, ...individualChatsList, ...groupChatsList])
         );
+        console.log(
+          JSON.stringify(contactsList, null, 2),
+          "This is contacts list"
+        );
       });
 
       onValue(individualChats, (snapshot) => {
@@ -84,28 +88,19 @@ const ChatList = ({ navigation }) => {
 
       onValue(groupsRef, (snapshot) => {
         snapshot.forEach((childSnapshot) => {
-          console.log(
-            "groupChats",
-            JSON.stringify(
-              Object.values(Object.values(childSnapshot.val())[0])[0],
-              null,
-              2
-            )
-          );
-          const lastGroupMessage = Object.values(childSnapshot.val().messages)[
-            Object.values(childSnapshot.val().messages).length - 1
-          ].text;
-          console.log(
-            Object.values(childSnapshot.val().messages)[
-              Object.values(childSnapshot.val().messages).length - 1
-            ].text,
-            "last message"
-          );
+          const groupData = childSnapshot.val();
+          const messages = groupData.messages
+            ? Object.values(groupData.messages)
+            : [];
+          const lastGroupMessage =
+            messages.length > 0
+              ? messages[messages.length - 1].text
+              : "No messages yet";
 
           groupChatsList.push({
             id: childSnapshot.key,
-            lastGroupMessage: `${lastGroupMessage}` || lastGroupMessage,
-            ...childSnapshot.val(),
+            lastGroupMessage: lastGroupMessage,
+            ...groupData,
           });
           dispatch(
             setItems([
@@ -130,14 +125,14 @@ const ChatList = ({ navigation }) => {
   const handleItemPress = (item) => {
     console.log("Item pressed:", JSON.stringify(item, null, 2));
     if (item.type === "group") {
-      navigation.navigate("PrivateChat", {
+      navigation.navigate("ChatScreen", {
         chatId: item.id,
         chatType: item.type,
         chatName: item.groupName,
         chatAvatar: item.photoURL || "https://via.placeholder.com/150",
       });
     } else {
-      navigation.navigate("PrivateChat", {
+      navigation.navigate("ChatScreen", {
         contactId: item.id,
         contactName: item.name,
         contactAvatar: item.photoURL,
@@ -146,16 +141,8 @@ const ChatList = ({ navigation }) => {
   };
 
   const renderItem = ({ item }) => {
-    const reItems = [item].reduce(
-      (obj, value) => {
-        return { ...obj, ...value };
-      },
-      { ...item }
-    );
-    const groupItems = items.filter((item) => item.type !== "group");
-    // console.log(groupItems[0], "itemss");
-    console.log(JSON.stringify(item, null, 2), "reItems");
-    console.log(item.text, "groupItems");
+    console.log("reItems", JSON.stringify(filteredItems, null, 2));
+
     return (
       item.id && (
         <ChatItem

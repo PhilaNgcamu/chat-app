@@ -9,10 +9,9 @@ import UserLogin from "../user_login/UserLogin";
 import UserSignUp from "../user_sign_up/UserSignUp";
 import UserProfile from "../user_profile/UserProfile";
 import ChatList from "../chat/display_chats/ChatList";
-import ChatScreen from "./GroupChatScreen";
 import Home from "./Home";
 import CreateGroupChat from "../chat/group_chat/CreateGroupChat";
-import PrivateChatScreen from "./PrivateChatScreen";
+import ChatScreen from "./ChatScreen";
 import Onboarding from "../onboarding/Onboarding";
 import { useSelector } from "react-redux";
 import { useFonts } from "expo-font";
@@ -35,19 +34,13 @@ function MessagesStackNavigator() {
         options={{ headerShown: false }}
       />
       <MessagesStack.Screen
-        name="ChatScreen"
-        component={ChatScreen}
-        options={{ headerShown: false }}
-      />
-      <MessagesStack.Screen
         name="CreateGroupChat"
         component={CreateGroupChat}
         options={{ headerShown: false }}
       />
-
       <MessagesStack.Screen
-        name="PrivateChat"
-        component={PrivateChatScreen}
+        name="ChatScreen"
+        component={ChatScreen}
         options={{ headerShown: false }}
       />
     </MessagesStack.Navigator>
@@ -179,20 +172,14 @@ export default function NavigationScreens({ user }) {
             component={ChatList}
             options={{ headerShown: false }}
           />
-
-          <Stack.Screen
-            name="ChatScreen"
-            component={ChatScreen}
-            options={{ headerShown: false }}
-          />
           <Stack.Screen
             name="CreateGroupChat"
             component={CreateGroupChat}
             options={{ headerShown: false }}
           />
           <Stack.Screen
-            name="PrivateChat"
-            component={PrivateChatScreen}
+            name="ChatScreen"
+            component={ChatScreen}
             options={{ headerShown: false }}
           />
         </Stack.Navigator>
