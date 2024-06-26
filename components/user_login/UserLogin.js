@@ -14,7 +14,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { setEmail, setLoading, setPassword } from "../../redux/actions";
 
 import BackButton from "./BackButton";
-import InputField from "./InputField";
 import SocialLoginButtons from "../onboarding/SocialLoginButtons";
 import AppleBlackIcon from "../../utils/icons/AppleBlackIcon";
 import Separator from "../onboarding/Separator";
@@ -22,6 +21,7 @@ import SignUpOrLoginButton from "../onboarding/SignUpLoginButton";
 import SignUpOrLoginSubtitle from "./SignupOrLoginSubtitle";
 import SignUpOrLoginTitle from "./SignUpOrLoginTitle";
 import ExistingOrCreateAccountButton from "../user_sign_up/ExistingOrCreateAccountButton";
+import InputField from "../user_sign_up/InputField";
 
 const UserLogin = ({ navigation }) => {
   const dispatch = useDispatch();

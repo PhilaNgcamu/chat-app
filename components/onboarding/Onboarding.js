@@ -10,7 +10,6 @@ import Header from "./Header";
 import Subtitle from "./Subtitle";
 import SocialLoginButtons from "./SocialLoginButtons";
 import Separator from "./Separator";
-import LoginLink from "./LoginLink";
 import Description from "./Description";
 import SignUpOrLoginButton from "./SignUpLoginButton";
 import ExistingOrCreateAccountButton from "../user_sign_up/ExistingOrCreateAccountButton";

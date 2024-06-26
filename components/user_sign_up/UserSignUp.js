@@ -119,8 +119,8 @@ const UserSignUp = ({ navigation }) => {
           <SignUpOrLoginButton
             onPress={handleSignUp}
             text="Create an account"
-            backgroundColor={"#24786D"}
-            color={"#fff"}
+            backgroundColor="#24786D"
+            color="#fff"
           />
           <ExistingOrCreateAccountButton
             onPress={() => navigation.navigate("UserLogin")}
