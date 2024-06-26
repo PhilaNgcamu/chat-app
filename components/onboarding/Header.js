@@ -18,21 +18,22 @@ const Header = () => {
 
 const styles = StyleSheet.create({
   header: {
-    position: "absolute",
-    top: verticalScale(88),
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: verticalScale(20),
+    position: "absolute",
+    top: verticalScale(88),
   },
   logo: {
-    width: horizontalScale(30),
-    height: horizontalScale(30),
+    width: horizontalScale(16),
+    height: horizontalScale(19.2),
+    marginRight: horizontalScale(4),
     resizeMode: "contain",
   },
   title: {
     fontFamily: "Poppins-Regular",
-    fontSize: moderateScale(25),
-    color: "#FFF",
+    fontWeight: "500",
+    fontSize: moderateScale(14),
+    color: "#FFFFFF",
     marginTop: verticalScale(4),
   },
 });
