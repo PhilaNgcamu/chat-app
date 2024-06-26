@@ -63,7 +63,6 @@ const ChatList = ({ navigation }) => {
           );
 
           individualChatsList.push({
-            id: childSnapshot.key,
             chatType: "private",
             lastIndividualMessage: lastIndividualMessage,
             ...chatData,
