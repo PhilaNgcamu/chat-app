@@ -15,7 +15,6 @@ import { setEmail, setLoading, setPassword } from "../../redux/actions";
 
 import BackButton from "./BackButton";
 import InputField from "./InputField";
-import RegisterLink from "./RegisterLink";
 import SocialLoginButtons from "../onboarding/SocialLoginButtons";
 import AppleBlackIcon from "../../utils/icons/AppleBlackIcon";
 import Separator from "../onboarding/Separator";
@@ -92,7 +91,7 @@ const UserLogin = ({ navigation }) => {
         <View style={styles.chooseOptions}>
           <SignUpOrLoginButton
             onPress={handleLogin}
-            text="Login"
+            text="Log in"
             backgroundColor="#24786D"
             color="#FFFFFF"
           />
@@ -137,7 +136,7 @@ const styles = StyleSheet.create({
   },
   chooseOptions: {
     position: "relative",
-    top: verticalScale(60),
+    top: verticalScale(67.5),
   },
 });
 
