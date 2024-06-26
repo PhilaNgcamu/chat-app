@@ -7,11 +7,11 @@ import {
   moderateScale,
 } from "../../utils/scale";
 
-const Separator = () => {
+const Separator = ({ color }) => {
   return (
     <View style={styles.separator}>
       <View style={styles.line} />
-      <Text style={styles.orText}>OR</Text>
+      <Text style={[styles.orText, { color: color }]}>OR</Text>
       <View style={styles.line} />
     </View>
   );
@@ -32,7 +32,6 @@ const styles = StyleSheet.create({
   orText: {
     fontSize: moderateScale(14),
     fontFamily: "Poppins-Bold",
-    color: "#D6E4E0",
     marginHorizontal: horizontalScale(15),
   },
 });

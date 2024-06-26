@@ -45,7 +45,7 @@ const Onboarding = ({ navigation }) => {
             borderColor="#FFFFFF"
             backgroundColor="#000000"
           />
-          <Separator />
+          <Separator color="#D6E4E0" />
           <SignUpButton onPress={() => navigation.navigate("UserSignUp")} />
           <LoginLink onPress={() => navigation.navigate("UserLogin")} />
         </View>

@@ -20,6 +20,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   subtitle: {
+    marginBottom: verticalScale(20),
     lineHeight: verticalScale(26),
     fontFamily: "Poppins-Bold",
     color: "#797C7B",

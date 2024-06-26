@@ -21,13 +21,13 @@ import { setEmail, setLoading, setPassword } from "../../redux/actions";
 
 import BackButton from "./BackButton";
 import Title from "./Title";
-import Separator from "./Separator";
 import InputField from "./InputField";
 import LoginButton from "./LoginButton";
 import RegisterLink from "./RegisterLink";
 import LoginSubtitle from "./LoginSubtitle";
 import SocialLoginButtons from "../onboarding/SocialLoginButtons";
 import AppleBlackIcon from "../../utils/icons/AppleBlackIcon";
+import Separator from "../onboarding/Separator";
 
 const UserLogin = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -69,7 +69,7 @@ const UserLogin = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <StatusBar style="light" />
+      <StatusBar style="dark" />
       <View style={styles.content}>
         <BackButton onPress={() => navigation.goBack()} />
         <Title />
@@ -79,7 +79,7 @@ const UserLogin = ({ navigation }) => {
           borderColor="#000000"
           backgroundColor="#FFFFFF"
         />
-        <Separator />
+        <Separator color="#797C7B" />
         <InputField
           label="Your email"
           value={email}
