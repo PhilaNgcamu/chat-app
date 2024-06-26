@@ -97,7 +97,7 @@ const UserSignUp = ({ navigation }) => {
           keyboardType="default"
         />
         <InputField
-          label="Your Email"
+          label="Your email"
           value={email}
           onChangeText={(text) => dispatch(setEmail(text))}
           keyboardType="email-address"
@@ -107,13 +107,13 @@ const UserSignUp = ({ navigation }) => {
           label="Password"
           value={password}
           onChangeText={(text) => dispatch(setPassword(text))}
-          secureTextEntry={true}
+          secureTextEntry
         />
         <InputField
           label="Confirm Password"
           value={confirmedPassword}
           onChangeText={(text) => dispatch(setConfirmedPassword(text))}
-          secureTextEntry={true}
+          secureTextEntry
         />
         <View style={styles.chooseOptions}>
           <SignUpOrLoginButton

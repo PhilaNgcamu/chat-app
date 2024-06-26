@@ -16,11 +16,9 @@ const InputField = ({
         style={styles.input}
         value={value}
         onChangeText={onChangeText}
-        secureTextEntry={
-          label === "Password" || "Your Password" ? secureTextEntry : false
-        }
+        secureTextEntry={label === "Password" ? secureTextEntry : false}
         keyboardType={keyboardType}
-        autoCapitalize={label === "Your Email" ? "none" : "words"}
+        autoCapitalize={label === "Your email" ? "none" : "words"}
       />
     </View>
   );
