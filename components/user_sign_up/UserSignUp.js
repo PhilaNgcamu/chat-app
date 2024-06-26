@@ -145,6 +145,8 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
     justifyContent: "center",
+    position: "relative",
+    top: verticalScale(3),
     padding: horizontalScale(16),
   },
   titleContainer: {
@@ -236,7 +238,7 @@ const styles = StyleSheet.create({
   },
   chooseOptions: {
     position: "relative",
-    top: verticalScale(56),
+    top: verticalScale(62),
   },
   error: {
     color: "red",

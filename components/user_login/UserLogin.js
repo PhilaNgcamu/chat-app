@@ -82,7 +82,7 @@ const UserLogin = ({ navigation }) => {
           keyboardType="email-address"
         />
         <InputField
-          label="Your password"
+          label="Password"
           value={password}
           onChangeText={(text) => dispatch(setPassword(text))}
           secureTextEntry
@@ -120,6 +120,8 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     padding: horizontalScale(16),
+    position: "relative",
+    bottom: verticalScale(3),
   },
   subtitle: {
     fontFamily: "Poppins-Bold",
