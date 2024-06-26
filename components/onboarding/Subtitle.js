@@ -9,10 +9,10 @@ import {
 const Subtitle = () => {
   return (
     <View style={styles.subtitle}>
-      <Text style={styles.connectText}>Connect</Text>
-      <Text style={styles.friendsText}>friends</Text>
-      <Text style={styles.easilyText}>easily &</Text>
-      <Text style={styles.quicklyText}>quickly</Text>
+      <Text style={styles.connectAndFriendsText}>Connect</Text>
+      <Text style={styles.connectAndFriendsText}>friends</Text>
+      <Text style={styles.easilyAndEasilyText}>easily &</Text>
+      <Text style={styles.easilyAndEasilyText}>quickly</Text>
     </View>
   );
 };
@@ -25,29 +25,19 @@ const styles = StyleSheet.create({
     width: horizontalScale(338),
     marginBottom: verticalScale(20),
   },
-  connectText: {
+  connectAndFriendsText: {
     fontFamily: "Poppins-Regular",
+    fontWeight: "500",
     fontSize: moderateScale(52),
     lineHeight: moderateScale(60),
-    color: "#FFF",
+    color: "#FFFFFF",
   },
-  friendsText: {
-    fontFamily: "Poppins-Regular",
-    fontSize: moderateScale(52),
-    lineHeight: moderateScale(60),
-    color: "#FFF",
-  },
-  easilyText: {
+  easilyAndEasilyText: {
     fontFamily: "Poppins-Bold",
+    fontWeight: "500",
     fontSize: moderateScale(52),
     lineHeight: moderateScale(60),
-    color: "#FFF",
-  },
-  quicklyText: {
-    fontFamily: "Poppins-Bold",
-    fontSize: moderateScale(52),
-    lineHeight: moderateScale(60),
-    color: "#FFF",
+    color: "#FFFFFF",
   },
 });
 

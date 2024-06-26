@@ -33,7 +33,7 @@ const Onboarding = ({ navigation }) => {
 
   return (
     <LinearGradient
-      colors={["#24786D", "#0f4c4c", "#000))"]}
+      colors={["#24786D", "#0f4c4c", "#000000"]}
       style={styles.container}
     >
       <StatusBar style="light" />
