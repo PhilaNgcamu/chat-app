@@ -13,8 +13,14 @@ const SignUpOrLoginTitle = ({ paragraphOne, paragraphTwo }) => {
         <Text style={styles.loginText}>{paragraphOne} </Text>
         {paragraphOne === "Log in" && <View style={styles.strokeOne} />}
       </View>
-      <View style={paragraphOne === "Sign up" && styles.signUpContainer}>
-        <Text style={styles.emailText}>{paragraphTwo}</Text>
+      <View
+        style={
+          paragraphOne === "Sign up"
+            ? styles.signUpContainer
+            : styles.chatboxText
+        }
+      >
+        <Text style={styles.descriptionText}>{paragraphTwo}</Text>
         {paragraphOne === "Sign up" && <View style={styles.strokeTwo} />}
       </View>
     </View>
@@ -45,11 +51,14 @@ const styles = StyleSheet.create({
     fontSize: moderateScale(21),
     marginBottom: verticalScale(26),
   },
-  emailText: {
+  descriptionText: {
     fontFamily: "Poppins-Bold",
     fontSize: moderateScale(21),
     marginBottom: verticalScale(6),
     zIndex: 1,
+  },
+  chatboxText: {
+    marginBottom: verticalScale(20),
   },
   strokeOne: {
     position: "relative",
@@ -62,8 +71,8 @@ const styles = StyleSheet.create({
   strokeTwo: {
     position: "relative",
     height: verticalScale(10),
-    width: horizontalScale(54),
-    right: horizontalScale(3),
+    width: horizontalScale(52.5),
+    right: horizontalScale(5),
     bottom: verticalScale(23),
     backgroundColor: "#58C3B6",
   },
