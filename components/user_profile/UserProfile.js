@@ -23,14 +23,13 @@ import {
 
 import * as ImagePicker from "expo-image-picker";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
-import { Feather, MaterialIcons } from "@expo/vector-icons";
+import { MaterialIcons } from "@expo/vector-icons";
 import {
   horizontalScale,
   moderateScale,
   verticalScale,
 } from "../../utils/scale";
 import { StatusBar } from "expo-status-bar";
-import placeholderImage from "../../assets/insert-image.png";
 import { useDispatch, useSelector } from "react-redux";
 import { setProfilePicture } from "../../redux/actions";
 import MessageIcon from "../../utils/icons/MessageIcon";
@@ -186,7 +185,9 @@ const UserProfile = () => {
           <TouchableOpacity onPress={pickImage}>
             <Image
               source={
-                profilePicture ? { uri: profilePicture } : placeholderImage
+                profilePicture
+                  ? { uri: profilePicture }
+                  : "https://via.placeholder.com/150"
               }
               alt="Profile Picture"
               style={styles.profilePicture}
