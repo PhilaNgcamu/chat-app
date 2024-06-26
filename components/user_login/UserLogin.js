@@ -21,7 +21,6 @@ import { setEmail, setLoading, setPassword } from "../../redux/actions";
 
 import BackButton from "./BackButton";
 import Title from "./Title";
-import SocialLogin from "./SocialLogin";
 import Separator from "./Separator";
 import InputField from "./InputField";
 import LoginButton from "./LoginButton";
