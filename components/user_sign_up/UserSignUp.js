@@ -22,6 +22,7 @@ import { getDatabase, ref, set } from "firebase/database";
 import BackButton from "../user_login/BackButton";
 import SignUpOrLoginButton from "../onboarding/SignUpLoginButton";
 import SignUpOrLoginSubtitle from "../user_login/SignupOrLoginSubtitle";
+import SignupOrLoginTitle from "../user_login/SignUpOrLoginTitle";
 
 const UserSignUp = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -84,13 +85,7 @@ const UserSignUp = ({ navigation }) => {
       <StatusBar style="dark" />
       <View style={styles.content}>
         <BackButton onPress={() => navigation.goBack()} />
-        <View style={styles.titleContainer}>
-          <Text style={styles.title}>Sign up with </Text>
-          <View style={styles.emailContainer}>
-            <Text style={styles.emailText}>Email</Text>
-            <View style={styles.stroke} />
-          </View>
-        </View>
+        <SignupOrLoginTitle paragraphOne="Sign up" paragraphTwo="with Email" />
         <SignUpOrLoginSubtitle
           paragraphOne="Get chatting with friends and family"
           paragraphTwo="today by signing up for our chat app!"
@@ -101,7 +96,6 @@ const UserSignUp = ({ navigation }) => {
           onChangeText={(text) => dispatch(setName(text))}
           keyboardType="default"
         />
-
         <InputField
           label="Your Email"
           value={email}
@@ -109,14 +103,12 @@ const UserSignUp = ({ navigation }) => {
           keyboardType="email-address"
           autoCapitalize="none"
         />
-
         <InputField
           label="Password"
           value={password}
           onChangeText={(text) => dispatch(setPassword(text))}
           secureTextEntry={true}
         />
-
         <InputField
           label="Confirm Password"
           value={confirmedPassword}

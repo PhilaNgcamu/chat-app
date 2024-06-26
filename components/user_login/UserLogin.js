@@ -20,16 +20,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { setEmail, setLoading, setPassword } from "../../redux/actions";
 
 import BackButton from "./BackButton";
-import Title from "./Title";
 import InputField from "./InputField";
-import LoginButton from "./LoginButton";
 import RegisterLink from "./RegisterLink";
-import LoginSubtitle from "./SignupOrLoginSubtitle";
 import SocialLoginButtons from "../onboarding/SocialLoginButtons";
 import AppleBlackIcon from "../../utils/icons/AppleBlackIcon";
 import Separator from "../onboarding/Separator";
 import SignUpOrLoginButton from "../onboarding/SignUpLoginButton";
 import SignUpOrLoginSubtitle from "./SignupOrLoginSubtitle";
+import SignUpOrLoginTitle from "./SignUpOrLoginTitle";
 
 const UserLogin = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -74,7 +72,7 @@ const UserLogin = ({ navigation }) => {
       <StatusBar style="dark" />
       <View style={styles.content}>
         <BackButton onPress={() => navigation.goBack()} />
-        <Title />
+        <SignUpOrLoginTitle paragraphOne="Log in" paragraphTwo="to Chatbox" />
         <SignUpOrLoginSubtitle
           paragraphOne="Welcome back! Sign in using your"
           paragraphTwo="social account or email to continue with us"
