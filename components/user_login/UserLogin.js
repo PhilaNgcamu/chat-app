@@ -1,21 +1,15 @@
 import React from "react";
-import {
-  View,
-  Text,
-  ActivityIndicator,
-  StyleSheet,
-  TouchableOpacity,
-  Alert,
-} from "react-native";
+import { View, Text, ActivityIndicator, StyleSheet, Alert } from "react-native";
 import { useFonts } from "expo-font";
+import { StatusBar } from "expo-status-bar";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../backend/firebaseConfig";
+
 import {
   horizontalScale,
   verticalScale,
   moderateScale,
 } from "../../utils/scale";
-import { StatusBar } from "expo-status-bar";
 import { useDispatch, useSelector } from "react-redux";
 import { setEmail, setLoading, setPassword } from "../../redux/actions";
 
@@ -28,12 +22,12 @@ import Separator from "../onboarding/Separator";
 import SignUpOrLoginButton from "../onboarding/SignUpLoginButton";
 import SignUpOrLoginSubtitle from "./SignupOrLoginSubtitle";
 import SignUpOrLoginTitle from "./SignUpOrLoginTitle";
+import ExistingOrCreateAccountButton from "../user_sign_up/ExistingOrCreateAccountButton";
 
 const UserLogin = ({ navigation }) => {
   const dispatch = useDispatch();
   const email = useSelector((state) => state.email);
   const password = useSelector((state) => state.password);
-  const loading = useSelector((state) => state.loading);
 
   const [fontsLoaded] = useFonts({
     "Poppins-Bold": require("../../assets/fonts/Poppins-Bold.ttf"),
@@ -42,7 +36,6 @@ const UserLogin = ({ navigation }) => {
   });
 
   const handleLogin = async () => {
-    dispatch(setLoading(true));
     try {
       await signInWithEmailAndPassword(auth, email, password);
       Alert.alert("Yay!", "Login Successful");
@@ -103,7 +96,10 @@ const UserLogin = ({ navigation }) => {
             backgroundColor="#24786D"
             color="#FFFFFF"
           />
-          <RegisterLink onPress={() => navigation.navigate("UserSignUp")} />
+          <ExistingOrCreateAccountButton
+            onPress={() => navigation.navigate("UserSignUp")}
+            text="Create an account"
+          />
         </View>
       </View>
     </View>

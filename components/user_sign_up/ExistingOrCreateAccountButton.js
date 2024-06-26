@@ -6,11 +6,14 @@ import {
   horizontalScale,
 } from "../../utils/scale";
 
-const ExistingAccountButton = ({ onPress }) => {
+const ExistingOrCreateAccountButton = ({ onPress, text }) => {
   return (
     <TouchableOpacity style={styles.loginButton} onPress={onPress}>
       <Text style={styles.loginButtonText}>
-        Existing account? <Text style={styles.loginText}>Log in</Text>
+        {text}{" "}
+        {text === "Existing account?" && (
+          <Text style={styles.loginText}>Log in</Text>
+        )}
       </Text>
     </TouchableOpacity>
   );
@@ -38,4 +41,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ExistingAccountButton;
+export default ExistingOrCreateAccountButton;

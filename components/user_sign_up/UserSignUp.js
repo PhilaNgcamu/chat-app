@@ -11,7 +11,7 @@ import {
 } from "../../redux/actions";
 
 import InputField from "./InputField";
-import ExistingAccountButton from "./ExistingAccountButton";
+import ExistingOrCreateAccountButton from "./ExistingOrCreateAccountButton";
 import {
   horizontalScale,
   moderateScale,
@@ -122,8 +122,9 @@ const UserSignUp = ({ navigation }) => {
             backgroundColor={"#24786D"}
             color={"#fff"}
           />
-          <ExistingAccountButton
+          <ExistingOrCreateAccountButton
             onPress={() => navigation.navigate("UserLogin")}
+            text="Existing account?"
           />
         </View>
       </View>

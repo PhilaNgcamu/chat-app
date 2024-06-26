@@ -1,5 +1,6 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
+
 import {
   verticalScale,
   horizontalScale,
@@ -49,16 +50,12 @@ const styles = StyleSheet.create({
   descriptionText: {
     fontFamily: "Poppins-Bold",
     fontSize: moderateScale(21),
-    marginBottom: verticalScale(26),
-  },
-  descriptionText: {
-    fontFamily: "Poppins-Bold",
-    fontSize: moderateScale(21),
     marginBottom: verticalScale(6),
     zIndex: 1,
   },
   chatboxText: {
     marginBottom: verticalScale(20),
+    zIndex: 1,
   },
   strokeOne: {
     position: "relative",
