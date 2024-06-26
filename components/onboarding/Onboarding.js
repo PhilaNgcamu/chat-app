@@ -15,6 +15,7 @@ import SocialLoginButtons from "./SocialLoginButtons";
 import Separator from "./Separator";
 import SignUpButton from "./SignUpButton";
 import LoginLink from "./LoginLink";
+import Description from "./Description";
 
 const Onboarding = ({ navigation }) => {
   const [fontsLoaded] = useFonts({
@@ -40,12 +41,7 @@ const Onboarding = ({ navigation }) => {
       <Header />
       <Subtitle />
       <View style={styles.content}>
-        <Text style={styles.description}>
-          Our chat app is the perfect way to stay
-        </Text>
-        <Text style={styles.description}>
-          connected with friends and family.
-        </Text>
+        <Description />
         <SocialLoginButtons />
         <Separator />
         <SignUpButton onPress={() => navigation.navigate("UserSignUp")} />
@@ -69,15 +65,9 @@ const styles = StyleSheet.create({
   },
   content: {
     position: "absolute",
-    top: verticalScale(460),
+    top: verticalScale(424),
     width: "100%",
     paddingHorizontal: horizontalScale(20),
-  },
-  description: {
-    fontSize: moderateScale(16),
-    lineHeight: moderateScale(24),
-    marginLeft: horizontalScale(10),
-    color: "#FFF",
   },
 });
 

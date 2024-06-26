@@ -1,21 +1,22 @@
 import React from "react";
-import { View, Image, StyleSheet } from "react-native";
-import fbLogo from "../../assets/facebook.png";
-import googleLogo from "../../assets/google.png";
-import appleLogo from "../../assets/apple.png";
+import { View, StyleSheet } from "react-native";
+
 import { horizontalScale, verticalScale } from "../../utils/scale";
+import AppleWhiteIcon from "../../utils/icons/AppleWhiteIcon";
+import GoogleIcon from "../../utils/icons/GoogleIcon";
+import FacebookIcon from "../../utils/icons/FacebookIcon";
 
 const SocialLoginButtons = () => {
   return (
     <View style={styles.socialLogos}>
       <View style={styles.socialLogoWrapper}>
-        <Image source={fbLogo} style={styles.socialLogo} />
+        <FacebookIcon />
       </View>
       <View style={styles.socialLogoWrapper}>
-        <Image source={googleLogo} style={styles.socialLogo} />
+        <GoogleIcon />
       </View>
       <View style={styles.socialLogoWrapper}>
-        <Image source={appleLogo} style={styles.socialLogo} />
+        <AppleWhiteIcon />
       </View>
     </View>
   );
@@ -30,20 +31,15 @@ const styles = StyleSheet.create({
     marginVertical: verticalScale(20),
   },
   socialLogoWrapper: {
-    width: horizontalScale(70),
-    height: horizontalScale(70),
-    borderRadius: horizontalScale(35),
+    width: horizontalScale(42),
+    height: horizontalScale(42),
+    borderRadius: horizontalScale(21),
     borderWidth: 1,
-    borderColor: "#FFF",
-    backgroundColor: "#000",
+    borderColor: "#FFFFFF",
+    backgroundColor: "#000000",
     justifyContent: "center",
     alignItems: "center",
     marginHorizontal: horizontalScale(10),
-  },
-  socialLogo: {
-    width: horizontalScale(36),
-    height: horizontalScale(36),
-    borderRadius: horizontalScale(18),
   },
 });
 

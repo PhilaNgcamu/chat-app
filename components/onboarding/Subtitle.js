@@ -20,7 +20,7 @@ const Subtitle = () => {
 const styles = StyleSheet.create({
   subtitle: {
     position: "absolute",
-    top: verticalScale(180),
+    top: verticalScale(150),
     left: horizontalScale(30),
     width: horizontalScale(338),
     marginBottom: verticalScale(20),

@@ -1,5 +1,6 @@
 import React from "react";
 import { View, Text, Image, StyleSheet } from "react-native";
+
 import {
   horizontalScale,
   verticalScale,
@@ -21,7 +22,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     position: "absolute",
-    top: verticalScale(88),
+    top: verticalScale(80),
   },
   logo: {
     width: horizontalScale(16),
