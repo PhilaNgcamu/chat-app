@@ -19,7 +19,7 @@ const Home = () => {
 
   return (
     <View style={styles.container}>
-      <StatusBar backgroundColor="#000" style="light" />
+      <StatusBar style="dark" />
       <Text style={styles.title}>Chatbox</Text>
 
       <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>

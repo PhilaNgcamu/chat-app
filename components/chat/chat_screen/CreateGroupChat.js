@@ -1,13 +1,20 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
   TextInput,
   TouchableOpacity,
   FlatList,
+  Image,
   StyleSheet,
 } from "react-native";
 import { getDatabase, ref, push, get, set } from "firebase/database";
+import {
+  getStorage,
+  ref as storageRef,
+  uploadBytes,
+  getDownloadURL,
+} from "firebase/storage";
 import { auth } from "../../../backend/firebaseConfig";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
@@ -16,15 +23,19 @@ import {
   setContacts,
   setGroupName,
   setSelectedContacts,
+  setGroupImage,
 } from "../../../redux/actions";
+import * as ImagePicker from "expo-image-picker";
+import { StatusBar } from "expo-status-bar";
 
 const CreateGroupChat = () => {
   const dispatch = useDispatch();
+  const navigation = useNavigation();
 
   const groupName = useSelector((state) => state.groupName);
   const contacts = useSelector((state) => state.contacts);
   const selectedContacts = useSelector((state) => state.selectedContacts);
-  const navigation = useNavigation();
+  const groupImage = useSelector((state) => state.groupImage);
 
   useEffect(() => {
     const fetchContacts = async () => {
@@ -56,9 +67,11 @@ const CreateGroupChat = () => {
 
   const handleCreateGroup = async () => {
     if (groupName.trim() === "" || selectedContacts.length === 0) return;
+
     const db = getDatabase();
     const newGroupChatRef = push(ref(db, "groups"));
-    await set(newGroupChatRef, {
+
+    const newGroupData = {
       groupName: groupName,
       users: selectedContacts.reduce(
         (acc, contact) => {
@@ -68,8 +81,40 @@ const CreateGroupChat = () => {
         { [auth.currentUser.uid]: true }
       ),
       type: "group",
+    };
+
+    if (groupImage) {
+      try {
+        const storage = getStorage();
+        const imageRef = storageRef(
+          storage,
+          `groupImages/${auth.currentUser.uid}/${Date.now()}`
+        );
+        const response = await fetch(groupImage);
+        const blob = await response.blob();
+        await uploadBytes(imageRef, blob);
+        const imageUrl = await getDownloadURL(imageRef);
+        newGroupData.imageUrl = imageUrl;
+      } catch (error) {
+        console.error("Error uploading image: ", error);
+      }
+    }
+
+    await set(newGroupChatRef, newGroupData);
+    navigation.goBack();
+  };
+
+  const pickImage = async () => {
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
     });
-    // navigation.goBack();
+
+    if (!result.canceled) {
+      dispatch(setGroupImage(result.assets[0].uri));
+    }
   };
 
   const toggleContactSelection = (contact) => {
@@ -100,6 +145,7 @@ const CreateGroupChat = () => {
 
   return (
     <View style={styles.container}>
+      <StatusBar style="dark" />
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <MaterialIcons name="arrow-back" size={24} color="#000" />
@@ -113,6 +159,13 @@ const CreateGroupChat = () => {
         placeholder="Group Name"
         placeholderTextColor="#888"
       />
+      <TouchableOpacity style={styles.imagePicker} onPress={pickImage}>
+        {groupImage ? (
+          <Image source={{ uri: groupImage }} style={styles.groupImage} />
+        ) : (
+          <Text style={styles.imagePickerText}>Pick a group image</Text>
+        )}
+      </TouchableOpacity>
       {contacts.length === 0 ? (
         <View style={styles.noContactsContainer}>
           <MaterialIcons name="error-outline" size={50} color="#888" />
@@ -168,6 +221,24 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     backgroundColor: "#fff",
     color: "#333",
+  },
+  imagePicker: {
+    alignItems: "center",
+    justifyContent: "center",
+    height: 100,
+    borderColor: "#ddd",
+    borderWidth: 1,
+    borderRadius: 8,
+    backgroundColor: "#fff",
+    marginBottom: 20,
+  },
+  groupImage: {
+    width: 100,
+    height: 100,
+    borderRadius: 8,
+  },
+  imagePickerText: {
+    color: "#888",
   },
   contactList: {
     flex: 1,
