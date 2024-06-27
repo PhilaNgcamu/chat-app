@@ -58,24 +58,21 @@ const ChatList = ({ navigation }) => {
             Object.values(messages)[Object.values(messages).length - 1].text;
 
           console.log(
-            JSON.stringify(chatData, null, 2),
+            JSON.stringify(contactsList["0"], null, 2),
             "These are contacts and chats"
           );
-
+          const chatId = contactsList["0"].id;
+          const name = contactsList["0"].name;
+          const photoURL = contactsList["0"].photoURL;
           individualChatsList.push({
+            id: chatId,
+            name: name,
+            photoURL: photoURL,
             chatType: "private",
             lastIndividualMessage: lastIndividualMessage,
-            ...chatData,
-            ...contactsList["0"],
           });
 
-          dispatch(
-            setItems([
-              ...contactsList,
-              ...individualChatsList,
-              ...groupChatsList,
-            ])
-          );
+          dispatch(setItems([...individualChatsList, ...groupChatsList]));
           console.log(
             JSON.stringify(individualChatsList, null, 2),
             "These are contacts and chats"
@@ -121,10 +118,10 @@ const ChatList = ({ navigation }) => {
 
   const handleItemPress = (item) => {
     console.log("Item pressed:", JSON.stringify(item, null, 2));
-    if (item.type === "group") {
+    if (item.chatType === "group") {
       navigation.navigate("ChatScreen", {
         chatId: item.id,
-        chatType: item.type,
+        chatType: item.chatType,
         chatName: item.groupName,
         chatAvatar: item.photoURL || "https://via.placeholder.com/150",
       });
@@ -133,12 +130,14 @@ const ChatList = ({ navigation }) => {
         contactId: item.id,
         contactName: item.name,
         contactAvatar: item.photoURL,
+        chatType: item.chatType,
       });
     }
   };
 
   const renderItem = ({ item }) => {
-    console.log("reItems", JSON.stringify(filteredItems, null, 2));
+    console.log("reItems", JSON.stringify(item, null, 2));
+    console.log("filteredItems", JSON.stringify(items, null, 2));
 
     return (
       <ChatItem
@@ -170,7 +169,7 @@ const ChatList = ({ navigation }) => {
           </View>
         ) : (
           <FlatList
-            data={filteredItems}
+            data={items}
             renderItem={renderItem}
             keyExtractor={(item) => item.id}
             style={styles.list}

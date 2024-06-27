@@ -161,7 +161,7 @@ const ChatScreen = ({ route, navigation }) => {
       <ChatHeader
         contactAvatar={chatType === "group" ? chatAvatar : contactAvatar}
         contactName={chatType === "group" ? chatName : contactName}
-        isOnline={isOnline}
+        isOnline={chatType}
         type={chatType}
         navigation={navigation}
       />
