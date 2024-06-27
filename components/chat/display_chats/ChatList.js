@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { View, FlatList, Text, StyleSheet, Alert } from "react-native";
+import { View, FlatList, Text, StyleSheet } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { getDatabase, ref, onValue, off } from "firebase/database";
 import { auth, db } from "../../../backend/firebaseConfig";
@@ -39,6 +39,10 @@ const ChatList = ({ navigation }) => {
         dispatch(
           setItems([...contactsList, ...individualChatsList, ...groupChatsList])
         );
+        console.log(
+          JSON.stringify(contactsList, null, 2),
+          "This is contacts list"
+        );
       });
 
       onValue(individualChats, (snapshot) => {
@@ -52,29 +56,26 @@ const ChatList = ({ navigation }) => {
           const messages = chats[chats.length - 1];
           const lastIndividualMessage =
             Object.values(messages)[Object.values(messages).length - 1].text;
+          const senderName =
+            Object.values(messages)[Object.values(messages).length - 1]
+              .senderName;
 
           console.log(
-            JSON.stringify(snapshot, null, 2),
+            JSON.stringify(contactsList["0"], null, 2),
             "These are contacts and chats"
           );
-          contactsList.forEach((contact, index) => {
-            const chatId = contact.id;
-            const name = contact.name;
-            const photoURL = contact.photoURL;
-            if (childSnapshot.key.includes(chatId)) {
-              individualChatsList.push({
-                id: chatId,
-                name: name,
-                photoURL: photoURL,
-                chatType: "private",
-                lastIndividualMessage: lastIndividualMessage,
-              });
-              dispatch(setItems([...individualChatsList, ...groupChatsList]));
-            } else {
-              dispatch(setItems([...contactsList, ...groupChatsList]));
-            }
+          const chatId = contactsList["0"].id;
+          const name = contactsList["0"].name;
+          const photoURL = contactsList["0"].photoURL;
+          individualChatsList.push({
+            id: chatId,
+            name: name,
+            photoURL: photoURL,
+            chatType: "private",
+            lastIndividualMessage: senderName === name && lastIndividualMessage,
           });
 
+          dispatch(setItems([...individualChatsList, ...groupChatsList]));
           console.log(
             JSON.stringify(individualChatsList, null, 2),
             "These are contacts and chats"
