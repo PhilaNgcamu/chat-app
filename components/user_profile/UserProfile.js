@@ -1,11 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import {
   View,
-  Text,
-  TextInput,
-  StyleSheet,
-  TouchableOpacity,
-  Image,
   Alert,
   ScrollView,
   KeyboardAvoidingView,
@@ -20,23 +15,17 @@ import {
   uploadBytes,
   getDownloadURL,
 } from "firebase/storage";
-
 import * as ImagePicker from "expo-image-picker";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
-import { MaterialIcons } from "@expo/vector-icons";
-import {
-  horizontalScale,
-  moderateScale,
-  verticalScale,
-} from "../../utils/scale";
 import { StatusBar } from "expo-status-bar";
 import { useDispatch, useSelector } from "react-redux";
 import { setProfilePicture } from "../../redux/actions";
-import MessageIcon from "../../utils/icons/MessageIcon";
-import MoreIcon from "../../utils/icons/MoreIcon";
-import PhoneIcon from "../../utils/icons/PhoneIcon";
 import { useTabBarVisibility } from "../chat/custom_hook/useTabBarVisibilityContext";
-import VideoIcon from "../../utils/icons/VideoIcon";
+import ProfileHeader from "./ProfileHeader";
+import ProfileInfo from "./ProfileInfo";
+import MediaShared from "./MediaShared";
+import SaveButton from "./SaveButton";
+import styles from "./styles";
 
 const UserProfile = () => {
   const auth = getAuth();
@@ -175,224 +164,32 @@ const UserProfile = () => {
     >
       <StatusBar style="light" />
       <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <View style={styles.headerContainer}>
-          <TouchableOpacity
-            onPress={() => navigation.goBack()}
-            style={styles.backButton}
-          >
-            <MaterialIcons name="arrow-back" size={24} color="#FFFFFF" />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={pickImage}>
-            <Image
-              source={
-                profilePicture
-                  ? { uri: profilePicture }
-                  : "https://via.placeholder.com/150"
-              }
-              alt="Profile Picture"
-              style={styles.profilePicture}
-            />
-          </TouchableOpacity>
-          <Text style={styles.profileName}>{name}</Text>
-          <Text style={styles.hashtag}>
-            {name && `@${name.toLowerCase().replace(/\s/g, "")}`}
-          </Text>
-          <View style={styles.iconContainer}>
-            <View style={styles.iconGroup}>
-              <MessageIcon color="#FFFFFF" />
-            </View>
-            <View style={styles.iconGroup}>
-              <VideoIcon color="#FFFFFF" />
-            </View>
-            <View style={styles.iconGroup}>
-              <PhoneIcon />
-            </View>
-            <View style={styles.iconGroup}>
-              <MoreIcon />
-            </View>
-          </View>
-        </View>
+        <ProfileHeader
+          navigation={navigation}
+          profilePicture={profilePicture}
+          name={name}
+          pickImage={pickImage}
+        />
       </ScrollView>
       <View style={styles.infoContainer}>
         <View style={styles.dragger} />
         <View style={styles.infoContent}>
-          <View style={styles.inputContainer}>
-            <Text style={styles.label}>Display Name</Text>
-            <TextInput
-              style={styles.input}
-              value={name}
-              onChangeText={setName}
-              placeholder="Enter your name"
-              placeholderTextColor="#AAAAAA"
-            />
-          </View>
-          <View style={styles.inputContainer}>
-            <Text style={styles.label}>Email Address</Text>
-            <TextInput
-              style={styles.input}
-              value={email}
-              onChangeText={setEmail}
-              keyboardType="email-address"
-              placeholder="Enter your email"
-              placeholderTextColor="#AAAAAA"
-            />
-          </View>
-          <View style={styles.inputContainer}>
-            <Text style={styles.label}>Status</Text>
-            <TextInput
-              style={styles.input}
-              value={statusMessage}
-              onChangeText={setStatusMessage}
-              placeholder="Enter a status message"
-              placeholderTextColor="#AAAAAA"
-            />
-          </View>
-          <View style={styles.inputContainer}>
-            <Text style={styles.label}>Phone Number</Text>
-            <TextInput
-              style={styles.input}
-              value={phoneNumber
-                .replace(/\D+/g, "")
-                .replace(/(\d{3})(\d{3})(\d{4})/, "($1) $2-$3")}
-              onChangeText={setPhoneNumber}
-              keyboardType="phone-pad"
-              placeholder="Enter your phone number"
-              placeholderTextColor="#AAAAAA"
-            />
-          </View>
-          <View style={styles.inputContainer}>
-            <Text style={styles.label}>Media Shared</Text>
-            <Text style={styles.viewAllText}>View All</Text>
-            <Image
-              source={
-                profilePicture ? { uri: profilePicture } : placeholderImage
-              }
-              alt="Media Shared"
-              style={styles.mediaShared}
-            />
-          </View>
-          <TouchableOpacity style={styles.button} onPress={handleSave}>
-            <Text style={styles.buttonText}>Save Changes</Text>
-          </TouchableOpacity>
+          <ProfileInfo
+            name={name}
+            setName={setName}
+            email={email}
+            setEmail={setEmail}
+            statusMessage={statusMessage}
+            setStatusMessage={setStatusMessage}
+            phoneNumber={phoneNumber}
+            setPhoneNumber={setPhoneNumber}
+          />
+          <MediaShared profilePicture={profilePicture} />
+          <SaveButton handleSave={handleSave} />
         </View>
       </View>
     </KeyboardAvoidingView>
   );
 };
-
-const styles = StyleSheet.create({
-  keyboardContainer: {
-    flex: 1,
-    backgroundColor: "#000",
-  },
-  scrollContainer: {
-    flex: 1,
-    backgroundColor: "#000",
-  },
-  loadingContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  headerContainer: {
-    position: "relative",
-    alignItems: "center",
-    top: verticalScale(40),
-  },
-  backButton: {
-    position: "absolute",
-    left: 20,
-    top: 0,
-  },
-  profileName: {
-    fontFamily: "Poppins-Bold",
-    fontSize: 24,
-    color: "#FFFFFF",
-  },
-  hashtag: {
-    fontFamily: "Poppins-Bold",
-    fontSize: 14,
-    color: "#797C7B",
-  },
-  profilePicture: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    marginBottom: 25,
-  },
-  iconContainer: {
-    flexDirection: "row",
-    justifyContent: "space-around",
-    width: "100%",
-    height: 44,
-    marginTop: 10,
-  },
-  iconGroup: {
-    backgroundColor: "#051D13",
-    padding: 10,
-    borderRadius: 50,
-    width: 44,
-    height: 44,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  infoContainer: {
-    backgroundColor: "#FFFFFF",
-    borderTopLeftRadius: 40,
-    borderTopRightRadius: 40,
-    height: verticalScale(500),
-  },
-  dragger: {
-    alignSelf: "center",
-    backgroundColor: "#D3D3D3",
-    width: 30,
-    height: 3,
-    borderRadius: 100,
-    marginTop: 10,
-    marginBottom: 10,
-  },
-  infoContent: {
-    paddingHorizontal: horizontalScale(15),
-  },
-  inputContainer: {
-    paddingTop: moderateScale(15),
-    paddingLeft: moderateScale(10),
-  },
-  input: {
-    fontFamily: "Poppins-Regular",
-    fontSize: 16,
-    color: "#000",
-  },
-  label: {
-    fontFamily: "Poppins-Bold",
-    fontSize: 14,
-    color: "#797C7B",
-  },
-  mediaShared: {
-    width: 92,
-    height: 92,
-    borderRadius: 16,
-  },
-  viewAllText: {
-    position: "relative",
-    bottom: 24,
-    textAlign: "right",
-    fontFamily: "Poppins-Bold",
-    fontSize: 14,
-    color: "#24786D",
-  },
-  buttonText: {
-    fontFamily: "Poppins-Bold",
-    fontSize: 16,
-    textAlign: "center",
-    color: "#FFFFFF",
-  },
-  button: {
-    backgroundColor: "#24786D",
-    padding: 12,
-    borderRadius: 20,
-    marginTop: 16,
-  },
-});
 
 export default UserProfile;
