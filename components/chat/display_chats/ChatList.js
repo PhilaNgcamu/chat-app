@@ -149,9 +149,7 @@ const ChatList = ({ navigation }) => {
     );
   };
 
-  const filteredItems = items.filter(
-    (item) => item.lastIndividualMessage || item.groupName
-  );
+  const filteredItems = items.filter((item) => item.groupName);
 
   return (
     <View style={styles.container}>
