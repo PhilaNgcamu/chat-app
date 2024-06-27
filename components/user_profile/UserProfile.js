@@ -137,7 +137,6 @@ const UserProfile = () => {
         storage,
         `profile_pictures/${user.uid}/${fileName}`
       );
-      console.log("This is a blob", blob);
 
       try {
         await uploadBytes(storeRef, blob);
