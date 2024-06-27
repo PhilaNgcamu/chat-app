@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
   },
   chatName: {
     fontSize: 16,
-    fontWeight: "Poppins-SemiBold",
+    fontWeight: "500",
     color: "#000E08",
   },
   statusText: {
