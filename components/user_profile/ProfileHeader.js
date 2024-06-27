@@ -5,8 +5,7 @@ import MessageIcon from "../../utils/icons/MessageIcon";
 import MoreIcon from "../../utils/icons/MoreIcon";
 import PhoneIcon from "../../utils/icons/PhoneIcon";
 import VideoIcon from "../../utils/icons/VideoIcon";
-import { verticalScale } from "../../utils/scale";
-import styles from "./styles";
+import styles from "./UserProfileStyles";
 
 const ProfileHeader = ({ navigation, profilePicture, name, pickImage }) => {
   return (

@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFFFFF",
     borderTopLeftRadius: 40,
     borderTopRightRadius: 40,
-    height: verticalScale(450),
+    height: verticalScale(550),
   },
   dragger: {
     alignSelf: "center",

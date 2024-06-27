@@ -25,7 +25,7 @@ import ProfileHeader from "./ProfileHeader";
 import ProfileInfo from "./ProfileInfo";
 import MediaShared from "./MediaShared";
 import SaveButton from "./SaveButton";
-import styles from "./styles";
+import styles from "./UserProfileStyles";
 
 const UserProfile = () => {
   const auth = getAuth();
