@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
-import { View, FlatList, Text, StyleSheet } from "react-native";
+import { View, FlatList, Text, StyleSheet, Alert } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { getDatabase, ref, onValue, off } from "firebase/database";
-import { auth } from "../../../backend/firebaseConfig";
+import { auth, db } from "../../../backend/firebaseConfig";
 import { StatusBar } from "expo-status-bar";
 import { useDispatch, useSelector } from "react-redux";
 import { setItems, setStatuses } from "../../../redux/actions";
@@ -39,10 +39,6 @@ const ChatList = ({ navigation }) => {
         dispatch(
           setItems([...contactsList, ...individualChatsList, ...groupChatsList])
         );
-        console.log(
-          JSON.stringify(contactsList, null, 2),
-          "This is contacts list"
-        );
       });
 
       onValue(individualChats, (snapshot) => {
@@ -58,21 +54,27 @@ const ChatList = ({ navigation }) => {
             Object.values(messages)[Object.values(messages).length - 1].text;
 
           console.log(
-            JSON.stringify(contactsList["0"], null, 2),
+            JSON.stringify(snapshot, null, 2),
             "These are contacts and chats"
           );
-          const chatId = contactsList["0"].id;
-          const name = contactsList["0"].name;
-          const photoURL = contactsList["0"].photoURL;
-          individualChatsList.push({
-            id: chatId,
-            name: name,
-            photoURL: photoURL,
-            chatType: "private",
-            lastIndividualMessage: lastIndividualMessage,
+          contactsList.forEach((contact, index) => {
+            const chatId = contact.id;
+            const name = contact.name;
+            const photoURL = contact.photoURL;
+            if (childSnapshot.key.includes(chatId)) {
+              individualChatsList.push({
+                id: chatId,
+                name: name,
+                photoURL: photoURL,
+                chatType: "private",
+                lastIndividualMessage: lastIndividualMessage,
+              });
+              dispatch(setItems([...individualChatsList, ...groupChatsList]));
+            } else {
+              dispatch(setItems([...contactsList, ...groupChatsList]));
+            }
           });
 
-          dispatch(setItems([...individualChatsList, ...groupChatsList]));
           console.log(
             JSON.stringify(individualChatsList, null, 2),
             "These are contacts and chats"
@@ -114,7 +116,7 @@ const ChatList = ({ navigation }) => {
     };
 
     fetchItems();
-  }, [dispatch]);
+  }, [db]);
 
   const handleItemPress = (item) => {
     console.log("Item pressed:", JSON.stringify(item, null, 2));
@@ -134,10 +136,22 @@ const ChatList = ({ navigation }) => {
       });
     }
   };
+  const uniqueEntries = new Map();
+  items.forEach((entry) => {
+    uniqueEntries.set(entry.id, entry);
+  });
+  const uniqueData = Array.from(uniqueEntries.values());
+  // console.log("reItems", JSON.stringify(item, null, 2));
+  // console.log("filteredItems", JSON.stringify(uniqueData, null, 2));
 
   const renderItem = ({ item }) => {
+    const uniqueEntries = new Map();
+    items.forEach((entry) => {
+      uniqueEntries.set(entry.id, entry);
+    });
+    const uniqueData = Array.from(uniqueEntries.values());
     console.log("reItems", JSON.stringify(item, null, 2));
-    console.log("filteredItems", JSON.stringify(items, null, 2));
+    console.log("filteredItems", JSON.stringify(uniqueData, null, 2));
 
     return (
       <ChatItem
@@ -167,7 +181,7 @@ const ChatList = ({ navigation }) => {
           </View>
         ) : (
           <FlatList
-            data={items}
+            data={uniqueData}
             renderItem={renderItem}
             keyExtractor={(item) => item.id}
             style={styles.list}
