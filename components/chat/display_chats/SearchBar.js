@@ -7,6 +7,7 @@ import { auth } from "../../../backend/firebaseConfig";
 import { getDatabase, ref, get } from "firebase/database";
 import { useFonts } from "expo-font";
 import { useNavigation } from "@react-navigation/native";
+import { StatusBar } from "expo-status-bar";
 
 const SearchBar = () => {
   const dispatch = useDispatch();
@@ -45,6 +46,7 @@ const SearchBar = () => {
 
   return (
     <View style={styles.header}>
+      <StatusBar style="light" />
       <View style={styles.searchWrapper}>
         <View style={styles.searchIcon}>
           <AntDesign name="search1" size={24} color="#fff" />
