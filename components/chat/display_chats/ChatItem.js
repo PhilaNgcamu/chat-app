@@ -25,8 +25,7 @@ const ChatItem = ({ item, onPress }) => {
     Object.keys(item).find((key) => key.includes("_"))
   );
   console.log(
-    item["TEFtiN5d3TZbete3HBKWYc3d3ib2_olLnM4P01AhOj5gDG8ddhAg91E63"]
-      ?.lastIndividualMessage,
+    item["TEFtiN5d3TZbete3HBKWYc3d3ib2_olLnM4P01AhOj5gDG8ddhAg91E63"],
     key,
     "keyyyy"
   );
@@ -39,12 +38,10 @@ const ChatItem = ({ item, onPress }) => {
         />
         <View style={styles.itemDetails}>
           <Text style={styles.itemTitle}>{item.name || item.groupName}</Text>
-          {(item["TEFtiN5d3TZbete3HBKWYc3d3ib2_olLnM4P01AhOj5gDG8ddhAg91E63"]
-            ?.lastIndividualMessage ||
-            item.lastGroupMessage) && (
+          {(item.lastIndividualMessage || item.lastGroupMessage) && (
             <Text style={styles.itemLastMessage}>
-              {item["TEFtiN5d3TZbete3HBKWYc3d3ib2_olLnM4P01AhOj5gDG8ddhAg91E63"]
-                ?.lastIndividualMessage || item.lastGroupMessage}
+              {JSON.stringify(Object.values(item)[2].lastIndividualMessage) ||
+                item.lastGroupMessage}
             </Text>
           )}
         </View>

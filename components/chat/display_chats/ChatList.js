@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { View, FlatList, Text, StyleSheet } from "react-native";
+import { View, FlatList, Text, StyleSheet, Alert } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { getDatabase, ref, onValue, off, update } from "firebase/database";
 import { auth, db } from "../../../backend/firebaseConfig";
@@ -16,7 +16,7 @@ const ChatList = ({ navigation }) => {
 
   useEffect(() => {
     const db = getDatabase();
-    const individualChats = ref(db, "chats");
+    const individualChatsRef = ref(db, "chats");
     const contactsRef = ref(db, "users");
     const groupsRef = ref(db, "groups");
     const currentUserID = auth.currentUser.uid;
@@ -26,143 +26,123 @@ const ChatList = ({ navigation }) => {
       const contactsList = [];
       const groupChatsList = [];
 
-      onValue(contactsRef, (snapshot) => {
-        contactsList.length = 0;
+      const fetchContacts = () => {
+        return new Promise((resolve) => {
+          onValue(contactsRef, (snapshot) => {
+            contactsList.length = 0;
 
-        Object.entries(snapshot.val()).forEach(([id, data]) => {
-          console.log(id, "This is id");
-          if (id !== currentUserID) {
-            contactsList.push({
-              id,
-              chatType: "private",
-              ...data,
+            Object.entries(snapshot.val()).forEach(([id, data]) => {
+              if (id !== currentUserID) {
+                contactsList.push({
+                  id,
+                  chatType: "private",
+                  ...data,
+                });
+              }
             });
-          }
+
+            dispatch(setStatuses(contactsList));
+            resolve(contactsList);
+          });
         });
+      };
 
-        dispatch(setStatuses(contactsList));
-        dispatch(setItems([...contactsList, ...groupChatsList]));
-        console.log(
-          JSON.stringify(contactsList, null, 2),
-          "This is contacts list"
-        );
-      });
+      const fetchIndividualChats = () => {
+        return new Promise((resolve) => {
+          onValue(individualChatsRef, async (snapshot) => {
+            if (snapshot.exists()) {
+              individualChatsList.length = 0;
 
-      onValue(individualChats, (snapshot) => {
-        if (snapshot.exists()) {
-          // console.log(
-          //   "information data2",
-          //   JSON.stringify(
-          //     Object.keys(snapshot.val())[0].slice(
-          //       0,
-          //       Object.keys(snapshot.val())[0].indexOf("_")
-          //     ),
-          //     null,
-          //     2
-          //   ),
-          //   "children",
-          //   JSON.stringify(
-          //     Object.values(Object.values(snapshot.val())[0].messages).at(-1),
-          //     null,
-          //     2
-          //   )
-          // );
-          // setItems([
-          //   Object.values(Object.values(snapshot.val())[0].messages).at(-1)
-          //     .text,
-          // ]);
-          individualChatsList.length = 0;
+              const chatKeys = Object.keys(snapshot.val());
 
-          console.log(
-            "information data2",
+              for (const chatKey of chatKeys) {
+                const messages = Object.values(
+                  snapshot.val()[chatKey].messages
+                );
+                const lastMessage = messages.at(-1);
 
-            JSON.stringify(Object.keys(snapshot.val()), null, 2),
-            "children",
-            JSON.stringify(
-              Object.values(Object.values(snapshot.val())[0].messages),
-              null,
-              2
-            )
-          );
+                if (lastMessage) {
+                  const userId = lastMessage.userId;
+                  const receiverId = lastMessage.receiverId;
+                  const lastIndividualMessage = lastMessage.text;
 
-          const userId = Object.values(
-            Object.values(snapshot.val())[0].messages
-          ).at(-1).userId;
+                  const updatesOne = {
+                    [`users/${userId}/${[userId, receiverId]
+                      .sort()
+                      .join("_")}/lastIndividualMessage`]:
+                      lastIndividualMessage,
+                  };
 
-          const receiverId = Object.values(
-            Object.values(snapshot.val())[0].messages
-          ).at(-1).receiverId;
+                  const updatesTwo = {
+                    [`users/${receiverId}/${[userId, receiverId]
+                      .sort()
+                      .join("_")}/lastIndividualMessage`]:
+                      lastIndividualMessage,
+                  };
 
-          const contactName = Object.values(
-            Object.values(snapshot.val())[0].messages
-          ).at(-1).contactName;
+                  try {
+                    await update(ref(db), updatesOne);
+                    await update(ref(db), updatesTwo);
+                    console.log("User last individual messages updated");
+                  } catch (error) {
+                    console.error(
+                      "Error updating last individual messages",
+                      error
+                    );
+                  }
+                }
+              }
 
-          // individualChatsList.push({
-          //   id: receiverId,
-          //   name: auth.currentUser.displayName,
-          //   photoURL: auth.currentUser.photoURL,
-          //   chatType: "private",
-          //   lastIndividualMessage: Object.values(
-          //     Object.values(snapshot.val())[0].messages
-          //   ).at(-1).text,
-          // });
-          const lastIndividualMessage = Object.values(
-            Object.values(snapshot.val())[0].messages
-          ).at(-1).text;
-
-          update(
-            ref(db, `users/${userId}/${[userId, receiverId].sort().join("_")}`),
-            {
-              lastIndividualMessage: lastIndividualMessage,
+              resolve(individualChatsList);
+            } else {
+              resolve(individualChatsList);
             }
-          ).then(() => {
-            console.log("User last individual messages updated");
           });
-          update(
-            ref(
-              db,
-              `users/${receiverId}/${[userId, receiverId].sort().join("_")}`
-            ),
-            {
-              lastIndividualMessage: lastIndividualMessage,
-            }
-          ).then(() => {
-            console.log("User last individual messages updated");
-          });
-
-          dispatch(setItems([...contactsList, ...groupChatsList]));
-        }
-      });
-
-      onValue(groupsRef, (snapshot) => {
-        snapshot.forEach((childSnapshot) => {
-          const groupData = childSnapshot.val();
-          const messages = groupData.messages
-            ? Object.values(groupData.messages)
-            : [];
-          const lastGroupMessage =
-            messages.length > 0
-              ? messages[messages.length - 1].text
-              : "No messages yet";
-
-          groupChatsList.push({
-            id: childSnapshot.key,
-            lastGroupMessage: lastGroupMessage,
-            ...groupData,
-          });
-          dispatch(setItems([...contactsList, ...groupChatsList]));
         });
+      };
+
+      const fetchGroups = () => {
+        return new Promise((resolve) => {
+          onValue(groupsRef, (snapshot) => {
+            snapshot.forEach((childSnapshot) => {
+              const groupData = childSnapshot.val();
+              const messages = groupData.messages
+                ? Object.values(groupData.messages)
+                : [];
+              const lastGroupMessage =
+                messages.length > 0
+                  ? messages[messages.length - 1].text
+                  : "No messages yet";
+
+              groupChatsList.push({
+                id: childSnapshot.key,
+                lastGroupMessage: lastGroupMessage,
+                ...groupData,
+              });
+            });
+
+            resolve(groupChatsList);
+          });
+        });
+      };
+
+      Promise.all([
+        fetchContacts(),
+        fetchIndividualChats(),
+        fetchGroups(),
+      ]).then(([contacts, individualChats, groups]) => {
+        dispatch(setItems([...contacts, ...groups]));
       });
 
       return () => {
-        off(individualChats);
+        off(individualChatsRef);
         off(contactsRef);
         off(groupsRef);
       };
     };
 
     fetchItems();
-  }, [db]);
+  }, [dispatch]);
 
   const handleItemPress = (item) => {
     console.log("Item pressed:", JSON.stringify(item, null, 2));
@@ -182,27 +162,14 @@ const ChatList = ({ navigation }) => {
       });
     }
   };
+
   const uniqueEntries = new Map();
   items.forEach((entry) => {
     uniqueEntries.set(entry.id, entry);
   });
   const uniqueData = Array.from(uniqueEntries.values());
-  // console.log("reItems", JSON.stringify(item, null, 2));
-  // console.log("filteredItems", JSON.stringify(uniqueData, null, 2));
 
   const renderItem = ({ item }) => {
-    const uniqueEntries = new Map();
-    items.forEach((entry) => {
-      uniqueEntries.set(entry.id, entry);
-    });
-
-    console.log("contacts List", JSON.stringify(items, null, 2));
-    // console.log(
-    //   "filteredItems",
-    //   auth.currentUser.uid,
-    //   JSON.stringify(uniqueData, null, 2)
-    //);
-
     return (
       <ChatItem
         key={item.id}
@@ -213,10 +180,7 @@ const ChatList = ({ navigation }) => {
       />
     );
   };
-  console.log(
-    JSON.stringify(items, null, 2),
-    "These are all the chats and contacts"
-  );
+
   const filteredItems = items.filter((item) => item.groupName);
 
   return (
@@ -235,7 +199,7 @@ const ChatList = ({ navigation }) => {
           </View>
         ) : (
           <FlatList
-            data={items}
+            data={uniqueData}
             renderItem={renderItem}
             keyExtractor={(item) => item.id}
             style={styles.list}
