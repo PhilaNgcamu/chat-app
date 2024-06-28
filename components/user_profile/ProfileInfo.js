@@ -1,6 +1,5 @@
 import React from "react";
 import { View, Text, TextInput } from "react-native";
-import { moderateScale } from "../../utils/scale";
 import styles from "./UserProfileStyles";
 
 const ProfileInfo = ({

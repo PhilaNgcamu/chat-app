@@ -109,7 +109,9 @@ const ChatScreen = ({ route, navigation }) => {
     const messageData = {
       createdAt: serverTimestamp(),
       userId,
+      receiverId: chatType !== "group" ? contactId : chatId,
       senderName: auth.currentUser.displayName,
+      contactName: contactName,
       text: newMessage.trim() !== "" ? newMessage : undefined,
     };
 

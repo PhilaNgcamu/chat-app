@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { View, FlatList, Text, StyleSheet } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
-import { getDatabase, ref, onValue, off } from "firebase/database";
+import { getDatabase, ref, onValue, off, update } from "firebase/database";
 import { auth, db } from "../../../backend/firebaseConfig";
 import { StatusBar } from "expo-status-bar";
 import { useDispatch, useSelector } from "react-redux";
@@ -28,17 +28,20 @@ const ChatList = ({ navigation }) => {
 
       onValue(contactsRef, (snapshot) => {
         contactsList.length = 0;
+
         Object.entries(snapshot.val()).forEach(([id, data]) => {
           console.log(id, "This is id");
           if (id !== currentUserID) {
-            contactsList.push({ id, ...data });
+            contactsList.push({
+              id,
+              chatType: "private",
+              ...data,
+            });
           }
         });
 
         dispatch(setStatuses(contactsList));
-        dispatch(
-          setItems([...contactsList, ...individualChatsList, ...groupChatsList])
-        );
+        dispatch(setItems([...contactsList, ...groupChatsList]));
         console.log(
           JSON.stringify(contactsList, null, 2),
           "This is contacts list"
@@ -46,41 +49,89 @@ const ChatList = ({ navigation }) => {
       });
 
       onValue(individualChats, (snapshot) => {
-        individualChatsList.length = 0;
-
-        snapshot.forEach((childSnapshot) => {
-          const chatData = childSnapshot.val();
-
-          console.log(JSON.stringify(chatData, null, 2), "This is chat data");
-          const chats = Object.values(chatData);
-          const messages = chats[chats.length - 1];
-          const lastIndividualMessage =
-            Object.values(messages)[Object.values(messages).length - 1].text;
-          const senderName =
-            Object.values(messages)[Object.values(messages).length - 1]
-              .senderName;
+        if (snapshot.exists()) {
+          // console.log(
+          //   "information data2",
+          //   JSON.stringify(
+          //     Object.keys(snapshot.val())[0].slice(
+          //       0,
+          //       Object.keys(snapshot.val())[0].indexOf("_")
+          //     ),
+          //     null,
+          //     2
+          //   ),
+          //   "children",
+          //   JSON.stringify(
+          //     Object.values(Object.values(snapshot.val())[0].messages).at(-1),
+          //     null,
+          //     2
+          //   )
+          // );
+          // setItems([
+          //   Object.values(Object.values(snapshot.val())[0].messages).at(-1)
+          //     .text,
+          // ]);
+          individualChatsList.length = 0;
 
           console.log(
-            JSON.stringify(contactsList["0"], null, 2),
-            "These are contacts and chats"
+            "information data2",
+
+            JSON.stringify(Object.keys(snapshot.val()), null, 2),
+            "children",
+            JSON.stringify(
+              Object.values(Object.values(snapshot.val())[0].messages),
+              null,
+              2
+            )
           );
-          const chatId = contactsList["0"].id;
-          const name = contactsList["0"].name;
-          const photoURL = contactsList["0"].photoURL;
-          individualChatsList.push({
-            id: chatId,
-            name: name,
-            photoURL: photoURL,
-            chatType: "private",
-            lastIndividualMessage: senderName === name && lastIndividualMessage,
+
+          const userId = Object.values(
+            Object.values(snapshot.val())[0].messages
+          ).at(-1).userId;
+
+          const receiverId = Object.values(
+            Object.values(snapshot.val())[0].messages
+          ).at(-1).receiverId;
+
+          const contactName = Object.values(
+            Object.values(snapshot.val())[0].messages
+          ).at(-1).contactName;
+
+          // individualChatsList.push({
+          //   id: receiverId,
+          //   name: auth.currentUser.displayName,
+          //   photoURL: auth.currentUser.photoURL,
+          //   chatType: "private",
+          //   lastIndividualMessage: Object.values(
+          //     Object.values(snapshot.val())[0].messages
+          //   ).at(-1).text,
+          // });
+          const lastIndividualMessage = Object.values(
+            Object.values(snapshot.val())[0].messages
+          ).at(-1).text;
+
+          update(
+            ref(db, `users/${userId}/${[userId, receiverId].sort().join("_")}`),
+            {
+              lastIndividualMessage: lastIndividualMessage,
+            }
+          ).then(() => {
+            console.log("User last individual messages updated");
+          });
+          update(
+            ref(
+              db,
+              `users/${receiverId}/${[userId, receiverId].sort().join("_")}`
+            ),
+            {
+              lastIndividualMessage: lastIndividualMessage,
+            }
+          ).then(() => {
+            console.log("User last individual messages updated");
           });
 
-          dispatch(setItems([...individualChatsList, ...groupChatsList]));
-          console.log(
-            JSON.stringify(individualChatsList, null, 2),
-            "These are contacts and chats"
-          );
-        });
+          dispatch(setItems([...contactsList, ...groupChatsList]));
+        }
       });
 
       onValue(groupsRef, (snapshot) => {
@@ -99,13 +150,7 @@ const ChatList = ({ navigation }) => {
             lastGroupMessage: lastGroupMessage,
             ...groupData,
           });
-          dispatch(
-            setItems([
-              ...contactsList,
-              ...individualChatsList,
-              ...groupChatsList,
-            ])
-          );
+          dispatch(setItems([...contactsList, ...groupChatsList]));
         });
       });
 
@@ -150,12 +195,17 @@ const ChatList = ({ navigation }) => {
     items.forEach((entry) => {
       uniqueEntries.set(entry.id, entry);
     });
-    const uniqueData = Array.from(uniqueEntries.values());
-    console.log("reItems", JSON.stringify(item, null, 2));
-    console.log("filteredItems", JSON.stringify(uniqueData, null, 2));
+
+    console.log("contacts List", JSON.stringify(items, null, 2));
+    // console.log(
+    //   "filteredItems",
+    //   auth.currentUser.uid,
+    //   JSON.stringify(uniqueData, null, 2)
+    //);
 
     return (
       <ChatItem
+        key={item.id}
         item={item}
         onPress={() => {
           handleItemPress(item);
@@ -163,7 +213,10 @@ const ChatList = ({ navigation }) => {
       />
     );
   };
-
+  console.log(
+    JSON.stringify(items, null, 2),
+    "These are all the chats and contacts"
+  );
   const filteredItems = items.filter((item) => item.groupName);
 
   return (
@@ -182,7 +235,7 @@ const ChatList = ({ navigation }) => {
           </View>
         ) : (
           <FlatList
-            data={uniqueData}
+            data={items}
             renderItem={renderItem}
             keyExtractor={(item) => item.id}
             style={styles.list}

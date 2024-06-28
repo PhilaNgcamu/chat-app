@@ -13,6 +13,23 @@ const ChatItem = ({ item, onPress }) => {
     return null;
   }
   console.log(JSON.stringify(item, null, 2), "itemzzz");
+  console.log(
+    JSON.stringify(
+      Object.keys(item).find((key) => key.includes("_")),
+      null,
+      2
+    ),
+    "itemsss"
+  );
+  const key = JSON.stringify(
+    Object.keys(item).find((key) => key.includes("_"))
+  );
+  console.log(
+    item["TEFtiN5d3TZbete3HBKWYc3d3ib2_olLnM4P01AhOj5gDG8ddhAg91E63"]
+      ?.lastIndividualMessage,
+    key,
+    "keyyyy"
+  );
   return (
     <TouchableOpacity style={styles.item} onPress={onPress}>
       <View style={styles.itemInfo}>
@@ -22,9 +39,12 @@ const ChatItem = ({ item, onPress }) => {
         />
         <View style={styles.itemDetails}>
           <Text style={styles.itemTitle}>{item.name || item.groupName}</Text>
-          {(item.lastIndividualMessage || item.lastGroupMessage) && (
+          {(item["TEFtiN5d3TZbete3HBKWYc3d3ib2_olLnM4P01AhOj5gDG8ddhAg91E63"]
+            ?.lastIndividualMessage ||
+            item.lastGroupMessage) && (
             <Text style={styles.itemLastMessage}>
-              {item.lastIndividualMessage || item.lastGroupMessage}
+              {item["TEFtiN5d3TZbete3HBKWYc3d3ib2_olLnM4P01AhOj5gDG8ddhAg91E63"]
+                ?.lastIndividualMessage || item.lastGroupMessage}
             </Text>
           )}
         </View>
