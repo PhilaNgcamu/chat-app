@@ -24,11 +24,7 @@ const ChatItem = ({ item, onPress }) => {
   const key = JSON.stringify(
     Object.keys(item).find((key) => key.includes("_"))
   );
-  console.log(
-    item["TEFtiN5d3TZbete3HBKWYc3d3ib2_olLnM4P01AhOj5gDG8ddhAg91E63"],
-    key,
-    "keyyyy"
-  );
+
   return (
     <TouchableOpacity style={styles.item} onPress={onPress}>
       <View style={styles.itemInfo}>

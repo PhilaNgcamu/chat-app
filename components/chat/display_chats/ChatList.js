@@ -104,22 +104,27 @@ const ChatList = ({ navigation }) => {
       const fetchGroups = () => {
         return new Promise((resolve) => {
           onValue(groupsRef, (snapshot) => {
-            snapshot.forEach((childSnapshot) => {
-              const groupData = childSnapshot.val();
-              const messages = groupData.messages
-                ? Object.values(groupData.messages)
-                : [];
-              const lastGroupMessage =
-                messages.length > 0
-                  ? messages[messages.length - 1].text
-                  : "No messages yet";
-
-              groupChatsList.push({
-                id: childSnapshot.key,
-                lastGroupMessage: lastGroupMessage,
-                ...groupData,
-              });
+            console.log("Groups:", JSON.stringify(snapshot, null, 2));
+            groupChatsList.push({
+              groupName: "My Groups",
             });
+
+            // snapshot.forEach((childSnapshot) => {
+            //   const groupData = childSnapshot.val();
+            //   const messages = groupData.messages
+            //     ? Object.values(groupData.messages)
+            //     : [];
+            //   const lastGroupMessage =
+            //     messages.length > 0
+            //       ? messages[messages.length - 1].text
+            //       : "No messages yet";
+
+            //   groupChatsList.push({
+            //     id: childSnapshot.key,
+            //     lastGroupMessage: lastGroupMessage,
+            //     ...groupData,
+            //   });
+            // });
 
             resolve(groupChatsList);
           });
@@ -130,7 +135,8 @@ const ChatList = ({ navigation }) => {
         fetchContacts(),
         fetchIndividualChats(),
         fetchGroups(),
-      ]).then(([contacts, individualChats, groups]) => {
+      ]).then(([contacts, groups]) => {
+        // console.log("Contacts:", JSON.stringify(contacts, null, 2));
         dispatch(setItems([...contacts, ...groups]));
       });
 
