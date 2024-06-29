@@ -148,7 +148,7 @@ const ChatList = ({ navigation }) => {
     };
 
     fetchItems();
-  }, [dispatch]);
+  }, [db, dispatch]);
 
   const handleItemPress = (item) => {
     console.log("Item pressed:", JSON.stringify(item, null, 2));
