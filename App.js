@@ -5,7 +5,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import NavigationScreens from "./components/screens/Navigation";
 import store from "./redux/store";
 import { TabBarVisibilityProvider } from "./components/chat/custom_hook/useTabBarVisibilityContext";
-import { auth } from "./backend/firebaseConfig"; // Ensure this path is correct
+import { auth } from "./backend/firebaseConfig";
 import { ActivityIndicator, View } from "react-native";
 
 export default function App() {
