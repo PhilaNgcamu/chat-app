@@ -12,7 +12,10 @@ const ChatItem = ({ item, onPress }) => {
   if (!fontsLoaded) {
     return null;
   }
-  console.log(JSON.stringify(item, null, 2), "itemzzz");
+  console.log(
+    JSON.stringify(Object.values(item)[2].lastReceivedMessage, null, 2),
+    "itemzzz"
+  );
   console.log(
     JSON.stringify(
       Object.keys(item).find((key) => key.includes("_")),
@@ -34,9 +37,12 @@ const ChatItem = ({ item, onPress }) => {
         />
         <View style={styles.itemDetails}>
           <Text style={styles.itemTitle}>{item.name || item.groupName}</Text>
-          {(item.lastIndividualMessage || item.lastGroupMessage) && (
+          {(Object.values(item)[2].lastReceivedMessage ||
+            Object.values(item)[2].lastSentMessage ||
+            item.lastGroupMessage) && (
             <Text style={styles.itemLastMessage}>
-              {JSON.stringify(Object.values(item)[2].lastIndividualMessage) ||
+              {Object.values(item)[2].lastSentMessage ||
+                item.lastReceivedMessage ||
                 item.lastGroupMessage}
             </Text>
           )}

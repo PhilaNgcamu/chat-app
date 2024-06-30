@@ -90,6 +90,7 @@ const ChatList = ({ navigation }) => {
                   }
                 }
               }
+
               resolve(individualChatsList);
             } else {
               resolve(individualChatsList);
