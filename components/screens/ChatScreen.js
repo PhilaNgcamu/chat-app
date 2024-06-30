@@ -44,7 +44,6 @@ const ChatScreen = ({ route, navigation }) => {
   const privateMessages = useSelector((state) => state.privateMessages);
   const groupMessages = useSelector((state) => state.groupMessages);
   const newMessage = useSelector((state) => state.newMessage);
-  const isOnline = useSelector((state) => state.isOnline);
   const image = useSelector((state) => state.image);
   const inputRef = useRef(null);
 
@@ -112,7 +111,7 @@ const ChatScreen = ({ route, navigation }) => {
       receiverId: chatType !== "group" ? contactId : chatId,
       senderName: auth.currentUser.displayName,
       contactName: contactName,
-      text: newMessage.trim() !== "" ? newMessage : undefined,
+      text: newMessage.trim() !== "" ? newMessage.trim() : undefined,
     };
 
     if (image) {
@@ -132,9 +131,10 @@ const ChatScreen = ({ route, navigation }) => {
         console.error("Error uploading image: ", error);
       }
     }
+    console.log("messageData", messageData);
 
-    dispatch(addNewPrivateMessage(""));
     await push(ref(db, chatIdPath), messageData);
+    dispatch(addNewPrivateMessage(""));
   };
 
   const pickImage = async () => {
