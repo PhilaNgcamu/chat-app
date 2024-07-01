@@ -125,6 +125,7 @@ export const setProfilePicture = (profilePicture) => ({
   payload: profilePicture,
 });
 
-export const increaseNotifications = () => ({
+export const increaseNotifications = (increaseNotifications) => ({
   type: actionTypes.INCREASE_NOTIFICATIONS,
+  payload: increaseNotifications,
 });

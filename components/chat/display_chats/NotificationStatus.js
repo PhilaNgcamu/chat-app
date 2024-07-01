@@ -15,9 +15,8 @@ const NotificationStatus = ({ userId, chatId }) => {
       console.log(userRef, "userRef");
       console.log(snapshot, "snapshot");
       const data = snapshot.val();
-      if (data.count !== null) {
-        dispatch(increaseNotifications());
-      }
+
+      dispatch(increaseNotifications(6));
     };
 
     onValue(userRef, handleNotificationCount);

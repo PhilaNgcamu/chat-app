@@ -1,3 +1,4 @@
+import { act } from "react";
 import actionTypes from "./actionTypes";
 
 const initialState = {
@@ -159,7 +160,7 @@ const rootReducer = (state = initialState, action) => {
     case actionTypes.INCREASE_NOTIFICATIONS:
       return {
         ...state,
-        notificationsCount: state.notificationsCount + 1,
+        notificationsCount: state.notificationsCount + action.payload,
       };
 
     default:

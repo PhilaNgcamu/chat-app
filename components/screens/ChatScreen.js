@@ -135,7 +135,7 @@ const ChatScreen = ({ route, navigation }) => {
     console.log("messageData", messageData);
 
     await push(ref(db, chatIdPath), messageData);
-    dispatch(increaseNotifications());
+    dispatch(increaseNotifications(9));
     dispatch(addNewPrivateMessage(""));
   };
 
