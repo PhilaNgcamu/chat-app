@@ -1,9 +1,12 @@
 import { getDatabase, off, onValue, ref, update } from "firebase/database";
 import React, { useEffect, useState } from "react";
 import { StyleSheet, Text } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
+import { increaseNotifications } from "../../../redux/actions";
 
 const NotificationStatus = ({ userId, chatId }) => {
-  const [notificationCount, setNotificationCount] = useState(0);
+  const dispatch = useDispatch();
+  const notificationsCount = useSelector((state) => state.notificationsCount);
 
   useEffect(() => {
     const db = getDatabase();
@@ -13,9 +16,7 @@ const NotificationStatus = ({ userId, chatId }) => {
       console.log(snapshot, "snapshot");
       const data = snapshot.val();
       if (data.count !== null) {
-        setNotificationCount(data.count);
-      } else {
-        setNotificationCount(0);
+        dispatch(increaseNotifications());
       }
     };
 
@@ -27,8 +28,8 @@ const NotificationStatus = ({ userId, chatId }) => {
   }, [userId, chatId]);
 
   return (
-    <Text style={styles.numberOfMessages}>
-      {notificationCount > 0 ? notificationCount : null}
+    <Text style={notificationsCount && styles.numberOfMessages}>
+      {notificationsCount > 0 && notificationsCount}
     </Text>
   );
 };

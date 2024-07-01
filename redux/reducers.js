@@ -25,6 +25,7 @@ const initialState = {
   error: null,
   tabBarVisible: true,
   profilePicture: "https://via.placeholder.com/150",
+  notificationsCount: 0,
 };
 
 const rootReducer = (state = initialState, action) => {
@@ -154,6 +155,11 @@ const rootReducer = (state = initialState, action) => {
       return {
         ...state,
         profilePicture: action.payload,
+      };
+    case actionTypes.INCREASE_NOTIFICATIONS:
+      return {
+        ...state,
+        notificationsCount: state.notificationsCount + 1,
       };
 
     default:

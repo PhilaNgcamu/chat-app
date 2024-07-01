@@ -1,4 +1,4 @@
-import { getDatabase, ref, update } from "firebase/database";
+import { get, getDatabase, ref, update } from "firebase/database";
 
 export const updateNotificationCount = async (userId, chatId) => {
   const db = getDatabase();
@@ -9,7 +9,7 @@ export const updateNotificationCount = async (userId, chatId) => {
 
   try {
     await update(userNotificationsRef, {
-      count: 16,
+      count: 0,
     });
     console.log("Notification count updated successfully");
   } catch (error) {

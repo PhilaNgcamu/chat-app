@@ -24,6 +24,7 @@ import {
   setGroupMessages,
   setPrivateMessages,
   addNewPrivateMessage,
+  increaseNotifications,
 } from "../../redux/actions";
 import ChatHeader from "../chat/chat_screen/ChatHeader";
 import MessageList from "../chat/chat_screen/MessageList";
@@ -134,6 +135,7 @@ const ChatScreen = ({ route, navigation }) => {
     console.log("messageData", messageData);
 
     await push(ref(db, chatIdPath), messageData);
+    dispatch(increaseNotifications());
     dispatch(addNewPrivateMessage(""));
   };
 

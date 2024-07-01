@@ -9,6 +9,7 @@ import { setItems, setStatuses } from "../../../redux/actions";
 import SearchBar from "./SearchBar";
 import StatusList from "./StatusList";
 import ChatItem from "./ChatItem";
+import { updateNotificationCount } from "../../../utils/notificationUtils";
 
 const ChatList = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -147,8 +148,9 @@ const ChatList = ({ navigation }) => {
     fetchItems();
   }, [dispatch]);
 
-  const handleItemPress = (item) => {
-    console.log("Item pressed:", JSON.stringify(item, null, 2));
+  const handleItemPress = async (item) => {
+    const readMessages = true;
+    console.log("Item pressed:", JSON.stringify(Object.keys(item)[2], null, 2));
     if (item.chatType === "group") {
       navigation.navigate("ChatScreen", {
         chatId: item.id,
@@ -163,6 +165,11 @@ const ChatList = ({ navigation }) => {
         contactAvatar: item.photoURL,
         chatType: item.chatType,
       });
+      await updateNotificationCount(
+        auth.currentUser.uid,
+        JSON.stringify(Object.keys(item)[2]),
+        readMessages
+      );
     }
   };
 
