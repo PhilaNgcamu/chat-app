@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { View, FlatList, Text, StyleSheet, Alert } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { getDatabase, ref, onValue, off, update } from "firebase/database";
-import { auth, db } from "../../../backend/firebaseConfig";
+import { auth } from "../../../backend/firebaseConfig";
 import { StatusBar } from "expo-status-bar";
 import { useDispatch, useSelector } from "react-redux";
 import { setItems, setStatuses } from "../../../redux/actions";
@@ -13,6 +13,7 @@ import ChatItem from "./ChatItem";
 const ChatList = ({ navigation }) => {
   const dispatch = useDispatch();
   const items = useSelector((state) => state.items);
+  const privateMessages = useSelector((state) => state.privateMessages);
 
   useEffect(() => {
     const db = getDatabase();
@@ -92,8 +93,6 @@ const ChatList = ({ navigation }) => {
               }
 
               resolve(individualChatsList);
-            } else {
-              resolve(individualChatsList);
             }
           });
         });
@@ -103,9 +102,9 @@ const ChatList = ({ navigation }) => {
         return new Promise((resolve) => {
           onValue(groupsRef, (snapshot) => {
             console.log("Groups:", JSON.stringify(snapshot, null, 2));
-            groupChatsList.push({
-              groupName: "My Groups",
-            });
+            // groupChatsList.push({
+            //   groupName: "My Groups",
+            // });
 
             // snapshot.forEach((childSnapshot) => {
             //   const groupData = childSnapshot.val();
@@ -124,7 +123,7 @@ const ChatList = ({ navigation }) => {
             //   });
             // });
 
-            resolve(groupChatsList);
+            // resolve(groupChatsList);
           });
         });
       };
@@ -132,9 +131,9 @@ const ChatList = ({ navigation }) => {
       Promise.all([
         fetchContacts(),
         fetchIndividualChats(),
-        fetchGroups(),
+        // fetchGroups(),
       ]).then(([contacts, groups]) => {
-        // console.log("Contacts:", JSON.stringify(contacts, null, 2));
+        // console.log("Contactzs:", JSON.stringify(contacts, null, 2));
         dispatch(setItems([...contacts, ...groups]));
       });
 
@@ -146,7 +145,7 @@ const ChatList = ({ navigation }) => {
     };
 
     fetchItems();
-  }, [db, dispatch]);
+  }, [privateMessages, dispatch]);
 
   const handleItemPress = (item) => {
     console.log("Item pressed:", JSON.stringify(item, null, 2));

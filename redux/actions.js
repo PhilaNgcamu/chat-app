@@ -124,8 +124,3 @@ export const setProfilePicture = (profilePicture) => ({
   type: actionTypes.SET_PROFILE_PICTURE,
   payload: profilePicture,
 });
-
-export const userUID = (uid) => ({
-  type: actionTypes.USER_UID,
-  payload: uid,
-});

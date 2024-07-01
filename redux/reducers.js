@@ -25,7 +25,6 @@ const initialState = {
   error: null,
   tabBarVisible: true,
   profilePicture: "https://via.placeholder.com/150",
-  uniqueUserID: "",
 };
 
 const rootReducer = (state = initialState, action) => {
@@ -156,11 +155,7 @@ const rootReducer = (state = initialState, action) => {
         ...state,
         profilePicture: action.payload,
       };
-    case actionTypes.USER_UID:
-      return {
-        ...state,
-        uniqueUserID: action.payload,
-      };
+
     default:
       return state;
   }
