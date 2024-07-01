@@ -12,10 +12,10 @@ const ChatItem = ({ item, onPress }) => {
   if (!fontsLoaded) {
     return null;
   }
-  console.log(
-    JSON.stringify(Object.values(item)[2].lastReceivedMessage, null, 2),
-    "itemzzz"
-  );
+  // console.log(
+  //   JSON.stringify(Object.values(item)[2].lastReceivedMessage, null, 2),
+  //   "itemzzz"
+  // );
   console.log(
     JSON.stringify(
       Object.keys(item).find((key) => key.includes("_")),
@@ -24,9 +24,9 @@ const ChatItem = ({ item, onPress }) => {
     ),
     "itemsss"
   );
-  const key = JSON.stringify(
-    Object.keys(item).find((key) => key.includes("_"))
-  );
+  const key = Object.keys(item).find((key) => key.includes("_"));
+
+  console.log(item[key], key, "Item key");
 
   return (
     <TouchableOpacity style={styles.item} onPress={onPress}>
@@ -37,12 +37,12 @@ const ChatItem = ({ item, onPress }) => {
         />
         <View style={styles.itemDetails}>
           <Text style={styles.itemTitle}>{item.name || item.groupName}</Text>
-          {(Object.values(item)[2].lastReceivedMessage ||
-            Object.values(item)[2].lastSentMessage ||
+          {(item[key]?.lastReceivedMessage ||
+            item[key]?.lastSentMessage ||
             item.lastGroupMessage) && (
             <Text style={styles.itemLastMessage}>
-              {Object.values(item)[2].lastSentMessage ||
-                item.lastReceivedMessage ||
+              {item[key]?.lastSentMessage ||
+                item[key]?.lastReceivedMessage ||
                 item.lastGroupMessage}
             </Text>
           )}
