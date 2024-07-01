@@ -43,6 +43,7 @@ const ChatList = ({ navigation }) => {
             });
 
             dispatch(setStatuses(contactsList));
+            dispatch(setItems([...contactsList]));
             resolve(contactsList);
           });
         });
@@ -68,20 +69,17 @@ const ChatList = ({ navigation }) => {
                   const lastIndividualMessage = lastMessage.text;
 
                   const updatesOne = {
-                    [`users/${userId}/${[userId, receiverId]
+                    [`users/${auth.currentUser.uid ? userId : receiverId}/${[
+                      userId,
+                      receiverId,
+                    ]
                       .sort()
-                      .join("_")}/lastSentMessage`]: lastIndividualMessage,
-                  };
-
-                  const updatesTwo = {
-                    [`users/${receiverId}/${[userId, receiverId]
-                      .sort()
-                      .join("_")}/lastReceivedMessage`]: lastIndividualMessage,
+                      .join("_")}/lastIndividualMessage`]:
+                      lastIndividualMessage,
                   };
 
                   try {
                     await update(ref(db), updatesOne);
-                    await update(ref(db), updatesTwo);
                     console.log("User last individual messages updated");
                   } catch (error) {
                     console.error(
@@ -132,10 +130,7 @@ const ChatList = ({ navigation }) => {
         fetchContacts(),
         fetchIndividualChats(),
         // fetchGroups(),
-      ]).then(([contacts, groups]) => {
-        // console.log("Contactzs:", JSON.stringify(contacts, null, 2));
-        dispatch(setItems([...contacts, ...groups]));
-      });
+      ]);
 
       return () => {
         off(individualChatsRef);
@@ -145,7 +140,7 @@ const ChatList = ({ navigation }) => {
     };
 
     fetchItems();
-  }, [privateMessages, dispatch]);
+  }, [dispatch]);
 
   const handleItemPress = (item) => {
     console.log("Item pressed:", JSON.stringify(item, null, 2));
@@ -173,6 +168,7 @@ const ChatList = ({ navigation }) => {
   const uniqueData = Array.from(uniqueEntries.values());
 
   const renderItem = ({ item }) => {
+    console.log("Itemzz:", JSON.stringify(item, null, 2));
     return (
       <ChatItem
         key={item.id}

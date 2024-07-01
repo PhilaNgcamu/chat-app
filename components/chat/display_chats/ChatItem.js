@@ -37,13 +37,9 @@ const ChatItem = ({ item, onPress }) => {
         />
         <View style={styles.itemDetails}>
           <Text style={styles.itemTitle}>{item.name || item.groupName}</Text>
-          {(item[key]?.lastReceivedMessage ||
-            item[key]?.lastSentMessage ||
-            item.lastGroupMessage) && (
+          {(item[key]?.lastIndividualMessage || item.lastGroupMessage) && (
             <Text style={styles.itemLastMessage}>
-              {item[key]?.lastSentMessage ||
-                item[key]?.lastReceivedMessage ||
-                item.lastGroupMessage}
+              {item[key]?.lastIndividualMessage || item.lastGroupMessage}
             </Text>
           )}
         </View>
