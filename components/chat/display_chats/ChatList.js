@@ -165,11 +165,6 @@ const ChatList = ({ navigation }) => {
         contactAvatar: item.photoURL,
         chatType: item.chatType,
       });
-      await updateNotificationCount(
-        auth.currentUser.uid,
-        JSON.stringify(Object.keys(item)[2]),
-        readMessages
-      );
     }
   };
 
