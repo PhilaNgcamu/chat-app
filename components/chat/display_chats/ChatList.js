@@ -69,10 +69,14 @@ const ChatList = ({ navigation }) => {
                   const lastIndividualMessage = lastMessage.text;
 
                   const updatesOne = {
-                    [`users/${auth.currentUser.uid ? userId : receiverId}/${[
-                      userId,
-                      receiverId,
-                    ]
+                    [`users/${userId}/${[userId, receiverId]
+                      .sort()
+                      .join("_")}/lastIndividualMessage`]:
+                      lastIndividualMessage,
+                  };
+
+                  const updatesTwo = {
+                    [`users/${receiverId}/${[userId, receiverId]
                       .sort()
                       .join("_")}/lastIndividualMessage`]:
                       lastIndividualMessage,
@@ -80,6 +84,7 @@ const ChatList = ({ navigation }) => {
 
                   try {
                     await update(ref(db), updatesOne);
+                    await update(ref(db), updatesTwo);
                     console.log("User last individual messages updated");
                   } catch (error) {
                     console.error(

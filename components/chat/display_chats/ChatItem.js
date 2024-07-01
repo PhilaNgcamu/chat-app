@@ -2,6 +2,7 @@ import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet, Image } from "react-native";
 import NotificationStatus from "./NotificationStatus";
 import { useFonts } from "expo-font";
+import NotificationsListener from "./NotificationsListener";
 
 const ChatItem = ({ item, onPress }) => {
   const [fontsLoaded] = useFonts({
@@ -12,24 +13,15 @@ const ChatItem = ({ item, onPress }) => {
   if (!fontsLoaded) {
     return null;
   }
-  // console.log(
-  //   JSON.stringify(Object.values(item)[2].lastReceivedMessage, null, 2),
-  //   "itemzzz"
-  // );
-  console.log(
-    JSON.stringify(
-      Object.keys(item).find((key) => key.includes("_")),
-      null,
-      2
-    ),
-    "itemsss"
-  );
+  NotificationsListener;
+  console.log(JSON.stringify(item, null, 2), "itemsss");
   const key = Object.keys(item).find((key) => key.includes("_"));
 
   console.log(item[key], key, "Item key");
 
   return (
     <TouchableOpacity style={styles.item} onPress={onPress}>
+      <NotificationsListener chatId={key} />
       <View style={styles.itemInfo}>
         <Image
           source={{ uri: item.photoURL || "https://via.placeholder.com/150" }}
@@ -45,7 +37,7 @@ const ChatItem = ({ item, onPress }) => {
         </View>
         <View style={styles.extraInfo}>
           <Text style={styles.lastTimeMessageSent}>2 min ago</Text>
-          <NotificationStatus />
+          <NotificationStatus chatId={key} userId={item.id} />
         </View>
       </View>
     </TouchableOpacity>
