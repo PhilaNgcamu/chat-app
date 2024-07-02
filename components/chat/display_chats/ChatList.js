@@ -40,6 +40,7 @@ const ChatList = ({ navigation }) => {
                 });
               }
             });
+            console.log("contactsList:", contactsList);
 
             dispatch(setStatuses(contactsList));
             dispatch(setItems([...contactsList]));

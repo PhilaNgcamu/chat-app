@@ -4,7 +4,7 @@ import { StyleSheet, Text } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { increaseNotifications } from "../../../redux/actions";
 
-const NotificationStatus = () => {
+const NotificationStatus = ({ notifications }) => {
   const dispatch = useDispatch();
   const notificationsCount = useSelector((state) => state.notificationsCount);
   const userId = useSelector((state) => state.userId);
@@ -41,8 +41,8 @@ const NotificationStatus = () => {
   console.log("Current notifications count:", notificationsCount);
 
   return (
-    <Text style={notificationsCount > 0 && styles.numberOfMessages}>
-      {notificationsCount > 0 && notificationsCount}
+    <Text style={notifications > 0 && styles.numberOfMessages}>
+      {notifications}
     </Text>
   );
 };

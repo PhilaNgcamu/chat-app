@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet, Image } from "react-native";
 import NotificationStatus from "./NotificationStatus";
 import { useFonts } from "expo-font";
 import { useSelector } from "react-redux";
+import { auth } from "../../../backend/firebaseConfig";
 
 const ChatItem = ({ item, onPress }) => {
   const notificationsCount = useSelector((state) => state.notificationsCount);
@@ -18,7 +19,7 @@ const ChatItem = ({ item, onPress }) => {
   console.log(JSON.stringify(item, null, 2), "itemsss");
   const key = Object.keys(item).find((key) => key.includes("_"));
 
-  console.log(item[key], key, "Item key");
+  console.log(item.id, auth.currentUser.uid, "Item key");
 
   return (
     <TouchableOpacity style={styles.item} onPress={onPress}>
@@ -39,7 +40,11 @@ const ChatItem = ({ item, onPress }) => {
           <Text style={notificationsCount > 0 && styles.lastTimeMessageSent}>
             2 min ago
           </Text>
-          {notificationsCount > 0 && <NotificationStatus />}
+          {item[key].notifications?.notificationsCount && (
+            <NotificationStatus
+              notifications={item[key].notifications?.notificationsCount}
+            />
+          )}
         </View>
       </View>
     </TouchableOpacity>

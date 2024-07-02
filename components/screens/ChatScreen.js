@@ -138,25 +138,24 @@ const ChatScreen = ({ route, navigation }) => {
       }
     }
     console.log("messageData", messageData);
+    dispatch(setCurrentUserId(userId));
+    dispatch(setReceiverId(contactId));
+    dispatch(setPrivateChatId([userId, contactId].sort().join("_")));
+    dispatch(increaseNotifications(notificationsCount));
 
     await updateNotification(
-      contactId,
+      userId,
       [userId, contactId].sort().join("_"),
       notificationsCount
     )
-      .then(() => {
-        dispatch(setCurrentUserId(userId));
-        dispatch(setReceiverId(contactId));
-        dispatch(setPrivateChatId([userId, contactId].sort().join("_")));
-        dispatch(increaseNotifications(notificationsCount));
+      .then(async () => {
+        await push(ref(db, chatIdPath), messageData);
+        dispatch(addNewPrivateMessage(""));
         console.log("Notified user");
       })
       .catch((error) => {
         console.error("Error notifying user", error);
       });
-
-    await push(ref(db, chatIdPath), messageData);
-    dispatch(addNewPrivateMessage(""));
   };
 
   const pickImage = async () => {

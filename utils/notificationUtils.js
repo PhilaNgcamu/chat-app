@@ -10,7 +10,7 @@ export const updateNotification = async (
   const db = getDatabase();
   const notifyUser = {
     [`users/${userId}/${chatId}/notifications`]: {
-      notificationsCount: notificationsCount || 1,
+      notificationsCount: notificationsCount + 1 || 1,
       unreadMessages: notificationsCount ? true : false,
     },
   };
