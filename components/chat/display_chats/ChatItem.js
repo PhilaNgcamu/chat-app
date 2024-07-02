@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet, Image } from "react-native";
 import NotificationStatus from "./NotificationStatus";
 import { useFonts } from "expo-font";
@@ -7,6 +7,7 @@ import { auth } from "../../../backend/firebaseConfig";
 
 const ChatItem = ({ item, onPress }) => {
   const notificationsCount = useSelector((state) => state.notificationsCount);
+  const [isPressed, setIsPressed] = useState(false);
 
   const [fontsLoaded] = useFonts({
     "Poppins-Bold": require("../../../assets/fonts/Poppins-Bold.ttf"),
@@ -40,7 +41,7 @@ const ChatItem = ({ item, onPress }) => {
           <Text style={notificationsCount > 0 && styles.lastTimeMessageSent}>
             2 min ago
           </Text>
-          {item[key].notifications?.notificationsCount && (
+          {item[key].notifications?.notificationsCount > 0 && (
             <NotificationStatus
               notifications={item[key].notifications?.notificationsCount}
             />

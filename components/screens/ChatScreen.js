@@ -141,7 +141,7 @@ const ChatScreen = ({ route, navigation }) => {
     dispatch(setCurrentUserId(userId));
     dispatch(setReceiverId(contactId));
     dispatch(setPrivateChatId([userId, contactId].sort().join("_")));
-    dispatch(increaseNotifications(notificationsCount));
+    dispatch(increaseNotifications(1));
 
     await updateNotification(
       userId,
