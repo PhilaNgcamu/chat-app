@@ -25,10 +25,14 @@ import {
   setPrivateMessages,
   addNewPrivateMessage,
   increaseNotifications,
+  setPrivateChatId,
+  setCurrentUserId,
+  setReceiverId,
 } from "../../redux/actions";
 import ChatHeader from "../chat/chat_screen/ChatHeader";
 import MessageList from "../chat/chat_screen/MessageList";
 import ChatInput from "../chat/chat_screen/ChatInput";
+import { updateNotification } from "../../utils/notificationUtils";
 
 const ChatScreen = ({ route, navigation }) => {
   const {
@@ -43,6 +47,7 @@ const ChatScreen = ({ route, navigation }) => {
   const dispatch = useDispatch();
 
   const privateMessages = useSelector((state) => state.privateMessages);
+  const notificationsCount = useSelector((state) => state.notificationsCount);
   const groupMessages = useSelector((state) => state.groupMessages);
   const newMessage = useSelector((state) => state.newMessage);
   const image = useSelector((state) => state.image);
@@ -134,8 +139,23 @@ const ChatScreen = ({ route, navigation }) => {
     }
     console.log("messageData", messageData);
 
+    await updateNotification(
+      contactId,
+      [userId, contactId].sort().join("_"),
+      notificationsCount
+    )
+      .then(() => {
+        dispatch(setCurrentUserId(userId));
+        dispatch(setReceiverId(contactId));
+        dispatch(setPrivateChatId([userId, contactId].sort().join("_")));
+        dispatch(increaseNotifications(notificationsCount));
+        console.log("Notified user");
+      })
+      .catch((error) => {
+        console.error("Error notifying user", error);
+      });
+
     await push(ref(db, chatIdPath), messageData);
-    dispatch(increaseNotifications(9));
     dispatch(addNewPrivateMessage(""));
   };
 

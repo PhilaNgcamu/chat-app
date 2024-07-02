@@ -27,6 +27,9 @@ const initialState = {
   tabBarVisible: true,
   profilePicture: "https://via.placeholder.com/150",
   notificationsCount: 0,
+  chatId: null,
+  userId: null,
+  receiverId: null,
 };
 
 const rootReducer = (state = initialState, action) => {
@@ -41,10 +44,20 @@ const rootReducer = (state = initialState, action) => {
         ...state,
         statuses: action.payload,
       };
-    case actionTypes.SET_SEARCH_QUERY:
+    case actionTypes.SET_PRIVATE_CHAT_ID:
       return {
         ...state,
-        searchQuery: action.payload,
+        chatId: action.payload,
+      };
+    case actionTypes.SET_CURRENT_USER_ID:
+      return {
+        ...state,
+        userId: action.payload,
+      };
+    case actionTypes.SET_RECEIVER_USER_ID:
+      return {
+        ...state,
+        receiverId: action.payload,
       };
     case actionTypes.SET_GROUP_MESSAGES:
       return {
@@ -160,7 +173,7 @@ const rootReducer = (state = initialState, action) => {
     case actionTypes.INCREASE_NOTIFICATIONS:
       return {
         ...state,
-        notificationsCount: state.notificationsCount + action.payload,
+        notificationsCount: action.payload,
       };
 
     default:

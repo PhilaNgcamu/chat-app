@@ -2,9 +2,11 @@ import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet, Image } from "react-native";
 import NotificationStatus from "./NotificationStatus";
 import { useFonts } from "expo-font";
-import NotificationsListener from "./NotificationsListener";
+import { useSelector } from "react-redux";
 
 const ChatItem = ({ item, onPress }) => {
+  const notificationsCount = useSelector((state) => state.notificationsCount);
+
   const [fontsLoaded] = useFonts({
     "Poppins-Bold": require("../../../assets/fonts/Poppins-Bold.ttf"),
     "Poppins-SemiBold": require("../../../assets/fonts/Poppins-SemiBold.ttf"),
@@ -13,7 +15,6 @@ const ChatItem = ({ item, onPress }) => {
   if (!fontsLoaded) {
     return null;
   }
-  NotificationsListener;
   console.log(JSON.stringify(item, null, 2), "itemsss");
   const key = Object.keys(item).find((key) => key.includes("_"));
 
@@ -21,7 +22,6 @@ const ChatItem = ({ item, onPress }) => {
 
   return (
     <TouchableOpacity style={styles.item} onPress={onPress}>
-      <NotificationsListener chatId={key} />
       <View style={styles.itemInfo}>
         <Image
           source={{ uri: item.photoURL || "https://via.placeholder.com/150" }}
@@ -36,8 +36,10 @@ const ChatItem = ({ item, onPress }) => {
           )}
         </View>
         <View style={styles.extraInfo}>
-          <Text style={styles.lastTimeMessageSent}>2 min ago</Text>
-          <NotificationStatus chatId={key} userId={item.id} />
+          <Text style={notificationsCount > 0 && styles.lastTimeMessageSent}>
+            2 min ago
+          </Text>
+          {notificationsCount > 0 && <NotificationStatus />}
         </View>
       </View>
     </TouchableOpacity>

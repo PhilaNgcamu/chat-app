@@ -9,12 +9,10 @@ import { setItems, setStatuses } from "../../../redux/actions";
 import SearchBar from "./SearchBar";
 import StatusList from "./StatusList";
 import ChatItem from "./ChatItem";
-import { updateNotificationCount } from "../../../utils/notificationUtils";
 
 const ChatList = ({ navigation }) => {
   const dispatch = useDispatch();
   const items = useSelector((state) => state.items);
-  const privateMessages = useSelector((state) => state.privateMessages);
 
   useEffect(() => {
     const db = getDatabase();

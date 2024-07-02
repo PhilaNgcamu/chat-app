@@ -1,9 +1,12 @@
 import { getDatabase, ref, onChildAdded, off } from "firebase/database";
 import { useEffect } from "react";
 import { auth } from "../../../backend/firebaseConfig";
-import { updateNotificationCount } from "../../../utils/notificationUtils";
+import { updateNotification } from "../../../utils/notificationUtils";
+import { useSelector } from "react-redux";
 
-const NotificationsListener = ({ chatId }) => {
+const NotificationsListener = () => {
+  const chatId = useSelector((state) => state.chatId);
+
   useEffect(() => {
     const db = getDatabase();
     const messagesRef = ref(db, `chats/${chatId}/messages`);
@@ -12,7 +15,7 @@ const NotificationsListener = ({ chatId }) => {
       const message = snapshot.val();
       console.log("Message:", message);
 
-      updateNotificationCount(auth.currentUser.uid, chatId);
+      updateNotification(auth.currentUser.uid, chatId);
     };
 
     const unsubscribe = onChildAdded(messagesRef, handleNewMessage);

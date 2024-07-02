@@ -1,17 +1,23 @@
-import { get, getDatabase, ref, update } from "firebase/database";
+import { getDatabase, ref, update } from "firebase/database";
 
-export const updateNotificationCount = async (userId, chatId) => {
+export const updateNotification = async (
+  userId,
+  chatId,
+  notificationsCount
+) => {
+  console.log("updateNotificationCount: ", userId, chatId, notificationsCount);
+
   const db = getDatabase();
-  const userNotificationsRef = ref(
-    db,
-    `users/${userId}/${chatId}/notificationsCount`
-  );
+  const notifyUser = {
+    [`users/${userId}/${chatId}/notifications`]: {
+      notificationsCount: notificationsCount || 1,
+      unreadMessages: notificationsCount ? true : false,
+    },
+  };
 
   try {
-    await update(userNotificationsRef, {
-      count: 0,
-    });
-    console.log("Notification count updated successfully");
+    await update(ref(db), notifyUser);
+    console.log("Notifications count updated successfully");
   } catch (error) {
     console.error("Error updating notification count:", error);
   }

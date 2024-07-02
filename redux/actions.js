@@ -10,9 +10,19 @@ export const setStatuses = (statuses) => ({
   payload: statuses,
 });
 
-export const setSearchQuery = (query) => ({
-  type: actionTypes.SET_SEARCH_QUERY,
-  payload: query,
+export const setPrivateChatId = (privateChatId) => ({
+  type: actionTypes.SET_PRIVATE_CHAT_ID,
+  payload: privateChatId,
+});
+
+export const setCurrentUserId = (currentUserId) => ({
+  type: actionTypes.SET_CURRENT_USER_ID,
+  payload: currentUserId,
+});
+
+export const setReceiverId = (receiverId) => ({
+  type: actionTypes.SET_RECEIVER_USER_ID,
+  payload: receiverId,
 });
 
 export const setGroupMessages = (groupMessages) => ({

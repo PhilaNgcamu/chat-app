@@ -1,33 +1,47 @@
-import { getDatabase, off, onValue, ref, update } from "firebase/database";
-import React, { useEffect, useState } from "react";
+import { getDatabase, off, onValue, ref } from "firebase/database";
+import React, { useEffect } from "react";
 import { StyleSheet, Text } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { increaseNotifications } from "../../../redux/actions";
 
-const NotificationStatus = ({ userId, chatId }) => {
+const NotificationStatus = () => {
   const dispatch = useDispatch();
   const notificationsCount = useSelector((state) => state.notificationsCount);
+  const userId = useSelector((state) => state.userId);
+  const receiverId = useSelector((state) => state.receiverId);
+  const chatId = useSelector((state) => state.chatId);
 
   useEffect(() => {
     const db = getDatabase();
-    const userRef = ref(db, `users/${userId}/${chatId}/notificationsCount`);
-    const handleNotificationCount = (snapshot) => {
-      console.log(userRef, "userRef");
-      console.log(snapshot, "snapshot");
-      const data = snapshot.val();
+    const userRef = ref(db, `users/${receiverId}/${chatId}/notifications`);
 
-      dispatch(increaseNotifications(6));
+    const handleNotificationCount = (snapshot) => {
+      const data = snapshot.val();
+      console.log(data, "Datatatata");
+      if (data && data.notificationsCount !== undefined) {
+        console.log(
+          "Notifications count updated from:",
+          notificationsCount,
+          "to:",
+          data.notificationsCount
+        );
+        dispatch(increaseNotifications(data.notificationsCount));
+      } else {
+        console.log("No notifications count data available");
+      }
     };
 
     onValue(userRef, handleNotificationCount);
 
     return () => {
-      off(userRef, "value", handleNotificationCount);
+      off(userRef, handleNotificationCount);
     };
-  }, [userId, chatId]);
+  }, [userId, chatId, receiverId, dispatch]);
+
+  console.log("Current notifications count:", notificationsCount);
 
   return (
-    <Text style={notificationsCount && styles.numberOfMessages}>
+    <Text style={notificationsCount > 0 && styles.numberOfMessages}>
       {notificationsCount > 0 && notificationsCount}
     </Text>
   );
