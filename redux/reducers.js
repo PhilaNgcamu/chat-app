@@ -30,6 +30,7 @@ const initialState = {
   chatId: null,
   userId: null,
   receiverId: null,
+  isContactPressed: false,
 };
 
 const rootReducer = (state = initialState, action) => {
@@ -75,15 +76,10 @@ const rootReducer = (state = initialState, action) => {
         newMessage: action.payload,
         groupMessages: [...state.groupMessages],
       };
-    case actionTypes.UPDATE_TYPING_STATUS:
+    case actionTypes.IS_CONTACT_PRESSED:
       return {
         ...state,
-        isTyping: action.payload,
-      };
-    case actionTypes.SET_OTHER_USER_TYPING:
-      return {
-        ...state,
-        otherUserTyping: action.payload,
+        isContactPressed: action.payload,
       };
     case actionTypes.SET_IMAGE:
       return {

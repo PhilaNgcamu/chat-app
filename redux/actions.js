@@ -40,14 +40,9 @@ export const addGroupMessage = (groupMessage) => ({
   payload: groupMessage,
 });
 
-export const setIsTyping = (isTyping) => ({
-  type: actionTypes.UPDATE_TYPING_STATUS,
-  payload: isTyping,
-});
-
-export const setOtherUserTyping = (otherUserTyping) => ({
-  type: actionTypes.SET_OTHER_USER_TYPING,
-  payload: otherUserTyping,
+export const shouldPressContact = (isContactPressed) => ({
+  type: actionTypes.IS_CONTACT_PRESSED,
+  payload: isContactPressed,
 });
 
 export const setImage = (image) => ({

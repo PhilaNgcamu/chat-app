@@ -1,13 +1,21 @@
-import React, { useState } from "react";
+import React, { useEffect } from "react";
 import { View, Text, TouchableOpacity, StyleSheet, Image } from "react-native";
 import NotificationStatus from "./NotificationStatus";
 import { useFonts } from "expo-font";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { auth } from "../../../backend/firebaseConfig";
+import { shouldPressContact } from "../../../redux/actions";
 
 const ChatItem = ({ item, onPress }) => {
+  const dispatch = useDispatch();
   const notificationsCount = useSelector((state) => state.notificationsCount);
-  const [isPressed, setIsPressed] = useState(false);
+  const isContactPressed = useSelector((state) => state.isContactPressed);
+
+  useEffect(() => {
+    console.log(
+      `ChatItem rendered for contact: ${item.id}, pressed: ${isContactPressed}`
+    );
+  }, [isContactPressed]);
 
   const [fontsLoaded] = useFonts({
     "Poppins-Bold": require("../../../assets/fonts/Poppins-Bold.ttf"),
@@ -21,9 +29,16 @@ const ChatItem = ({ item, onPress }) => {
   const key = Object.keys(item).find((key) => key.includes("_"));
 
   console.log(item.id, auth.currentUser.uid, "Item key");
+  console.log("contact pressed", isContactPressed);
 
   return (
-    <TouchableOpacity style={styles.item} onPress={onPress}>
+    <TouchableOpacity
+      style={styles.item}
+      onPress={() => {
+        onPress();
+        dispatch(shouldPressContact(true));
+      }}
+    >
       <View style={styles.itemInfo}>
         <Image
           source={{ uri: item.photoURL || "https://via.placeholder.com/150" }}
@@ -41,11 +56,12 @@ const ChatItem = ({ item, onPress }) => {
           <Text style={notificationsCount > 0 && styles.lastTimeMessageSent}>
             2 min ago
           </Text>
-          {item[key].notifications?.notificationsCount > 0 && (
-            <NotificationStatus
-              notifications={item[key].notifications?.notificationsCount}
-            />
-          )}
+          {!isContactPressed &&
+            item[key].notifications?.notificationsCount > 0 && (
+              <NotificationStatus
+                notifications={item[key].notifications?.notificationsCount}
+              />
+            )}
         </View>
       </View>
     </TouchableOpacity>

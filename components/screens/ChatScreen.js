@@ -28,6 +28,7 @@ import {
   setPrivateChatId,
   setCurrentUserId,
   setReceiverId,
+  shouldPressContact,
 } from "../../redux/actions";
 import ChatHeader from "../chat/chat_screen/ChatHeader";
 import MessageList from "../chat/chat_screen/MessageList";
@@ -48,6 +49,8 @@ const ChatScreen = ({ route, navigation }) => {
 
   const privateMessages = useSelector((state) => state.privateMessages);
   const notificationsCount = useSelector((state) => state.notificationsCount);
+  const isContactPressed = useSelector((state) => state.isContactPressed);
+
   const groupMessages = useSelector((state) => state.groupMessages);
   const newMessage = useSelector((state) => state.newMessage);
   const image = useSelector((state) => state.image);
@@ -142,6 +145,7 @@ const ChatScreen = ({ route, navigation }) => {
     dispatch(setReceiverId(contactId));
     dispatch(setPrivateChatId([userId, contactId].sort().join("_")));
     dispatch(increaseNotifications(1));
+    dispatch(shouldPressContact(false));
 
     await updateNotification(
       userId,
