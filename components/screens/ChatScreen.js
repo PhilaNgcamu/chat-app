@@ -149,10 +149,8 @@ const ChatScreen = ({ route, navigation }) => {
 
     await updateNotification(
       userId,
-      contactId,
       [userId, contactId].sort().join("_"),
-      newMessage.trim() !== "" ? newMessage.trim() : image,
-      true
+      false
     )
       .then(async () => {
         await push(ref(db, chatIdPath), messageData);

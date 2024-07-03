@@ -69,14 +69,14 @@ const ChatList = ({ navigation }) => {
                   const lastIndividualMessage = lastMessage.text;
 
                   const updatesOne = {
-                    [`users/${userId}/${[userId, receiverId]
+                    [`chats/${[userId, receiverId]
                       .sort()
                       .join("_")}/lastIndividualMessage`]:
                       lastIndividualMessage,
                   };
 
                   const updatesTwo = {
-                    [`users/${receiverId}/${[userId, receiverId]
+                    [`chats/${[userId, receiverId]
                       .sort()
                       .join("_")}/lastIndividualMessage`]:
                       lastIndividualMessage,

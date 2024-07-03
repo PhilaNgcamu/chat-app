@@ -1,17 +1,9 @@
 import { getDatabase, ref, get, update } from "firebase/database";
-import { auth } from "../backend/firebaseConfig";
 
-export const updateNotification = async (
-  userId,
-  receiverId,
-  chatId,
-  lastIndividualMessage,
-  messagesRead
-) => {
-  console.log("updateNotification: ", chatId);
-
+export const updateNotification = async (userId, chatId, messagesRead) => {
   const db = getDatabase();
   const notifyUserRef = ref(db, `chats/${chatId}/${userId}/notifications`);
+  console.log("updateNotification: ", notifyUserRef);
 
   try {
     const snapshot = await get(notifyUserRef);
@@ -22,10 +14,9 @@ export const updateNotification = async (
       notificationsCount = data?.notificationsCount || 0;
     }
     const notifyUser = {
-      userId: auth.currentUser.uid !== receiverId && userId,
-      lastIndividualMessage: lastIndividualMessage,
-      notificationsCount: messagesRead ? notificationsCount + 1 : 0,
-      unreadMessages: messagesRead ? true : false,
+      userId: userId,
+      notificationsCount: messagesRead ? 0 : notificationsCount + 1,
+      unreadMessages: messagesRead ? false : true,
     };
 
     await update(notifyUserRef, notifyUser);

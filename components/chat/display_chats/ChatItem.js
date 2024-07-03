@@ -3,8 +3,9 @@ import { View, Text, TouchableOpacity, StyleSheet, Image } from "react-native";
 import { useFonts } from "expo-font";
 import { useDispatch, useSelector } from "react-redux";
 import { shouldPressContact } from "../../../redux/actions";
-import { getDatabase, off, onValue, ref } from "firebase/database";
+import { getDatabase, off, onValue, ref, update } from "firebase/database";
 import NotificationStatus from "./NotificationStatus";
+import { updateNotification } from "../../../utils/notificationUtils";
 
 const ChatItem = ({ item, onPress }) => {
   const dispatch = useDispatch();
@@ -27,18 +28,39 @@ const ChatItem = ({ item, onPress }) => {
   useEffect(() => {
     const db = getDatabase();
     const notificationsRef = ref(db, `chats/${key}/${item.id}/notifications`);
+    const lastMessageRef = ref(db, `chats/${key}/lastIndividualMessage`);
+
     const handleNotifications = (snapshot) => {
       const data = snapshot.val();
       console.log("Notification Data:", data);
       setNotifications(data?.notificationsCount || 0);
-      setLastIndividualMessage(data?.lastIndividualMessage);
+    };
+    const handleLastMessage = (snapshot) => {
+      const message = snapshot.val();
+      console.log("Last Message Data:", message);
+      setLastIndividualMessage(message);
     };
 
     onValue(notificationsRef, handleNotifications);
+    onValue(lastMessageRef, handleLastMessage);
+
     return () => {
       off(notificationsRef, handleNotifications);
+      off(lastMessageRef, handleLastMessage);
     };
   }, [key]);
+
+  const handlePress = () => {
+    if (!isContactPressed) {
+      dispatch(shouldPressContact(true));
+      setNotifications(0);
+      updateNotification(item.id, key, true);
+    } else {
+      dispatch(shouldPressContact(true));
+      updateNotification(item.id, key, true);
+    }
+    console.log("is contact pressed:", isContactPressed);
+  };
 
   if (!fontsLoaded) {
     return null;
@@ -49,7 +71,7 @@ const ChatItem = ({ item, onPress }) => {
       style={styles.item}
       onPress={() => {
         onPress();
-        dispatch(shouldPressContact(true));
+        handlePress();
       }}
     >
       <View style={styles.itemInfo}>
@@ -67,7 +89,9 @@ const ChatItem = ({ item, onPress }) => {
         </View>
         <View style={styles.extraInfo}>
           <Text style={styles.lastTimeMessageSent}>2 min ago</Text>
-          <NotificationStatus notificationsCount={notifications} />
+          {notifications > 0 && (
+            <NotificationStatus notificationsCount={notifications} />
+          )}
         </View>
       </View>
     </TouchableOpacity>
