@@ -1,10 +1,16 @@
 import { getDatabase, ref, get, update } from "firebase/database";
 
-export const updateNotification = async (userId, chatId) => {
-  console.log("updateNotificationCount: ", userId, chatId);
+export const updateNotification = async (
+  userId,
+  receiverId,
+  chatId,
+  lastIndividualMessage,
+  messagesRead
+) => {
+  console.log("updateNotificationCount: ", chatId);
 
   const db = getDatabase();
-  const notifyUserRef = ref(db, `users/${userId}/${chatId}/notifications`);
+  const notifyUserRef = ref(db, `chats/${chatId}/notifications`);
 
   try {
     const snapshot = await get(notifyUserRef);
@@ -16,8 +22,10 @@ export const updateNotification = async (userId, chatId) => {
     }
 
     const notifyUser = {
-      notificationsCount: notificationsCount + 1,
-      unreadMessages: true,
+      userId: userId,
+      lastIndividualMessage: lastIndividualMessage,
+      notificationsCount: messagesRead !== true ? 0 : notificationsCount + 1,
+      unreadMessages: messagesRead !== true ? false : true,
     };
 
     await update(notifyUserRef, notifyUser);

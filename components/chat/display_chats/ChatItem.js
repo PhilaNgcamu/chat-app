@@ -1,35 +1,47 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet, Image } from "react-native";
-import NotificationStatus from "./NotificationStatus";
 import { useFonts } from "expo-font";
 import { useDispatch, useSelector } from "react-redux";
-import { auth } from "../../../backend/firebaseConfig";
 import { shouldPressContact } from "../../../redux/actions";
+import { getDatabase, off, onValue, ref } from "firebase/database";
+import NotificationStatus from "./NotificationStatus";
 
 const ChatItem = ({ item, onPress }) => {
   const dispatch = useDispatch();
   const notificationsCount = useSelector((state) => state.notificationsCount);
   const isContactPressed = useSelector((state) => state.isContactPressed);
-
-  useEffect(() => {
-    console.log(
-      `ChatItem rendered for contact: ${item.id}, pressed: ${isContactPressed}`
-    );
-  }, [isContactPressed]);
+  const userId = useSelector((state) => state.userId);
+  const receiverId = useSelector((state) => state.receiverId);
+  const chatId = useSelector((state) => state.chatId);
+  const [notifications, setNotifications] = useState(0);
+  const [lastIndividualMessage, setLastIndividualMessage] = useState("");
 
   const [fontsLoaded] = useFonts({
     "Poppins-Bold": require("../../../assets/fonts/Poppins-Bold.ttf"),
     "Poppins-SemiBold": require("../../../assets/fonts/Poppins-SemiBold.ttf"),
     "Poppins-Regular": require("../../../assets/fonts/Poppins-Regular.ttf"),
   });
+
+  const key = Object.keys(item).find((key) => key.includes("_"));
+
+  useEffect(() => {
+    const db = getDatabase();
+    const notificationsRef = ref(db, `chats/${key}/notifications`);
+    const handleNotifications = (snapshot) => {
+      const data = snapshot.val();
+      setNotifications(data?.notificationsCount || 0);
+      setLastIndividualMessage(data?.lastIndividualMessage);
+    };
+
+    onValue(notificationsRef, handleNotifications);
+    return () => {
+      off(notificationsRef, handleNotifications);
+    };
+  }, [key]);
+
   if (!fontsLoaded) {
     return null;
   }
-  console.log(JSON.stringify(item, null, 2), "itemsss");
-  const key = Object.keys(item).find((key) => key.includes("_"));
-
-  console.log(item.id, auth.currentUser.uid, "Item key");
-  console.log("contact pressed", isContactPressed);
 
   return (
     <TouchableOpacity
@@ -48,20 +60,13 @@ const ChatItem = ({ item, onPress }) => {
           <Text style={styles.itemTitle}>{item.name || item.groupName}</Text>
           {(item[key]?.lastIndividualMessage || item.lastGroupMessage) && (
             <Text style={styles.itemLastMessage}>
-              {item[key]?.lastIndividualMessage || item.lastGroupMessage}
+              {lastIndividualMessage || item.lastGroupMessage}
             </Text>
           )}
         </View>
         <View style={styles.extraInfo}>
-          <Text style={notificationsCount > 0 && styles.lastTimeMessageSent}>
-            2 min ago
-          </Text>
-          {!isContactPressed &&
-            item[key].notifications?.notificationsCount > 0 && (
-              <NotificationStatus
-                notifications={item[key].notifications?.notificationsCount}
-              />
-            )}
+          <Text style={styles.lastTimeMessageSent}>2 min ago</Text>
+          <NotificationStatus notificationsCount={notifications} />
         </View>
       </View>
     </TouchableOpacity>

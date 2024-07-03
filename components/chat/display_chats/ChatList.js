@@ -85,6 +85,11 @@ const ChatList = ({ navigation }) => {
                   try {
                     await update(ref(db), updatesOne);
                     await update(ref(db), updatesTwo);
+                    individualChatsList.push({
+                      id: userId,
+                      lastIndividualMessage: lastIndividualMessage,
+                      unreadMessages: true,
+                    });
                     console.log("User last individual messages updated");
                   } catch (error) {
                     console.error(
@@ -94,6 +99,7 @@ const ChatList = ({ navigation }) => {
                   }
                 }
               }
+              dispatch(setItems([...individualChatsList, ...contactsList]));
 
               resolve(individualChatsList);
             }
@@ -172,6 +178,12 @@ const ChatList = ({ navigation }) => {
     uniqueEntries.set(entry.id, entry);
   });
   const uniqueData = Array.from(uniqueEntries.values());
+  const combinedObject = [
+    uniqueData.reduce((obj, item) => {
+      return { ...obj, ...item };
+    }, {}),
+  ];
+  console.log("Unique-Da:", JSON.stringify(combinedObject, null, 2));
 
   const renderItem = ({ item }) => {
     console.log("Itemzz:", JSON.stringify(item, null, 2));
@@ -204,7 +216,7 @@ const ChatList = ({ navigation }) => {
           </View>
         ) : (
           <FlatList
-            data={uniqueData}
+            data={combinedObject}
             renderItem={renderItem}
             keyExtractor={(item) => item.id}
             style={styles.list}
