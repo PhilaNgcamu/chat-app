@@ -82,7 +82,12 @@ const ChatItem = ({ item, onPress }) => {
         <View style={styles.itemDetails}>
           <Text style={styles.itemTitle}>{item.name || item.groupName}</Text>
           {(lastIndividualMessage || item.lastGroupMessage) && (
-            <Text style={styles.itemLastMessage}>
+            <Text
+              style={[
+                styles.itemLastMessage,
+                notifications === 0 && { fontFamily: "Poppins-Regular" },
+              ]}
+            >
               {lastIndividualMessage || item.lastGroupMessage}
             </Text>
           )}
