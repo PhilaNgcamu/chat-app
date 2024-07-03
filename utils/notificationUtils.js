@@ -11,7 +11,7 @@ export const updateNotification = async (
   console.log("updateNotification: ", chatId);
 
   const db = getDatabase();
-  const notifyUserRef = ref(db, `chats/${userId}/${chatId}/notifications`);
+  const notifyUserRef = ref(db, `chats/${chatId}/${userId}/notifications`);
 
   try {
     const snapshot = await get(notifyUserRef);

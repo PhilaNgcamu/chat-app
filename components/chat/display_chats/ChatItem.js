@@ -26,10 +26,7 @@ const ChatItem = ({ item, onPress }) => {
 
   useEffect(() => {
     const db = getDatabase();
-    const notificationsRef = ref(
-      db,
-      `chats/${receiverId}/${key}/notifications`
-    );
+    const notificationsRef = ref(db, `chats/${key}/${item.id}/notifications`);
     const handleNotifications = (snapshot) => {
       const data = snapshot.val();
       console.log("Notification Data:", data);
@@ -62,7 +59,7 @@ const ChatItem = ({ item, onPress }) => {
         />
         <View style={styles.itemDetails}>
           <Text style={styles.itemTitle}>{item.name || item.groupName}</Text>
-          {(item[key]?.lastIndividualMessage || item.lastGroupMessage) && (
+          {(lastIndividualMessage || item.lastGroupMessage) && (
             <Text style={styles.itemLastMessage}>
               {lastIndividualMessage || item.lastGroupMessage}
             </Text>
