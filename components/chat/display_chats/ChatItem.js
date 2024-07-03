@@ -26,9 +26,13 @@ const ChatItem = ({ item, onPress }) => {
 
   useEffect(() => {
     const db = getDatabase();
-    const notificationsRef = ref(db, `chats/${key}/notifications`);
+    const notificationsRef = ref(
+      db,
+      `chats/${receiverId}/${key}/notifications`
+    );
     const handleNotifications = (snapshot) => {
       const data = snapshot.val();
+      console.log("Notification Data:", data);
       setNotifications(data?.notificationsCount || 0);
       setLastIndividualMessage(data?.lastIndividualMessage);
     };

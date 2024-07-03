@@ -86,7 +86,7 @@ const ChatList = ({ navigation }) => {
                     await update(ref(db), updatesOne);
                     await update(ref(db), updatesTwo);
                     individualChatsList.push({
-                      id: userId,
+                      id: [userId, receiverId].sort().join("_"),
                       lastIndividualMessage: lastIndividualMessage,
                       unreadMessages: true,
                     });

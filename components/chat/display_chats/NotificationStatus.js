@@ -1,7 +1,5 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { StyleSheet, Text } from "react-native";
-import { useDispatch } from "react-redux";
-import { getDatabase, off, onValue, ref, update } from "firebase/database";
 
 const NotificationStatus = ({ notificationsCount }) => {
   return <Text style={styles.numberOfMessages}>{notificationsCount}</Text>;
