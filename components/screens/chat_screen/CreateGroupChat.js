@@ -72,6 +72,12 @@ const CreateGroupChat = () => {
     const newGroupChatRef = push(ref(db, "groups"));
 
     const newGroupData = {
+      id: selectedContacts.reduce(
+        (acc, contact) => {
+          return [...acc, contact.id].join("_");
+        },
+        [auth.currentUser.uid]
+      ),
       groupName: groupName,
       users: selectedContacts.reduce(
         (acc, contact) => {
