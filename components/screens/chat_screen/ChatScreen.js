@@ -174,11 +174,6 @@ const ChatScreen = ({ route, navigation }) => {
       )
         .then(async () => {
           await push(ref(db, chatIdPath), messageData);
-          await sendPushNotification(
-            expoPushToken,
-            "New Message",
-            messageData.text || "You've received a new message"
-          );
           dispatch(addNewPrivateMessage(""));
           console.log("Notified user");
         })
@@ -193,11 +188,6 @@ const ChatScreen = ({ route, navigation }) => {
       )
         .then(async () => {
           await push(ref(db, chatIdPath), messageData);
-          await sendPushNotification(
-            expoPushToken,
-            "New Message",
-            messageData.text || "You've received a new message"
-          );
           dispatch(addNewPrivateMessage(""));
           console.log("Notified user");
         })
