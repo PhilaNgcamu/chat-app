@@ -130,9 +130,6 @@ const UserProfile = () => {
       const response = await fetch(imageUri);
       const blob = await response.blob();
       const fileName = imageUri.split("/").pop();
-      console.log(JSON.stringify(result, null, 2));
-      console.log(fileName);
-
       const storeRef = storageRef(
         storage,
         `profile_pictures/${user.uid}/${fileName}`

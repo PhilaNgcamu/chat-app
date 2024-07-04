@@ -23,17 +23,4 @@ const auth = initializeAuth(app, {
 });
 const db = getDatabase(app);
 
-onAuthStateChanged(auth, (user) => {
-  console.log(user);
-  if (user) {
-    // User is signed in, see docs for a list of available properties
-    // https://firebase.google.com/docs/reference/js/firebase.User
-    const uid = user.uid;
-    // ...
-  } else {
-    // User is signed out
-    // ...
-  }
-});
-
 export { auth, db };

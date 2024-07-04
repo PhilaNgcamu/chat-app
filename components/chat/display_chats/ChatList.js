@@ -40,8 +40,6 @@ const ChatList = ({ navigation }) => {
                 });
               }
             });
-            console.log("contactsList:", contactsList);
-
             dispatch(setStatuses(contactsList));
             dispatch(setItems([...contactsList]));
             resolve(contactsList);
@@ -90,7 +88,6 @@ const ChatList = ({ navigation }) => {
                       lastIndividualMessage: lastIndividualMessage,
                       unreadMessages: true,
                     });
-                    console.log("User last individual messages updated");
                   } catch (error) {
                     console.error(
                       "Error updating last individual messages",
@@ -155,7 +152,6 @@ const ChatList = ({ navigation }) => {
 
   const handleItemPress = async (item) => {
     const readMessages = true;
-    console.log("Item pressed:", JSON.stringify(Object.keys(item)[2], null, 2));
     if (item.chatType === "group") {
       navigation.navigate("ChatScreen", {
         chatId: item.id,
@@ -183,7 +179,6 @@ const ChatList = ({ navigation }) => {
       return { ...obj, ...item };
     }, {}),
   ];
-  console.log("Unique-Da:", JSON.stringify(combinedObject, null, 2));
 
   const renderItem = ({ item }) => {
     console.log("Itemzz:", JSON.stringify(item, null, 2));

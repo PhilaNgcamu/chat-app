@@ -7,7 +7,6 @@ import Constants from "expo-constants";
 export const updateNotification = async (userId, chatId, messagesRead) => {
   const db = getDatabase();
   const notifyUserRef = ref(db, `chats/${chatId}/${userId}/notifications`);
-  console.log("updateNotification: ", notifyUserRef);
 
   try {
     const snapshot = await get(notifyUserRef);
@@ -24,7 +23,6 @@ export const updateNotification = async (userId, chatId, messagesRead) => {
     };
 
     await update(notifyUserRef, notifyUser);
-    console.log("Notifications count updated successfully");
   } catch (error) {
     console.error("Error updating notification count:", error);
   }

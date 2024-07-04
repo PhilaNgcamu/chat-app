@@ -128,7 +128,6 @@ const CreateGroupChat = () => {
   };
 
   const renderItem = ({ item }) => {
-    console.log(contacts, "groupsssi");
     return (
       <TouchableOpacity
         style={[

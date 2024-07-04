@@ -119,8 +119,6 @@ const ChatScreen = ({ route, navigation }) => {
     };
   }, [chatId, contactId, chatType, dispatch, isChatScreenFocussed]);
 
-  console.log("Is Focussed", isChatScreenFocussed);
-
   const handleSend = async () => {
     if (newMessage.trim() === "" && !image) {
       return;
@@ -159,7 +157,6 @@ const ChatScreen = ({ route, navigation }) => {
         console.error("Error uploading image: ", error);
       }
     }
-    console.log("messageData", messageData);
     dispatch(setCurrentUserId(userId));
     dispatch(setReceiverId(contactId));
     dispatch(setPrivateChatId([userId, contactId].sort().join("_")));
@@ -174,7 +171,6 @@ const ChatScreen = ({ route, navigation }) => {
       .then(async () => {
         await push(ref(db, chatIdPath), messageData);
         dispatch(addNewPrivateMessage(""));
-        console.log("Notified user 3");
       })
       .catch((error) => {
         console.error("Error notifying user", error);
