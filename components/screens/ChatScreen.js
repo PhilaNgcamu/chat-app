@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useCallback } from "react";
+import React, { useEffect, useRef, useCallback, useState } from "react";
 import { StyleSheet, KeyboardAvoidingView, Platform } from "react-native";
 import {
   getDatabase,
@@ -29,6 +29,7 @@ import {
   setCurrentUserId,
   setReceiverId,
   shouldPressContact,
+  setIsScreenFocused,
 } from "../../redux/actions";
 import ChatHeader from "../chat/chat_screen/ChatHeader";
 import MessageList from "../chat/chat_screen/MessageList";
@@ -48,7 +49,9 @@ const ChatScreen = ({ route, navigation }) => {
   const dispatch = useDispatch();
 
   const privateMessages = useSelector((state) => state.privateMessages);
-  const notificationsCount = useSelector((state) => state.notificationsCount);
+  const isChatScreenFocussed = useSelector(
+    (state) => state.isChatScreenFocussed
+  );
   const isContactPressed = useSelector((state) => state.isContactPressed);
 
   const groupMessages = useSelector((state) => state.groupMessages);
@@ -61,8 +64,12 @@ const ChatScreen = ({ route, navigation }) => {
   useFocusEffect(
     useCallback(() => {
       setTabBarVisible(false);
-      return () => setTabBarVisible(true);
-    }, [setTabBarVisible])
+      dispatch(setIsScreenFocused(true));
+      return () => {
+        setTabBarVisible(true);
+        dispatch(setIsScreenFocused(false));
+      };
+    }, [setTabBarVisible, isChatScreenFocussed])
   );
 
   useEffect(() => {
@@ -100,7 +107,9 @@ const ChatScreen = ({ route, navigation }) => {
     return () => {
       unsubscribeMessages();
     };
-  }, [chatId, contactId, chatType, dispatch]);
+  }, [chatId, contactId, chatType, dispatch, isChatScreenFocussed]);
+
+  console.log("Is Focussed", isChatScreenFocussed);
 
   const handleSend = async () => {
     if (newMessage.trim() === "" && !image) {
@@ -147,19 +156,35 @@ const ChatScreen = ({ route, navigation }) => {
     dispatch(increaseNotifications(1));
     dispatch(shouldPressContact(false));
 
-    await updateNotification(
-      userId,
-      [userId, contactId].sort().join("_"),
-      false
-    )
-      .then(async () => {
-        await push(ref(db, chatIdPath), messageData);
-        dispatch(addNewPrivateMessage(""));
-        console.log("Notified user");
-      })
-      .catch((error) => {
-        console.error("Error notifying user", error);
-      });
+    if (isChatScreenFocussed) {
+      await updateNotification(
+        userId,
+        [userId, contactId].sort().join("_"),
+        true
+      )
+        .then(async () => {
+          await push(ref(db, chatIdPath), messageData);
+          dispatch(addNewPrivateMessage(""));
+          console.log("Notified user");
+        })
+        .catch((error) => {
+          console.error("Error notifying user", error);
+        });
+    } else {
+      await updateNotification(
+        userId,
+        [userId, contactId].sort().join("_"),
+        false
+      )
+        .then(async () => {
+          await push(ref(db, chatIdPath), messageData);
+          dispatch(addNewPrivateMessage(""));
+          console.log("Notified user");
+        })
+        .catch((error) => {
+          console.error("Error notifying user", error);
+        });
+    }
   };
 
   const pickImage = async () => {

@@ -31,6 +31,8 @@ const initialState = {
   userId: null,
   receiverId: null,
   isContactPressed: false,
+  isChatScreenFocussed: false,
+  otherUserStatus: null,
 };
 
 const rootReducer = (state = initialState, action) => {
@@ -170,6 +172,17 @@ const rootReducer = (state = initialState, action) => {
       return {
         ...state,
         notificationsCount: action.payload,
+      };
+    case actionTypes.IS_SCREEN_FOCUSSED:
+      return {
+        ...state,
+        isChatScreenFocussed: action.payload,
+      };
+
+    case actionTypes.SET_OTHER_USER_STATUS:
+      return {
+        ...state,
+        otherUserStatus: action.payload,
       };
 
     default:

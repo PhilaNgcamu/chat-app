@@ -134,3 +134,13 @@ export const increaseNotifications = (increaseNotifications) => ({
   type: actionTypes.INCREASE_NOTIFICATIONS,
   payload: increaseNotifications,
 });
+
+export const setIsScreenFocused = (isFocused) => ({
+  type: actionTypes.IS_SCREEN_FOCUSSED,
+  payload: isFocused,
+});
+
+export const setOtherUserStatus = (status) => ({
+  type: actionTypes.SET_OTHER_USER_STATUS,
+  payload: status,
+});

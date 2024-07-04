@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Provider } from "react-redux";
 import { onAuthStateChanged } from "firebase/auth";
-import { NavigationContainer } from "@react-navigation/native";
 import NavigationScreens from "./components/screens/Navigation";
 import store from "./redux/store";
 import { TabBarVisibilityProvider } from "./components/chat/custom_hook/useTabBarVisibilityContext";

@@ -14,6 +14,9 @@ const ChatItem = ({ item, onPress }) => {
   const userId = useSelector((state) => state.userId);
   const receiverId = useSelector((state) => state.receiverId);
   const chatId = useSelector((state) => state.chatId);
+  const isChatScreenFocussed = useSelector(
+    (state) => state.isChatScreenFocussed
+  );
   const [notifications, setNotifications] = useState(0);
   const [lastIndividualMessage, setLastIndividualMessage] = useState("");
 
@@ -32,12 +35,10 @@ const ChatItem = ({ item, onPress }) => {
 
     const handleNotifications = (snapshot) => {
       const data = snapshot.val();
-      console.log("Notification Data:", data);
       setNotifications(data?.notificationsCount || 0);
     };
     const handleLastMessage = (snapshot) => {
       const message = snapshot.val();
-      console.log("Last Message Data:", message);
       setLastIndividualMessage(message);
     };
 
@@ -59,7 +60,6 @@ const ChatItem = ({ item, onPress }) => {
       dispatch(shouldPressContact(true));
       updateNotification(item.id, key, true);
     }
-    console.log("is contact pressed:", isContactPressed);
   };
 
   if (!fontsLoaded) {
@@ -94,7 +94,7 @@ const ChatItem = ({ item, onPress }) => {
         </View>
         <View style={styles.extraInfo}>
           <Text style={styles.lastTimeMessageSent}>2 min ago</Text>
-          {notifications > 0 && (
+          {!isChatScreenFocussed && notifications > 0 && (
             <NotificationStatus notificationsCount={notifications} />
           )}
         </View>
