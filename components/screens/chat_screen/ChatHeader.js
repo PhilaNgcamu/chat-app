@@ -11,6 +11,8 @@ import { Ionicons } from "@expo/vector-icons";
 import { useFonts } from "expo-font";
 import CallIcon from "../../../utils/icons/CallIcon";
 import VideoIcon from "../../../utils/icons/VideoIcon";
+import { updateNotification } from "../../../utils/notificationUtils";
+import { useSelector } from "react-redux";
 
 const ChatHeader = ({
   contactAvatar,
@@ -19,6 +21,9 @@ const ChatHeader = ({
   isOnline,
   navigation,
 }) => {
+  const userId = useSelector((state) => state.userId);
+  const receiverId = useSelector((state) => state.receiverId);
+  const chatId = useSelector((state) => state.chatId);
   const [fontsLoaded] = useFonts({
     "Poppins-Bold": require("../../../assets/fonts/Poppins-Bold.ttf"),
     "Poppins-SemiBold": require("../../../assets/fonts/Poppins-SemiBold.ttf"),
@@ -36,7 +41,16 @@ const ChatHeader = ({
   }
   return (
     <View style={styles.header}>
-      <TouchableOpacity onPress={() => navigation.goBack()}>
+      <TouchableOpacity
+        onPress={async () => {
+          await updateNotification(
+            receiverId,
+            [userId, receiverId].sort().join("_"),
+            true
+          );
+          navigation.goBack();
+        }}
+      >
         <Ionicons name="arrow-back" size={24} color="#000" />
       </TouchableOpacity>
       <View style={styles.avatarContainer}>

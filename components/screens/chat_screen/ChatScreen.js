@@ -166,35 +166,20 @@ const ChatScreen = ({ route, navigation }) => {
     dispatch(increaseNotifications(1));
     dispatch(shouldPressContact(false));
 
-    if (!isChatScreenFocussed) {
-      await updateNotification(
-        userId,
-        [userId, contactId].sort().join("_"),
-        true
-      )
-        .then(async () => {
-          await push(ref(db, chatIdPath), messageData);
-          dispatch(addNewPrivateMessage(""));
-          console.log("Notified user");
-        })
-        .catch((error) => {
-          console.error("Error notifying user", error);
-        });
-    } else {
-      await updateNotification(
-        userId,
-        [userId, contactId].sort().join("_"),
-        false
-      )
-        .then(async () => {
-          await push(ref(db, chatIdPath), messageData);
-          dispatch(addNewPrivateMessage(""));
-          console.log("Notified user");
-        })
-        .catch((error) => {
-          console.error("Error notifying user", error);
-        });
-    }
+    await updateNotification(
+      userId,
+      [userId, contactId].sort().join("_"),
+      false
+    )
+      .then(async () => {
+        await push(ref(db, chatIdPath), messageData);
+        dispatch(addNewPrivateMessage(""));
+        console.log("Notified user 3");
+      })
+      .catch((error) => {
+        console.error("Error notifying user", error);
+      });
+
     await sendPushNotification(
       expoPushToken,
       `${auth.currentUser.displayName} sent you a message`,
