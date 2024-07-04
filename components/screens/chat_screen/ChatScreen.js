@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useCallback, useState } from "react";
 import { StyleSheet, KeyboardAvoidingView, Platform } from "react-native";
+import * as Notifications from "expo-notifications";
 import {
   getDatabase,
   ref,
@@ -13,12 +14,12 @@ import {
   uploadBytes,
   getDownloadURL,
 } from "firebase/storage";
-import { auth } from "../../backend/firebaseConfig";
+import { auth } from "../../../backend/firebaseConfig";
 import * as ImagePicker from "expo-image-picker";
 import { useFocusEffect } from "@react-navigation/native";
 import { StatusBar } from "expo-status-bar";
 import { useDispatch, useSelector } from "react-redux";
-import { useTabBarVisibility } from "../chat/custom_hook/useTabBarVisibilityContext";
+import { useTabBarVisibility } from "../../chat/custom_hook/useTabBarVisibilityContext";
 import {
   setImage,
   setGroupMessages,
@@ -30,11 +31,15 @@ import {
   setReceiverId,
   shouldPressContact,
   setIsScreenFocused,
-} from "../../redux/actions";
-import ChatHeader from "../chat/chat_screen/ChatHeader";
-import MessageList from "../chat/chat_screen/MessageList";
-import ChatInput from "../chat/chat_screen/ChatInput";
-import { updateNotification } from "../../utils/notificationUtils";
+} from "../../../redux/actions";
+import ChatHeader from "./ChatHeader";
+import MessageList from "./MessageList";
+import ChatInput from "./ChatInput";
+import {
+  updateNotification,
+  registerForPushNotificationsAsync,
+  sendPushNotification,
+} from "../../../utils/notificationUtils";
 
 const ChatScreen = ({ route, navigation }) => {
   const {
@@ -60,6 +65,11 @@ const ChatScreen = ({ route, navigation }) => {
   const inputRef = useRef(null);
 
   const { setTabBarVisible } = useTabBarVisibility();
+
+  const [expoPushToken, setExpoPushToken] = useState("");
+  const [notification, setNotification] = useState(undefined);
+  const notificationListener = useRef();
+  const responseListener = useRef();
 
   useFocusEffect(
     useCallback(() => {
@@ -156,7 +166,7 @@ const ChatScreen = ({ route, navigation }) => {
     dispatch(increaseNotifications(1));
     dispatch(shouldPressContact(false));
 
-    if (isChatScreenFocussed) {
+    if (!isChatScreenFocussed) {
       await updateNotification(
         userId,
         [userId, contactId].sort().join("_"),
@@ -164,6 +174,11 @@ const ChatScreen = ({ route, navigation }) => {
       )
         .then(async () => {
           await push(ref(db, chatIdPath), messageData);
+          await sendPushNotification(
+            expoPushToken,
+            "New Message",
+            messageData.text || "You've received a new message"
+          );
           dispatch(addNewPrivateMessage(""));
           console.log("Notified user");
         })
@@ -178,6 +193,11 @@ const ChatScreen = ({ route, navigation }) => {
       )
         .then(async () => {
           await push(ref(db, chatIdPath), messageData);
+          await sendPushNotification(
+            expoPushToken,
+            "New Message",
+            messageData.text || "You've received a new message"
+          );
           dispatch(addNewPrivateMessage(""));
           console.log("Notified user");
         })
@@ -185,6 +205,11 @@ const ChatScreen = ({ route, navigation }) => {
           console.error("Error notifying user", error);
         });
     }
+    await sendPushNotification(
+      expoPushToken,
+      `${auth.currentUser.displayName} sent you a message`,
+      messageData.text || "You've received a new message"
+    );
   };
 
   const pickImage = async () => {
@@ -203,6 +228,31 @@ const ChatScreen = ({ route, navigation }) => {
   const handleTyping = (text) => {
     dispatch(addNewPrivateMessage(text));
   };
+
+  useEffect(() => {
+    registerForPushNotificationsAsync()
+      .then((token) => setExpoPushToken(token ?? ""))
+      .catch((error) => setExpoPushToken(`${error}`));
+
+    notificationListener.current =
+      Notifications.addNotificationReceivedListener((notification) => {
+        setNotification(notification);
+      });
+
+    responseListener.current =
+      Notifications.addNotificationResponseReceivedListener((response) => {
+        console.log(response);
+      });
+
+    return () => {
+      notificationListener.current &&
+        Notifications.removeNotificationSubscription(
+          notificationListener.current
+        );
+      responseListener.current &&
+        Notifications.removeNotificationSubscription(responseListener.current);
+    };
+  }, []);
 
   return (
     <KeyboardAvoidingView

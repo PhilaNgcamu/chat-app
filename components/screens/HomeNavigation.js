@@ -21,7 +21,6 @@ const Home = () => {
     <View style={styles.container}>
       <StatusBar style="dark" />
       <Text style={styles.title}>Chatbox</Text>
-
       <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
         <Text style={styles.buttonText}>Logout</Text>
       </TouchableOpacity>
