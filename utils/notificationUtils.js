@@ -1,13 +1,26 @@
-import { Platform } from "react-native";
+import { Alert, Platform } from "react-native";
 import { getDatabase, ref, get, update } from "firebase/database";
 import * as Device from "expo-device";
 import * as Notifications from "expo-notifications";
 import Constants from "expo-constants";
 
-export const updateNotification = async (userId, chatId, messagesRead) => {
+export const updateNotification = async (
+  userId,
+  chatId,
+  messagesRead,
+  chatType
+) => {
   const db = getDatabase();
-  const notifyUserRef = ref(db, `chats/${chatId}/${userId}/notifications`);
+  let notifyUserRef;
 
+  if (chatType === "group") {
+    console.log("Error Group", chatId, userId);
+    notifyUserRef = ref(db, `groups/${chatId}/notifications`);
+  } else {
+    console.log("Error Private", chatId);
+
+    notifyUserRef = ref(db, `chats/${chatId}/${userId}/notifications`);
+  }
   try {
     const snapshot = await get(notifyUserRef);
     let notificationsCount = 0;
@@ -86,7 +99,5 @@ export async function registerForPushNotificationsAsync() {
       })
     ).data;
     return pushTokenString;
-  } else {
-    alert("Must use physical device for Push Notifications");
   }
 }

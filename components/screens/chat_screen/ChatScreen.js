@@ -7,6 +7,7 @@ import {
   push,
   onValue,
   serverTimestamp,
+  update,
 } from "firebase/database";
 import {
   getStorage,
@@ -31,6 +32,7 @@ import {
   setReceiverId,
   shouldPressContact,
   setIsScreenFocused,
+  addGroupMessage,
 } from "../../../redux/actions";
 import ChatHeader from "./ChatHeader";
 import MessageList from "./MessageList";
@@ -46,19 +48,18 @@ const ChatScreen = ({ route, navigation }) => {
     contactId,
     contactName,
     contactAvatar,
-    chatId,
+    groupChatId,
     chatType,
     chatName,
     chatAvatar,
   } = route.params;
+
   const dispatch = useDispatch();
 
   const privateMessages = useSelector((state) => state.privateMessages);
   const isChatScreenFocussed = useSelector(
     (state) => state.isChatScreenFocussed
   );
-  const isContactPressed = useSelector((state) => state.isContactPressed);
-
   const groupMessages = useSelector((state) => state.groupMessages);
   const newMessage = useSelector((state) => state.newMessage);
   const image = useSelector((state) => state.image);
@@ -70,6 +71,8 @@ const ChatScreen = ({ route, navigation }) => {
   const [notification, setNotification] = useState(undefined);
   const notificationListener = useRef();
   const responseListener = useRef();
+
+  const userId = auth.currentUser.uid;
 
   useFocusEffect(
     useCallback(() => {
@@ -84,13 +87,20 @@ const ChatScreen = ({ route, navigation }) => {
 
   useEffect(() => {
     const db = getDatabase();
-    const userId = auth.currentUser.uid;
     const isGroupChat = chatType === "group";
+    console.log(
+      "ChatScreen: ",
+      groupChatId,
+      isGroupChat,
+      chatType,
+      chatName,
+      chatAvatar
+    );
     const messagesRef = ref(
       db,
       `${
         isGroupChat
-          ? `groups/${chatId}`
+          ? `groups/${groupChatId}`
           : `chats/${
               userId < contactId
                 ? `${userId}_${contactId}`
@@ -117,28 +127,44 @@ const ChatScreen = ({ route, navigation }) => {
     return () => {
       unsubscribeMessages();
     };
-  }, [chatId, contactId, chatType, dispatch, isChatScreenFocussed]);
-
+  }, [groupChatId, contactId, chatType, dispatch, isChatScreenFocussed]);
+  dispatch(setCurrentUserId(userId));
+  dispatch(setReceiverId(contactId));
+  dispatch(
+    setPrivateChatId(
+      chatType === "group" ? groupChatId : [userId, contactId].sort().join("_")
+    )
+  );
   const handleSend = async () => {
     if (newMessage.trim() === "" && !image) {
       return;
     }
+    console.log(groupChatId, "What Group Chat");
 
     const db = getDatabase();
     const userId = auth.currentUser.uid;
     const chatIdPath =
       chatType === "group"
-        ? `groups/${chatId}/messages`
+        ? `groups/${groupChatId}/messages`
         : `chats/${[userId, contactId].sort().join("_")}/messages`;
+    console.log("chatIdPath: ", chatIdPath);
 
     const messageData = {
       createdAt: serverTimestamp(),
       userId,
-      receiverId: chatType !== "group" ? contactId : chatId,
+      receiverId: chatType !== "group" ? contactId : groupChatId,
       senderName: auth.currentUser.displayName,
-      contactName: contactName,
       text: newMessage.trim() !== "" ? newMessage.trim() : undefined,
     };
+    if (chatType !== "group") {
+      messageData["contactName"] = contactName;
+    }
+    if (chatType === "group") {
+      update(ref(db, `groups/${groupChatId}`), {
+        lastGroupMessage:
+          newMessage.trim() !== "" ? newMessage.trim() : undefined,
+      });
+    }
 
     if (image) {
       try {
@@ -157,16 +183,14 @@ const ChatScreen = ({ route, navigation }) => {
         console.error("Error uploading image: ", error);
       }
     }
-    dispatch(setCurrentUserId(userId));
-    dispatch(setReceiverId(contactId));
-    dispatch(setPrivateChatId([userId, contactId].sort().join("_")));
-    dispatch(increaseNotifications(1));
-    dispatch(shouldPressContact(false));
 
     await updateNotification(
       userId,
-      [userId, contactId].sort().join("_"),
-      false
+      chatType === "group"
+        ? groupChatId
+        : [userId, contactId]?.sort().join("_"),
+      false,
+      chatType
     )
       .then(async () => {
         await push(ref(db, chatIdPath), messageData);

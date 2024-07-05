@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import {
   View,
   Text,
@@ -8,7 +8,7 @@ import {
   Image,
   StyleSheet,
 } from "react-native";
-import { getDatabase, ref, push, get, set } from "firebase/database";
+import { getDatabase, ref, set, get } from "firebase/database";
 import {
   getStorage,
   ref as storageRef,
@@ -69,22 +69,20 @@ const CreateGroupChat = () => {
     if (groupName.trim() === "" || selectedContacts.length === 0) return;
 
     const db = getDatabase();
-    const newGroupChatRef = push(ref(db, "groups"));
+    const userId = auth.currentUser.uid;
+    const groupId = [userId, ...selectedContacts.map((contact) => contact.id)]
+      .sort()
+      .join("_");
 
     const newGroupData = {
-      id: selectedContacts.reduce(
-        (acc, contact) => {
-          return [...acc, contact.id].join("_");
-        },
-        [auth.currentUser.uid]
-      ),
-      groupName: groupName,
+      groupId,
+      groupName,
       users: selectedContacts.reduce(
         (acc, contact) => {
           acc[contact.id] = true;
           return acc;
         },
-        { [auth.currentUser.uid]: true }
+        { [userId]: true }
       ),
       type: "group",
     };
@@ -94,7 +92,7 @@ const CreateGroupChat = () => {
         const storage = getStorage();
         const imageRef = storageRef(
           storage,
-          `groupImages/${auth.currentUser.uid}/${Date.now()}`
+          `groupImages/${userId}/${Date.now()}`
         );
         const response = await fetch(groupImage);
         const blob = await response.blob();
@@ -106,6 +104,7 @@ const CreateGroupChat = () => {
       }
     }
 
+    const newGroupChatRef = ref(db, `groups/${groupId}`);
     await set(newGroupChatRef, newGroupData);
     navigation.goBack();
   };

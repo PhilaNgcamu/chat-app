@@ -6,6 +6,7 @@ import { shouldPressContact } from "../../../redux/actions";
 import { getDatabase, off, onValue, ref, update } from "firebase/database";
 import NotificationStatus from "./NotificationStatus";
 import { updateNotification } from "../../../utils/notificationUtils";
+import { auth } from "../../../backend/firebaseConfig";
 
 const ChatItem = ({ item, onPress }) => {
   const dispatch = useDispatch();
@@ -18,6 +19,7 @@ const ChatItem = ({ item, onPress }) => {
     (state) => state.isChatScreenFocussed
   );
   const [notifications, setNotifications] = useState(0);
+
   const [lastIndividualMessage, setLastIndividualMessage] = useState("");
 
   const [fontsLoaded] = useFonts({
@@ -27,13 +29,26 @@ const ChatItem = ({ item, onPress }) => {
   });
 
   const key = Object.keys(item).find((key) => key.includes("_"));
+  const currentUserId = auth.currentUser.uid;
+  console.log("Item key", currentUserId, item?.users?.[currentUserId]);
 
   useEffect(() => {
     const db = getDatabase();
-    const notificationsRef = ref(db, `chats/${key}/${item.id}/notifications`);
+    const privateNotifications = ref(
+      db,
+      `chats/${key}/${item.id}/notifications`
+    );
     const lastMessageRef = ref(db, `chats/${key}/lastIndividualMessage`);
+    const groupsNotificationsRef = ref(
+      db,
+      `groups/${item.groupId}/notifications`
+    );
 
-    const handleNotifications = (snapshot) => {
+    const handlePrivateMessagesNotification = (snapshot) => {
+      const data = snapshot.val();
+      setNotifications(data?.notificationsCount || 0);
+    };
+    const handleGroupsNotifications = (snapshot) => {
       const data = snapshot.val();
       setNotifications(data?.notificationsCount || 0);
     };
@@ -42,24 +57,39 @@ const ChatItem = ({ item, onPress }) => {
       setLastIndividualMessage(message);
     };
 
-    onValue(notificationsRef, handleNotifications);
+    onValue(privateNotifications, handlePrivateMessagesNotification);
+    onValue(groupsNotificationsRef, handleGroupsNotifications);
     onValue(lastMessageRef, handleLastMessage);
 
     return () => {
-      off(notificationsRef, handleNotifications);
+      off(privateNotifications, handlePrivateMessagesNotification);
+      off(groupsNotificationsRef, handleGroupsNotifications);
       off(lastMessageRef, handleLastMessage);
     };
   }, [key]);
 
+  console.log("Notifications Groups", notifications);
+
   const handlePress = () => {
+    console.log(
+      "updated notification",
+      item.groupId,
+      key,
+      true,
+      item.chatType || item.type
+    );
     if (!isContactPressed) {
       dispatch(shouldPressContact(true));
       setNotifications(0);
-      updateNotification(item.id, key, true);
     } else {
       dispatch(shouldPressContact(true));
-      updateNotification(item.id, key, true);
     }
+    updateNotification(
+      currentUserId,
+      item.groupId,
+      true,
+      item.chatType || item.type
+    );
   };
 
   if (!fontsLoaded) {

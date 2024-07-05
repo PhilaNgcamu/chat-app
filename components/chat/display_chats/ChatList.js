@@ -5,7 +5,7 @@ import { getDatabase, ref, onValue, off, update } from "firebase/database";
 import { auth } from "../../../backend/firebaseConfig";
 import { StatusBar } from "expo-status-bar";
 import { useDispatch, useSelector } from "react-redux";
-import { setItems, setStatuses } from "../../../redux/actions";
+import { setGroup, setItems, setStatuses } from "../../../redux/actions";
 import SearchBar from "./SearchBar";
 import StatusList from "./StatusList";
 import ChatItem from "./ChatItem";
@@ -13,6 +13,7 @@ import ChatItem from "./ChatItem";
 const ChatList = ({ navigation }) => {
   const dispatch = useDispatch();
   const items = useSelector((state) => state.items);
+  const groups = useSelector((state) => state.groups);
 
   useEffect(() => {
     const db = getDatabase();
@@ -71,10 +72,21 @@ const ChatList = ({ navigation }) => {
                       .sort()
                       .join("_")}/lastIndividualMessage`]:
                       lastIndividualMessage,
+                    [`users/${userId}/${[userId, receiverId]
+                      .sort()
+                      .join("_")}/lastIndividualMessage`]:
+                      lastIndividualMessage,
                   };
 
                   const updatesTwo = {
-                    [`chats/${[userId, receiverId]
+                    [`chats/${[userId, receiverId].sort().join("_")}/${[
+                      userId,
+                      receiverId,
+                    ]
+                      .sort()
+                      .join("_")}/lastIndividualMessage`]:
+                      lastIndividualMessage,
+                    [`users/${receiverId}/${[userId, receiverId]
                       .sort()
                       .join("_")}/lastIndividualMessage`]:
                       lastIndividualMessage,
@@ -108,37 +120,14 @@ const ChatList = ({ navigation }) => {
         return new Promise((resolve) => {
           onValue(groupsRef, (snapshot) => {
             if (snapshot.exists()) {
-              console.log(
-                "Groups:",
-                JSON.stringify(Object.values(snapshot.val()), null, 2),
-                snapshot.val().key
-              );
-              // for (const childSnapshot of Object.values(snapshot.val())) {
-              //   groupChatsList.push({
-              //     id: childSnapshot.key,
-              //     ...childSnapshot.val(),
-              //   });
-              // }
-              dispatch(setItems([...contactsList]));
-              // resolve(groupChatsList);
-              // snapshot.forEach((childSnapshot) => {
-              //   const groupData = childSnapshot.val();
-              //   const messages = groupData.messages
-              //     ? Object.values(groupData.messages)
-              //     : [];
-              //   const lastGroupMessage =
-              //     messages.length > 0
-              //       ? messages[messages.length - 1].text
-              //       : "No messages yet";
-
-              //   groupChatsList.push({
-              //     id: childSnapshot.key,
-              //     lastGroupMessage: lastGroupMessage,
-              //     ...groupData,
-              //   });
-              // });
-
-              // resolve(groupChatsList);
+              for (const childSnapshot of Object.values(snapshot.val())) {
+                console.log(childSnapshot, "childSnapshot");
+                groupChatsList.push({
+                  ...childSnapshot,
+                });
+              }
+              dispatch(setGroup([...groupChatsList]));
+              resolve(groupChatsList);
             }
           });
         });
@@ -157,11 +146,10 @@ const ChatList = ({ navigation }) => {
   }, [dispatch]);
 
   const handleItemPress = async (item) => {
-    const readMessages = true;
-    if (item.chatType === "group") {
+    if (item.type === "group") {
       navigation.navigate("ChatScreen", {
-        chatId: item.id,
-        chatType: item.chatType,
+        groupChatId: item.groupId,
+        chatType: item.type,
         chatName: item.groupName,
         chatAvatar: item.photoURL || "https://via.placeholder.com/150",
       });
@@ -180,17 +168,25 @@ const ChatList = ({ navigation }) => {
     uniqueEntries.set(entry.id, entry);
   });
   const uniqueData = Array.from(uniqueEntries.values());
-  const combinedObject = [
-    uniqueData.reduce((obj, item) => {
-      return { ...obj, ...item };
-    }, {}),
-  ];
+  const combinedObject = uniqueData.reduce((obj, item) => {
+    return { ...obj, ...item };
+  }, []);
+  const uniqueGroups = new Map();
+  groups.forEach((entry) => {
+    uniqueGroups.set(entry.groupId, entry);
+  });
+  const uniqueGroupData = Array.from(uniqueGroups.values());
+  const combinedGroupObject = uniqueGroupData.reduce((obj, item) => {
+    return { ...obj, ...item };
+  }, {});
+
+  console.log("combined object:", JSON.stringify(combinedObject, null, 2));
 
   const renderItem = ({ item }) => {
     console.log("Itemzz:", JSON.stringify(item, null, 2));
     return (
       <ChatItem
-        key={item.id}
+        key={item.id || item.groupId}
         item={item}
         onPress={() => {
           handleItemPress(item);
@@ -215,7 +211,7 @@ const ChatList = ({ navigation }) => {
           </View>
         ) : (
           <FlatList
-            data={combinedObject}
+            data={[combinedObject, combinedGroupObject]}
             renderItem={renderItem}
             keyExtractor={(item) => item.id}
             style={styles.list}

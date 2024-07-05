@@ -3,6 +3,7 @@ import actionTypes from "./actionTypes";
 
 const initialState = {
   items: [],
+  groups: [],
   statuses: [],
   searchQuery: "",
   groupMessages: [],
@@ -41,6 +42,11 @@ const rootReducer = (state = initialState, action) => {
       return {
         ...state,
         items: action.payload,
+      };
+    case actionTypes.SET_GROUP:
+      return {
+        ...state,
+        groups: action.payload,
       };
     case actionTypes.SET_STATUSES:
       return {

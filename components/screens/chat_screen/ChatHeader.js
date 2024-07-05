@@ -39,15 +39,12 @@ const ChatHeader = ({
       </View>
     );
   }
+  console.log(chatId, userId, receiverId, type, "Chat header");
   return (
     <View style={styles.header}>
       <TouchableOpacity
         onPress={async () => {
-          await updateNotification(
-            receiverId,
-            [userId, receiverId].sort().join("_"),
-            true
-          );
+          await updateNotification(userId, chatId, true, type);
           navigation.goBack();
         }}
       >

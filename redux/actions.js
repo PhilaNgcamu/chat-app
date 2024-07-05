@@ -5,6 +5,11 @@ export const setItems = (items) => ({
   payload: items,
 });
 
+export const setGroup = (group) => ({
+  type: actionTypes.SET_GROUP,
+  payload: group,
+});
+
 export const setStatuses = (statuses) => ({
   type: actionTypes.SET_STATUSES,
   payload: statuses,
