@@ -85,11 +85,6 @@ export const setPrivateFilteredMessages = (messages) => ({
   payload: messages,
 });
 
-export const setOtherUserName = (name) => ({
-  type: actionTypes.SET_OTHER_USER_NAME,
-  payload: name,
-});
-
 export const setIsOnline = (isOnline) => ({
   type: actionTypes.SET_IS_ONLINE,
   payload: isOnline,

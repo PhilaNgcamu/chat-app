@@ -8,7 +8,11 @@ const MediaShared = ({ profilePicture }) => {
       <Text style={styles.label}>Media Shared</Text>
       <Text style={styles.viewAllText}>View All</Text>
       <Image
-        source={profilePicture ? { uri: profilePicture } : placeholderImage}
+        source={
+          profilePicture
+            ? { uri: profilePicture }
+            : "https://via.placeholder.com/150"
+        }
         style={styles.mediaShared}
       />
     </View>

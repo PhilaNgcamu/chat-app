@@ -1,16 +1,12 @@
-import { act } from "react";
 import actionTypes from "./actionTypes";
 
 const initialState = {
   items: [],
   groups: [],
   statuses: [],
-  searchQuery: "",
   groupMessages: [],
   groupFilteredMessages: [],
   newMessage: "",
-  isTyping: false,
-  otherUserTyping: [],
   image: null,
   groupName: "",
   contacts: [],
@@ -18,22 +14,17 @@ const initialState = {
   privateMessages: [],
   privateFilteredMessages: [],
   otherUserName: "",
-  isOnline: false,
   name: "",
   email: "",
   password: "",
   loading: false,
   confirmedPassword: "",
-  error: null,
   tabBarVisible: true,
   profilePicture: "https://via.placeholder.com/150",
   notificationsCount: 0,
   chatId: null,
   userId: null,
   receiverId: null,
-  isContactPressed: false,
-  isChatScreenFocussed: false,
-  otherUserStatus: null,
 };
 
 const rootReducer = (state = initialState, action) => {
@@ -84,11 +75,7 @@ const rootReducer = (state = initialState, action) => {
         newMessage: action.payload,
         groupMessages: [...state.groupMessages],
       };
-    case actionTypes.IS_CONTACT_PRESSED:
-      return {
-        ...state,
-        isContactPressed: action.payload,
-      };
+
     case actionTypes.SET_IMAGE:
       return {
         ...state,
@@ -124,16 +111,7 @@ const rootReducer = (state = initialState, action) => {
         ...state,
         privateFilteredMessages: action.payload,
       };
-    case actionTypes.SET_OTHER_USER_NAME:
-      return {
-        ...state,
-        otherUserName: action.payload,
-      };
-    case actionTypes.SET_IS_ONLINE:
-      return {
-        ...state,
-        isOnline: action.payload,
-      };
+
     case actionTypes.SET_EMAIL:
       return {
         ...state,
@@ -178,17 +156,6 @@ const rootReducer = (state = initialState, action) => {
       return {
         ...state,
         notificationsCount: action.payload,
-      };
-    case actionTypes.IS_SCREEN_FOCUSSED:
-      return {
-        ...state,
-        isChatScreenFocussed: action.payload,
-      };
-
-    case actionTypes.SET_OTHER_USER_STATUS:
-      return {
-        ...state,
-        otherUserStatus: action.payload,
       };
 
     default:

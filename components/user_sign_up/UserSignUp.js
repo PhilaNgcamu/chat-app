@@ -3,12 +3,6 @@ import { View, ActivityIndicator, StyleSheet, Alert } from "react-native";
 import { useFonts } from "expo-font";
 import { StatusBar } from "expo-status-bar";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  setConfirmedPassword,
-  setEmail,
-  setName,
-  setPassword,
-} from "../../redux/actions";
 
 import InputField from "./InputField";
 import ExistingOrCreateAccountButton from "./ExistingOrCreateAccountButton";
@@ -23,13 +17,23 @@ import BackButton from "../user_login/BackButton";
 import SignUpOrLoginButton from "../onboarding/SignUpLoginButton";
 import SignUpOrLoginSubtitle from "../user_login/SignupOrLoginSubtitle";
 import SignupOrLoginTitle from "../user_login/SignUpOrLoginTitle";
+import {
+  confirmPassword,
+  setUserEmail,
+  setUserName,
+  setUserPassword,
+} from "../../redux/user_profile_sign_up_and_login/userProfileSignupAndLoginActions";
 
 const UserSignUp = ({ navigation }) => {
   const dispatch = useDispatch();
-  const name = useSelector((state) => state.name);
-  const email = useSelector((state) => state.email);
-  const password = useSelector((state) => state.password);
-  const confirmedPassword = useSelector((state) => state.confirmedPassword);
+  const userName = useSelector((state) => state.userVerification.userName);
+  const userEmail = useSelector((state) => state.userVerification.userEmail);
+  const userPassword = useSelector(
+    (state) => state.userVerification.userPassword
+  );
+  const confirmUserPassword = useSelector(
+    (state) => state.userVerification.confirmUserPassword
+  );
 
   const [fontsLoaded] = useFonts({
     "Poppins-Bold": require("../../assets/fonts/Poppins-Bold.ttf"),
@@ -37,8 +41,24 @@ const UserSignUp = ({ navigation }) => {
     "Poppins-Regular": require("../../assets/fonts/Poppins-Regular.ttf"),
   });
 
+  const handleUserName = (userName) => {
+    dispatch(setUserName(userName));
+  };
+
+  const handleUserEmail = (userEmail) => {
+    dispatch(setUserEmail(userEmail));
+  };
+
+  const handleUserPassword = (userPassword) => {
+    dispatch(setUserPassword(userPassword));
+  };
+
+  const handleConfirmedUserPassword = (confirmUserPassword) => {
+    dispatch(confirmPassword(confirmUserPassword));
+  };
+
   const handleSignUp = async () => {
-    if (password !== confirmedPassword) {
+    if (userPassword !== confirmUserPassword) {
       Alert.alert("Oops!", "Password do not match. Please try again.");
       return;
     }
@@ -47,15 +67,15 @@ const UserSignUp = ({ navigation }) => {
       const auth = getAuth();
       const userCredential = await createUserWithEmailAndPassword(
         auth,
-        email,
-        password
+        userEmail,
+        userPassword
       );
       const user = userCredential.user;
 
       const db = getDatabase();
       await set(ref(db, "users/" + user.uid), {
-        name: name,
-        email: email,
+        name: userName,
+        email: userEmail,
       }).then((result) => {
         console.log(result, "This is response");
       });
@@ -65,10 +85,10 @@ const UserSignUp = ({ navigation }) => {
     } catch (error) {
       Alert.alert("Oops!", "Something wrong happened.");
     } finally {
-      dispatch(setName(""));
-      dispatch(setEmail(""));
-      dispatch(setPassword(""));
-      dispatch(setConfirmedPassword(""));
+      dispatch(setUserName(""));
+      dispatch(setUserEmail(""));
+      dispatch(setUserPassword(""));
+      dispatch(confirmPassword(""));
     }
   };
 
@@ -93,27 +113,27 @@ const UserSignUp = ({ navigation }) => {
         <View style={styles.formContainer}>
           <InputField
             label="Your Name"
-            value={name}
-            onChangeText={(text) => dispatch(setName(text))}
+            value={userName}
+            onChangeText={handleUserName}
             keyboardType="default"
           />
           <InputField
             label="Your email"
-            value={email}
-            onChangeText={(text) => dispatch(setEmail(text))}
+            value={userEmail}
+            onChangeText={handleUserEmail}
             keyboardType="email-address"
             autoCapitalize="none"
           />
           <InputField
             label="Password"
-            value={password}
-            onChangeText={(text) => dispatch(setPassword(text))}
+            value={userPassword}
+            onChangeText={handleUserPassword}
             secureTextEntry
           />
           <InputField
             label="Confirm Password"
-            value={confirmedPassword}
-            onChangeText={(text) => dispatch(setConfirmedPassword(text))}
+            value={confirmPassword}
+            onChangeText={handleConfirmedUserPassword}
             secureTextEntry
           />
         </View>

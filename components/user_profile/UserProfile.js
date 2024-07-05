@@ -19,27 +19,52 @@ import * as ImagePicker from "expo-image-picker";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { StatusBar } from "expo-status-bar";
 import { useDispatch, useSelector } from "react-redux";
-import { setProfilePicture } from "../../redux/actions";
 import { useTabBarVisibility } from "../chat/custom_hook/useTabBarVisibilityContext";
 import ProfileHeader from "./ProfileHeader";
 import ProfileInfo from "./ProfileInfo";
 import MediaShared from "./MediaShared";
 import SaveButton from "./SaveButton";
 import styles from "./UserProfileStyles";
+import {
+  setPhoneNumber,
+  setProfilePicture,
+  setStatusMessage,
+  setUserName,
+} from "../../redux/user_profile_sign_up_and_login/userProfileSignupAndLoginActions";
 
 const UserProfile = () => {
+  const dispatch = useDispatch();
   const auth = getAuth();
   const user = auth.currentUser;
   const navigation = useNavigation();
-  const [name, setName] = useState(user.displayName || "");
-  const [email, setEmail] = useState(user.email || "");
-  const [statusMessage, setStatusMessage] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
-
-  const dispatch = useDispatch();
-  const profilePicture = useSelector((state) => state.profilePicture);
-
+  const userName = useSelector((state) => state.userVerification.userName);
+  const userEmail = useSelector((state) => state.userVerification.userEmail);
+  const statusMessage = useSelector(
+    (state) => state.userVerification.statusMessage
+  );
+  const phoneNumber = useSelector(
+    (state) => state.userVerification.phoneNumber
+  );
+  const profilePicture = useSelector(
+    (state) => state.userVerification.profilePicture
+  );
   const { setTabBarVisible } = useTabBarVisibility();
+
+  const handleUserName = (userName) => {
+    dispatch(setUserName(userName));
+  };
+
+  const handleUserEmail = (userEmail) => {
+    dispatch(setUserName(userEmail));
+  };
+
+  const handleStatusMessage = (statusMessage) => {
+    dispatch(setStatusMessage(statusMessage));
+  };
+
+  const handlePhoneNumber = (phoneNumber) => {
+    dispatch(setPhoneNumber(phoneNumber));
+  };
 
   useFocusEffect(
     useCallback(() => {
@@ -64,8 +89,8 @@ const UserProfile = () => {
       const snapshot = await get(userRef);
       if (snapshot.exists()) {
         const userData = snapshot.val();
-        setStatusMessage(userData.statusMessage || "");
-        setPhoneNumber(userData.phoneNumber || "");
+        dispatch(setStatusMessage(userData.statusMessage || ""));
+        dispatch(setPhoneNumber(userData.phoneNumber || ""));
       }
     };
     fetchUserProfile();
@@ -81,7 +106,13 @@ const UserProfile = () => {
   }, [user]);
 
   const handleSave = async () => {
-    if (!name || !email || !statusMessage || !phoneNumber || !profilePicture) {
+    if (
+      !userName ||
+      !userEmail ||
+      !statusMessage ||
+      !phoneNumber ||
+      !profilePicture
+    ) {
       Alert.alert(
         "Oops!",
         "Please fill in all fields and add a profile picture before saving."
@@ -94,7 +125,7 @@ const UserProfile = () => {
 
     try {
       await updateProfile(user, {
-        displayName: name,
+        displayName: userName,
         photoURL: profilePicture,
       });
 
@@ -103,8 +134,8 @@ const UserProfile = () => {
       const db = getDatabase();
       await set(ref(db, "users/" + user.uid), {
         photoURL: profilePicture,
-        name: name,
-        email: email,
+        name: userName,
+        email: userEmail,
         statusMessage: statusMessage,
         phoneNumber: phoneNumber,
       });
@@ -139,8 +170,8 @@ const UserProfile = () => {
         await uploadBytes(storeRef, blob);
         const downloadUrl = await getDownloadURL(storeRef);
         dispatch(setProfilePicture(downloadUrl));
-      } catch (e) {
-        console.error("Upload failed: ", e);
+      } catch (error) {
+        console.error("Upload failed: ", error);
       }
     }
   };
@@ -163,7 +194,7 @@ const UserProfile = () => {
         <ProfileHeader
           navigation={navigation}
           profilePicture={profilePicture}
-          name={name}
+          name={userName}
           pickImage={pickImage}
         />
       </ScrollView>
@@ -171,14 +202,14 @@ const UserProfile = () => {
         <View style={styles.dragger} />
         <View style={styles.infoContent}>
           <ProfileInfo
-            name={name}
-            setName={setName}
-            email={email}
-            setEmail={setEmail}
+            name={userName}
+            setName={handleUserName}
+            email={userEmail}
+            setEmail={handleUserEmail}
             statusMessage={statusMessage}
-            setStatusMessage={setStatusMessage}
+            setStatusMessage={handleStatusMessage}
             phoneNumber={phoneNumber}
-            setPhoneNumber={setPhoneNumber}
+            setPhoneNumber={handlePhoneNumber}
           />
           <MediaShared profilePicture={profilePicture} />
           <SaveButton handleSave={handleSave} />

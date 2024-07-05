@@ -26,13 +26,9 @@ import {
   setGroupMessages,
   setPrivateMessages,
   addNewPrivateMessage,
-  increaseNotifications,
   setPrivateChatId,
   setCurrentUserId,
   setReceiverId,
-  shouldPressContact,
-  setIsScreenFocused,
-  addGroupMessage,
 } from "../../../redux/actions";
 import ChatHeader from "./ChatHeader";
 import MessageList from "./MessageList";
@@ -57,9 +53,6 @@ const ChatScreen = ({ route, navigation }) => {
   const dispatch = useDispatch();
 
   const privateMessages = useSelector((state) => state.privateMessages);
-  const isChatScreenFocussed = useSelector(
-    (state) => state.isChatScreenFocussed
-  );
   const groupMessages = useSelector((state) => state.groupMessages);
   const newMessage = useSelector((state) => state.newMessage);
   const image = useSelector((state) => state.image);
@@ -77,12 +70,10 @@ const ChatScreen = ({ route, navigation }) => {
   useFocusEffect(
     useCallback(() => {
       setTabBarVisible(false);
-      dispatch(setIsScreenFocused(true));
       return () => {
         setTabBarVisible(true);
-        dispatch(setIsScreenFocused(false));
       };
-    }, [setTabBarVisible, isChatScreenFocussed])
+    }, [setTabBarVisible])
   );
 
   useEffect(() => {

@@ -1,4 +1,4 @@
-import { Alert, Platform } from "react-native";
+import { Platform } from "react-native";
 import { getDatabase, ref, get, update } from "firebase/database";
 import * as Device from "expo-device";
 import * as Notifications from "expo-notifications";

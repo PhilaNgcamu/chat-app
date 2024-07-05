@@ -3,21 +3,13 @@ import { View, Text, TouchableOpacity, StyleSheet, Image } from "react-native";
 import { useFonts } from "expo-font";
 import { useDispatch, useSelector } from "react-redux";
 import { shouldPressContact } from "../../../redux/actions";
-import { getDatabase, off, onValue, ref, update } from "firebase/database";
+import { getDatabase, off, onValue, ref } from "firebase/database";
 import NotificationStatus from "./NotificationStatus";
 import { updateNotification } from "../../../utils/notificationUtils";
 import { auth } from "../../../backend/firebaseConfig";
 
 const ChatItem = ({ item, onPress }) => {
   const dispatch = useDispatch();
-  const notificationsCount = useSelector((state) => state.notificationsCount);
-  const isContactPressed = useSelector((state) => state.isContactPressed);
-  const userId = useSelector((state) => state.userId);
-  const receiverId = useSelector((state) => state.receiverId);
-  const chatId = useSelector((state) => state.chatId);
-  const isChatScreenFocussed = useSelector(
-    (state) => state.isChatScreenFocussed
-  );
   const [notifications, setNotifications] = useState(0);
 
   const [lastIndividualMessage, setLastIndividualMessage] = useState("");
@@ -124,7 +116,7 @@ const ChatItem = ({ item, onPress }) => {
         </View>
         <View style={styles.extraInfo}>
           <Text style={styles.lastTimeMessageSent}>2 min ago</Text>
-          {!isChatScreenFocussed && notifications > 0 && (
+          {notifications > 0 && (
             <NotificationStatus notificationsCount={notifications} />
           )}
         </View>
