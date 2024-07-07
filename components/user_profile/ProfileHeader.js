@@ -8,6 +8,7 @@ import VideoIcon from "../../utils/icons/VideoIcon";
 import styles from "./UserProfileStyles";
 
 const ProfileHeader = ({ navigation, profilePicture, name, pickImage }) => {
+  console.log("profilePicture", profilePicture);
   return (
     <View style={styles.headerContainer}>
       <TouchableOpacity

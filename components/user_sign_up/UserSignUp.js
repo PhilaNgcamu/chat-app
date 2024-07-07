@@ -84,11 +84,6 @@ const UserSignUp = ({ navigation }) => {
       });
     } catch (error) {
       Alert.alert("Oops!", "Something wrong happened.");
-    } finally {
-      dispatch(setUserName(""));
-      dispatch(setUserEmail(""));
-      dispatch(setUserPassword(""));
-      dispatch(confirmPassword(""));
     }
   };
 

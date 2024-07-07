@@ -19,9 +19,11 @@ const PEXELS_API_KEY =
 const StatusList = () => {
   const dispatch = useDispatch();
   const [pexelsPhotos, setPexelsPhotos] = useState([]);
-  const statuses = useSelector((state) => state.statuses);
+  const statuses = useSelector((state) => state.chatList.statuses);
   const filterForImages = statuses.filter((status) => status.photoURL !== null);
-  const profilePicture = useSelector((state) => state.profilePicture);
+  const profilePicture = useSelector(
+    (state) => state.userVerification.profilePicture
+  );
 
   useEffect(() => {
     const fetchUserProfilePicture = async () => {

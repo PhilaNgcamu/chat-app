@@ -29,6 +29,7 @@ import {
   setPhoneNumber,
   setProfilePicture,
   setStatusMessage,
+  setUserEmail,
   setUserName,
 } from "../../redux/user_profile_sign_up_and_login/userProfileSignupAndLoginActions";
 
@@ -55,7 +56,7 @@ const UserProfile = () => {
   };
 
   const handleUserEmail = (userEmail) => {
-    dispatch(setUserName(userEmail));
+    dispatch(setUserEmail(userEmail));
   };
 
   const handleStatusMessage = (statusMessage) => {
@@ -129,8 +130,6 @@ const UserProfile = () => {
         photoURL: profilePicture,
       });
 
-      await updateEmail(user, email);
-
       const db = getDatabase();
       await set(ref(db, "users/" + user.uid), {
         photoURL: profilePicture,
@@ -144,7 +143,7 @@ const UserProfile = () => {
 
       navigation.navigate("Home");
     } catch (error) {
-      Alert.alert("Oops!", "Changing an email address is not allowed.");
+      console.log("Error updating profile:", error);
     }
   };
 

@@ -9,11 +9,16 @@ import { setGroup, setItems, setStatuses } from "../../../redux/actions";
 import SearchBar from "./SearchBar";
 import StatusList from "./StatusList";
 import ChatItem from "./ChatItem";
+import {
+  displayContacts,
+  displayGroups,
+  displayStatuses,
+} from "../../../redux/chat_list/chatListActions";
 
 const ChatList = ({ navigation }) => {
   const dispatch = useDispatch();
-  const items = useSelector((state) => state.items);
-  const groups = useSelector((state) => state.groups);
+  const items = useSelector((state) => state.chatList.contacts);
+  const groups = useSelector((state) => state.chatList.groups);
 
   useEffect(() => {
     const db = getDatabase();
@@ -41,8 +46,9 @@ const ChatList = ({ navigation }) => {
                 });
               }
             });
-            dispatch(setStatuses(contactsList));
-            dispatch(setItems([...contactsList]));
+            console.log("contactsList: ", Object.entries(snapshot.val()));
+            dispatch(displayStatuses(contactsList));
+            dispatch(displayContacts([...contactsList]));
             resolve(contactsList);
           });
         });
@@ -108,7 +114,9 @@ const ChatList = ({ navigation }) => {
                   }
                 }
               }
-              dispatch(setItems([...individualChatsList, ...contactsList]));
+              dispatch(
+                displayContacts([...individualChatsList, ...contactsList])
+              );
 
               resolve(individualChatsList);
             }
@@ -126,7 +134,7 @@ const ChatList = ({ navigation }) => {
                   ...childSnapshot,
                 });
               }
-              dispatch(setGroup([...groupChatsList]));
+              dispatch(displayGroups([...groupChatsList]));
               resolve(groupChatsList);
             }
           });
@@ -164,6 +172,7 @@ const ChatList = ({ navigation }) => {
   };
 
   const uniqueEntries = new Map();
+  console.log("itemsss:", JSON.stringify(items, null, 2));
   items.forEach((entry) => {
     uniqueEntries.set(entry.id, entry);
   });
