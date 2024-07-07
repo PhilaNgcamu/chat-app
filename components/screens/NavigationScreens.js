@@ -10,7 +10,7 @@ import UserSignUp from "../user_sign_up/UserSignUp";
 import UserProfile from "../user_profile/UserProfile";
 import ChatList from "../chat/display_chats/ChatList";
 import Home from "./HomeNavigation";
-import CreateGroupChat from "./chat_screen/CreateGroupChat";
+
 import ChatScreen from "./chat_screen/ChatScreen";
 import Onboarding from "../onboarding/Onboarding";
 import { useSelector } from "react-redux";
@@ -19,6 +19,7 @@ import GroupIcon from "../../utils/icons/GroupIcon";
 import MessageIcon from "../../utils/icons/MessageIcon";
 import SettingsIcon from "../../utils/icons/SettingsIcon";
 import CallsIcon from "../../utils/icons/CallsIcon";
+import CreateGroupChat from "./create_group_chat_screen/CreateGroupChat";
 
 const Stack = createNativeStackNavigator();
 const MessagesStack = createNativeStackNavigator();
