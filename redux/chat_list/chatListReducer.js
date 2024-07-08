@@ -5,6 +5,8 @@ const initialState = {
   groups: [],
   statuses: [],
   lastMessage: "",
+  notifications: 0,
+  notifyTheRecipientId: "",
 };
 
 const chatListReducer = (state = initialState, action) => {
@@ -28,6 +30,16 @@ const chatListReducer = (state = initialState, action) => {
       return {
         ...state,
         lastMessage: action.payload,
+      };
+    case chatListType.DISPLAY_NOTIFICATIONS:
+      return {
+        ...state,
+        notifications: action.payload,
+      };
+    case chatListType.NOTIFY_THE_RECIPIENT_ID:
+      return {
+        ...state,
+        notifyTheRecipientId: action.payload,
       };
     default:
       return state;

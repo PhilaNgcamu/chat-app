@@ -4,6 +4,8 @@ export const chatListType = {
   DISPLAY_STATUSES: "DISPLAY_STATUSES",
   DISPLAY_GROUP_MESSAGES: "DISPLAY_GROUP_MESSAGE",
   DISPLAY_LAST_MESSAGE: "DISPLAY_LAST_MESSAGE",
+  DISPLAY_NOTIFICATIONS: "DISPLAY_NOTIFICATIONS",
+  NOTIFY_THE_RECIPIENT_ID: "NOTIFY_THE_RECIPIENT_ID",
 };
 
 export const displayContacts = (displayContacts) => ({
@@ -29,4 +31,14 @@ export const displayGroupMessages = (groupMessages) => ({
 export const displayLastMessage = (lastMessage) => ({
   type: chatListType.DISPLAY_LAST_MESSAGE,
   payload: lastMessage,
+});
+
+export const displayNotifications = (notifications) => ({
+  type: chatListType.DISPLAY_NOTIFICATIONS,
+  payload: notifications,
+});
+
+export const notifyTheRecipientId = (recipientId) => ({
+  type: chatListType.NOTIFY_THE_RECIPIENT_ID,
+  payload: recipientId,
 });

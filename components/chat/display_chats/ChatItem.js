@@ -5,12 +5,20 @@ import { getDatabase, off, onValue, ref } from "firebase/database";
 import NotificationStatus from "./NotificationStatus";
 import { updateNotification } from "../../../utils/notificationUtils";
 import { auth } from "../../../backend/firebaseConfig";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  displayNotifications,
+  notifyTheRecipientId,
+} from "../../../redux/chat_list/chatListActions";
 
 const ChatItem = ({ item, onPress }) => {
   const chatId = useSelector((state) => state.chatScreen.chatId);
-  const [notifications, setNotifications] = useState(0);
-  const [notifyUserId, setNotifyUserId] = useState("");
+  const notifications = useSelector((state) => state.chatList.notifications);
+  const notifyRecipient = useSelector(
+    (state) => state.chatList.notifyTheRecipientId
+  );
+
+  const dispatch = useDispatch();
 
   const [lastIndividualMessage, setLastIndividualMessage] = useState("");
 
@@ -35,12 +43,12 @@ const ChatItem = ({ item, onPress }) => {
 
     const handlePrivateMessagesNotification = (snapshot) => {
       const data = snapshot.val();
-      setNotifications(data?.notificationsCount || 0);
-      setNotifyUserId(data?.userId);
+      dispatch(displayNotifications(data?.notificationsCount || 0));
+      dispatch(notifyTheRecipientId(data?.userId));
     };
     const handleGroupsNotifications = (snapshot) => {
       const data = snapshot.val();
-      setNotifications(data?.notificationsCount || 0);
+      dispatch(displayNotifications(data?.notificationsCount || 0));
     };
     const handleLastMessage = (snapshot) => {
       const message = snapshot.val();
@@ -59,7 +67,7 @@ const ChatItem = ({ item, onPress }) => {
   }, [key]);
 
   const handlePress = () => {
-    if (auth.currentUser.uid !== notifyUserId && chatId !== null) {
+    if (auth.currentUser.uid !== notifyRecipient && chatId !== null) {
       updateNotification(
         currentUserId,
         item.chatType === "group" ? item.groupId : chatId,
@@ -93,7 +101,7 @@ const ChatItem = ({ item, onPress }) => {
               style={[
                 styles.itemLastMessage,
                 notifications > 0 &&
-                  currentUserId !== notifyUserId && {
+                  currentUserId !== notifyRecipient && {
                     fontFamily: "Poppins-SemiBold",
                   },
               ]}
@@ -104,7 +112,7 @@ const ChatItem = ({ item, onPress }) => {
         </View>
         <View style={styles.extraInfo}>
           <Text style={styles.lastTimeMessageSent}>2 min ago</Text>
-          {notifications > 0 && currentUserId !== notifyUserId && (
+          {notifications > 0 && currentUserId !== notifyRecipient && (
             <NotificationStatus notificationsCount={notifications} />
           )}
         </View>

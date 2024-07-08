@@ -5,7 +5,6 @@ import { getDatabase, ref, onValue, off, update } from "firebase/database";
 import { auth } from "../../../backend/firebaseConfig";
 import { StatusBar } from "expo-status-bar";
 import { useDispatch, useSelector } from "react-redux";
-import { setGroup, setItems, setStatuses } from "../../../redux/actions";
 import SearchBar from "./SearchBar";
 import StatusList from "./StatusList";
 import ChatItem from "./ChatItem";
@@ -46,7 +45,6 @@ const ChatList = ({ navigation }) => {
                 });
               }
             });
-            console.log("contactsList: ", Object.entries(snapshot.val()));
             dispatch(displayStatuses(contactsList));
             dispatch(displayContacts([...contactsList]));
             resolve(contactsList);
@@ -169,7 +167,6 @@ const ChatList = ({ navigation }) => {
   };
 
   const uniqueEntries = new Map();
-  console.log("itemsss:", JSON.stringify(items, null, 2));
   items.forEach((entry) => {
     uniqueEntries.set(entry.id, entry);
   });
@@ -186,13 +183,7 @@ const ChatList = ({ navigation }) => {
     return { ...obj, ...item };
   }, {});
 
-  console.log(
-    "combined object:",
-    JSON.stringify(Object.keys(combinedGroupObject), null, 2)
-  );
-
   const renderItem = ({ item }) => {
-    console.log("Itemzz:", JSON.stringify(item, null, 2));
     return (
       <ChatItem
         key={item.id || item.groupId}
