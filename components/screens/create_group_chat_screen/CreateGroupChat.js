@@ -19,23 +19,24 @@ import { auth } from "../../../backend/firebaseConfig";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  setContacts,
-  setGroupName,
-  setSelectedContacts,
-  setGroupImage,
-} from "../../../redux/actions";
 import * as ImagePicker from "expo-image-picker";
 import { StatusBar } from "expo-status-bar";
+import {
+  setGroupImage,
+  setGroupName,
+  setSelectedGroupContacts,
+} from "../../../redux/group_chat/groupChatActions";
 
 const CreateGroupChat = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
 
-  const groupName = useSelector((state) => state.groupName);
-  const contacts = useSelector((state) => state.contacts);
-  const selectedContacts = useSelector((state) => state.selectedContacts);
-  const groupImage = useSelector((state) => state.groupImage);
+  const groupName = useSelector((state) => state.groupChat.groupName);
+  const contacts = useSelector((state) => state.groupContacts.contacts);
+  const selectedContacts = useSelector(
+    (state) => state.selectedGroupContacts.selectedContacts
+  );
+  const groupImage = useSelector((state) => state.groupImage.groupImage);
 
   useEffect(() => {
     const fetchContacts = async () => {
@@ -56,9 +57,9 @@ const CreateGroupChat = () => {
           (contact) => contact.id !== currentUserID
         );
 
-        dispatch(setContacts(filteredContacts));
+        dispatch(setGroupContacts(filteredContacts));
       } else {
-        dispatch(setContacts([]));
+        dispatch(setGroupContacts([]));
       }
     };
 
@@ -125,10 +126,12 @@ const CreateGroupChat = () => {
   const toggleContactSelection = (contact) => {
     if (selectedContacts.some((c) => c.id === contact.id)) {
       dispatch(
-        setSelectedContacts(selectedContacts.filter((c) => c.id !== contact.id))
+        setSelectedGroupContacts(
+          selectedContacts.filter((c) => c.id !== contact.id)
+        )
       );
     } else {
-      dispatch(setSelectedContacts([...selectedContacts, contact]));
+      dispatch(setSelectedGroupContacts([...selectedContacts, contact]));
     }
   };
 

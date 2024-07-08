@@ -1,15 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet, Image } from "react-native";
 import { useFonts } from "expo-font";
-import { useDispatch, useSelector } from "react-redux";
-import { shouldPressContact } from "../../../redux/actions";
 import { getDatabase, off, onValue, ref } from "firebase/database";
 import NotificationStatus from "./NotificationStatus";
 import { updateNotification } from "../../../utils/notificationUtils";
 import { auth } from "../../../backend/firebaseConfig";
 
 const ChatItem = ({ item, onPress }) => {
-  const dispatch = useDispatch();
   const [notifications, setNotifications] = useState(0);
 
   const [lastIndividualMessage, setLastIndividualMessage] = useState("");
@@ -63,19 +60,6 @@ const ChatItem = ({ item, onPress }) => {
   console.log("Notifications Groups", notifications);
 
   const handlePress = () => {
-    console.log(
-      "updated notification",
-      item.groupId,
-      key,
-      true,
-      item.chatType || item.type
-    );
-    if (!isContactPressed) {
-      dispatch(shouldPressContact(true));
-      setNotifications(0);
-    } else {
-      dispatch(shouldPressContact(true));
-    }
     updateNotification(
       currentUserId,
       item.groupId,

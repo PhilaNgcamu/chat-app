@@ -11,7 +11,6 @@ import {
   moderateScale,
 } from "../../utils/scale";
 import { useDispatch, useSelector } from "react-redux";
-import { setEmail, setLoading, setPassword } from "../../redux/actions";
 
 import BackButton from "./BackButton";
 import SocialLoginButtons from "../onboarding/SocialLoginButtons";
@@ -22,11 +21,18 @@ import SignUpOrLoginSubtitle from "./SignupOrLoginSubtitle";
 import SignUpOrLoginTitle from "./SignUpOrLoginTitle";
 import ExistingOrCreateAccountButton from "../user_sign_up/ExistingOrCreateAccountButton";
 import InputField from "../user_sign_up/InputField";
+import {
+  setLoading,
+  setUserEmail,
+  setUserPassword,
+} from "../../redux/user_profile_sign_up_and_login/userProfileSignupAndLoginActions";
 
 const UserLogin = ({ navigation }) => {
   const dispatch = useDispatch();
-  const email = useSelector((state) => state.email);
-  const password = useSelector((state) => state.password);
+  const userEmail = useSelector((state) => state.userVerification.userEmail);
+  const userPassword = useSelector(
+    (state) => state.userVerification.userPassword
+  );
 
   const [fontsLoaded] = useFonts({
     "Poppins-Bold": require("../../assets/fonts/Poppins-Bold.ttf"),
@@ -36,7 +42,7 @@ const UserLogin = ({ navigation }) => {
 
   const handleLogin = async () => {
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+      await signInWithEmailAndPassword(auth, userEmail, userPassword);
       Alert.alert("Yay!", "Login Successful");
       navigation.navigate("Home");
     } catch (error) {
@@ -46,8 +52,8 @@ const UserLogin = ({ navigation }) => {
       );
     } finally {
       dispatch(setLoading(false));
-      dispatch(setEmail(""));
-      dispatch(setPassword(""));
+      dispatch(setUserEmail(""));
+      dispatch(setUserPassword(""));
     }
   };
 
@@ -78,13 +84,13 @@ const UserLogin = ({ navigation }) => {
         <InputField
           label="Your email"
           value={email}
-          onChangeText={(text) => dispatch(setEmail(text))}
+          onChangeText={(text) => dispatch(setUserEmail(text))}
           keyboardType="email-address"
         />
         <InputField
           label="Password"
           value={password}
-          onChangeText={(text) => dispatch(setPassword(text))}
+          onChangeText={(text) => dispatch(setUserPassword(text))}
           secureTextEntry
         />
         <Text style={styles.forgotPasswordText}>Forgot password?</Text>

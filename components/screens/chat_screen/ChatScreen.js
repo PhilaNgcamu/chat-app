@@ -21,15 +21,15 @@ import { useFocusEffect } from "@react-navigation/native";
 import { StatusBar } from "expo-status-bar";
 import { useDispatch, useSelector } from "react-redux";
 import { useTabBarVisibility } from "../../chat/custom_hook/useTabBarVisibilityContext";
-import {
-  setImage,
-  setGroupMessages,
-  setPrivateMessages,
-  addNewPrivateMessage,
-  setPrivateChatId,
-  setCurrentUserId,
-  setReceiverId,
-} from "../../../redux/actions";
+// import {
+//   setImage,
+//   setGroupMessages,
+//   setPrivateMessages,
+//   addNewPrivateMessage,
+//   setPrivateChatId,
+//   setCurrentUserId,
+//   setReceiverId,
+// } from "../../../redux/actions";
 import ChatHeader from "./ChatHeader";
 import MessageList from "./MessageList";
 import ChatInput from "./ChatInput";
@@ -38,6 +38,18 @@ import {
   registerForPushNotificationsAsync,
   sendPushNotification,
 } from "../../../utils/notificationUtils";
+import { displayGroupMessages } from "../../../redux/chat_list/chatListActions";
+import {
+  addNewPrivateMessage,
+  displayPrivateMessages,
+} from "../../../redux/private_chat/privateChatActions";
+import {
+  expoPushToken,
+  setChatId,
+  setCurrentUserId,
+  setImageToBeSent,
+  setRecipientId,
+} from "../../../redux/chat_screen/chatScreenActions";
 
 const ChatScreen = ({ route, navigation }) => {
   const {
@@ -60,7 +72,6 @@ const ChatScreen = ({ route, navigation }) => {
 
   const { setTabBarVisible } = useTabBarVisibility();
 
-  const [expoPushToken, setExpoPushToken] = useState("");
   const [notification, setNotification] = useState(undefined);
   const notificationListener = useRef();
   const responseListener = useRef();
@@ -109,20 +120,20 @@ const ChatScreen = ({ route, navigation }) => {
         });
       });
       if (isGroupChat) {
-        dispatch(setGroupMessages(messageList));
+        dispatch(displayGroupMessages(messageList));
       } else {
-        dispatch(setPrivateMessages(messageList));
+        dispatch(displayPrivateMessages(messageList));
       }
     });
 
     return () => {
       unsubscribeMessages();
     };
-  }, [groupChatId, contactId, chatType, dispatch, isChatScreenFocussed]);
+  }, [groupChatId, contactId, chatType, dispatch, userId]);
   dispatch(setCurrentUserId(userId));
-  dispatch(setReceiverId(contactId));
+  dispatch(setRecipientId(contactId));
   dispatch(
-    setPrivateChatId(
+    setChatId(
       chatType === "group" ? groupChatId : [userId, contactId].sort().join("_")
     )
   );
@@ -169,7 +180,7 @@ const ChatScreen = ({ route, navigation }) => {
         await uploadBytes(imageRef, blob);
         const imageUrl = await getDownloadURL(imageRef);
         messageData.imageUrl = imageUrl;
-        dispatch(setImage(null));
+        dispatch(setImageToBeSent(null));
       } catch (error) {
         console.error("Error uploading image: ", error);
       }
@@ -217,8 +228,8 @@ const ChatScreen = ({ route, navigation }) => {
 
   useEffect(() => {
     registerForPushNotificationsAsync()
-      .then((token) => setExpoPushToken(token ?? ""))
-      .catch((error) => setExpoPushToken(`${error}`));
+      .then((token) => dispatch(expoPushToken(token ?? "")))
+      .catch((error) => dispatch(expoPushToken(`${error}`)));
 
     notificationListener.current =
       Notifications.addNotificationReceivedListener((notification) => {

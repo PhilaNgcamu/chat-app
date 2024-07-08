@@ -107,13 +107,7 @@ const UserProfile = () => {
   }, [user]);
 
   const handleSave = async () => {
-    if (
-      !userName ||
-      !userEmail ||
-      !statusMessage ||
-      !phoneNumber ||
-      !profilePicture
-    ) {
+    if (!userName || !userEmail || !statusMessage || !phoneNumber) {
       Alert.alert(
         "Oops!",
         "Please fill in all fields and add a profile picture before saving."

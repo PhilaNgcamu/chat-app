@@ -11,7 +11,9 @@ import { StatusBar } from "expo-status-bar";
 
 const SearchBar = () => {
   const dispatch = useDispatch();
-  const profilePicture = useSelector((state) => state.profilePicture);
+  const profilePicture = useSelector(
+    (state) => state.userVerification.profilePicture
+  );
 
   const navigation = useNavigation();
 

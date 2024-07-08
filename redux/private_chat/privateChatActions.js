@@ -3,7 +3,7 @@ export const privateChatType = {
   ADD_NEW_PRIVATE_MESSAGE: "ADD_NEW_PRIVATE_MESSAGE",
 };
 
-export const displayPrivateMessage = (privateMessages) => ({
+export const displayPrivateMessages = (privateMessages) => ({
   type: privateChatType.DISPLAY_PRIVATE_MESSAGES,
   payload: privateMessages,
 });

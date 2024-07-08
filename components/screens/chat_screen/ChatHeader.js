@@ -21,9 +21,9 @@ const ChatHeader = ({
   isOnline,
   navigation,
 }) => {
-  const userId = useSelector((state) => state.userId);
-  const receiverId = useSelector((state) => state.receiverId);
-  const chatId = useSelector((state) => state.chatId);
+  const userId = useSelector((state) => state.chatScreen.userId);
+  const recipientId = useSelector((state) => state.chatScreen.recipientId);
+  const chatId = useSelector((state) => state.chatScreen.chatId);
   const [fontsLoaded] = useFonts({
     "Poppins-Bold": require("../../../assets/fonts/Poppins-Bold.ttf"),
     "Poppins-SemiBold": require("../../../assets/fonts/Poppins-SemiBold.ttf"),
@@ -39,7 +39,7 @@ const ChatHeader = ({
       </View>
     );
   }
-  console.log(chatId, userId, receiverId, type, "Chat header");
+  console.log(chatId, userId, recipientId, type, "Chat header");
   return (
     <View style={styles.header}>
       <TouchableOpacity
