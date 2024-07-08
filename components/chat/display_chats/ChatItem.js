@@ -7,6 +7,7 @@ import { updateNotification } from "../../../utils/notificationUtils";
 import { auth } from "../../../backend/firebaseConfig";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  displayLastMessage,
   displayNotifications,
   notifyTheRecipientId,
 } from "../../../redux/chat_list/chatListActions";
@@ -17,10 +18,11 @@ const ChatItem = ({ item, onPress }) => {
   const notifyRecipient = useSelector(
     (state) => state.chatList.notifyTheRecipientId
   );
+  const lastIndividualMessage = useSelector(
+    (state) => state.chatList.lastMessage
+  );
 
   const dispatch = useDispatch();
-
-  const [lastIndividualMessage, setLastIndividualMessage] = useState("");
 
   const [fontsLoaded] = useFonts({
     "Poppins-Bold": require("../../../assets/fonts/Poppins-Bold.ttf"),
@@ -30,7 +32,6 @@ const ChatItem = ({ item, onPress }) => {
 
   const key = Object.keys(item).find((key) => key.includes("_"));
   const currentUserId = auth.currentUser.uid;
-  console.log("Item key", chatId, currentUserId, item);
 
   useEffect(() => {
     const db = getDatabase();
@@ -52,7 +53,7 @@ const ChatItem = ({ item, onPress }) => {
     };
     const handleLastMessage = (snapshot) => {
       const message = snapshot.val();
-      setLastIndividualMessage(message);
+      dispatch(displayLastMessage(message));
     };
 
     onValue(privateNotifications, handlePrivateMessagesNotification);
