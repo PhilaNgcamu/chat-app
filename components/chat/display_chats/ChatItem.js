@@ -58,11 +58,8 @@ const ChatItem = ({ item, onPress }) => {
     };
   }, [key]);
 
-  console.log("Notifications Groups", notifications);
-
   const handlePress = () => {
     if (auth.currentUser.uid !== notifyUserId && chatId !== null) {
-      console.log("NotificationsSe", chatId);
       updateNotification(
         currentUserId,
         item.chatType === "group" ? item.groupId : chatId,
