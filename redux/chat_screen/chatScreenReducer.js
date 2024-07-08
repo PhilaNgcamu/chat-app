@@ -5,6 +5,8 @@ const initialState = {
   chatId: null,
   userId: null,
   recipientId: null,
+  pushNotification: undefined,
+  expoPushToken: "",
 };
 
 const chatScreenReducer = (state = initialState, action) => {
@@ -28,6 +30,16 @@ const chatScreenReducer = (state = initialState, action) => {
       return {
         ...state,
         chosenImageToBeSent: action.payload,
+      };
+    case chatScreenType.PUSH_NOTIFICATION:
+      return {
+        ...state,
+        pushNotification: action.payload,
+      };
+    case chatScreenType.EXPO_PUSH_TOKEN:
+      return {
+        ...state,
+        expoPushToken: action.payload,
       };
     default:
       return state;

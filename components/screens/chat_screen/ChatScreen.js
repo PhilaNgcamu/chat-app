@@ -61,6 +61,9 @@ const ChatScreen = ({ route, navigation }) => {
   const groupMessages = useSelector((state) => state.groupChat.groupMessages);
   const newMessage = useSelector((state) => state.privateChat.newMessage);
   const image = useSelector((state) => state.chatScreen.chosenImageToBeSent);
+  const expoNotifyToken = useSelector(
+    (state) => state.chatScreen.expoPushToken
+  );
   const inputRef = useRef(null);
 
   const { setTabBarVisible } = useTabBarVisibility();
@@ -202,8 +205,8 @@ const ChatScreen = ({ route, navigation }) => {
       });
 
     await sendPushNotification(
-      expoPushToken,
-      `${auth.currentUser.displayName} sent you a message`,
+      expoNotifyToken,
+      `${auth.currentUser.displayName.trim()} sent you a message`,
       messageData.text || "You've received a new message"
     );
   };
@@ -232,7 +235,7 @@ const ChatScreen = ({ route, navigation }) => {
 
     notificationListener.current =
       Notifications.addNotificationReceivedListener((notification) => {
-        setNotification(notification);
+        dispatch(setNotification(notification));
       });
 
     responseListener.current =
