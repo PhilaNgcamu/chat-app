@@ -13,7 +13,11 @@ import { useFonts } from "expo-font";
 import CallIcon from "../../../utils/icons/CallIcon";
 import VideoIcon from "../../../utils/icons/VideoIcon";
 import { updateNotification } from "../../../utils/notificationUtils";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  displayNotifications,
+  notifyTheRecipientId,
+} from "../../../redux/chat_list/chatListActions";
 
 const ChatHeader = ({
   contactAvatar,
@@ -24,14 +28,17 @@ const ChatHeader = ({
 }) => {
   const userId = useSelector((state) => state.chatScreen.userId);
   const recipientId = useSelector((state) => state.chatScreen.recipientId);
+  const notifyRecipientId = useSelector(
+    (state) => state.chatList.notifyTheRecipientId
+  );
   const chatId = useSelector((state) => state.chatScreen.chatId);
   const [fontsLoaded] = useFonts({
     "Poppins-Bold": require("../../../assets/fonts/Poppins-Bold.ttf"),
     "Poppins-SemiBold": require("../../../assets/fonts/Poppins-SemiBold.ttf"),
     "Poppins-Regular": require("../../../assets/fonts/Poppins-Regular.ttf"),
   });
-  const [notifications, setNotifications] = useState(0);
-  const [notifyUserId, setNotifyUserId] = useState("");
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const db = getDatabase();
@@ -40,12 +47,12 @@ const ChatHeader = ({
 
     const handlePrivateMessagesNotification = (snapshot) => {
       const data = snapshot.val();
-      setNotifications(data?.notificationsCount || 0);
-      setNotifyUserId(data?.userId);
+      dispatch(displayNotifications(data?.notificationsCount || 0));
+      dispatch(notifyTheRecipientId(data?.userId));
     };
     const handleGroupsNotifications = (snapshot) => {
       const data = snapshot.val();
-      setNotifications(data?.notificationsCount || 0);
+      displayNotifications(data?.notificationsCount || 0);
     };
 
     onValue(privateNotifications, handlePrivateMessagesNotification);
@@ -72,7 +79,7 @@ const ChatHeader = ({
       <TouchableOpacity
         onPress={async () => {
           navigation.goBack();
-          if (notifyUserId === userId) {
+          if (notifyRecipientId === userId) {
             return;
           }
           await updateNotification(userId, chatId, true, type);
