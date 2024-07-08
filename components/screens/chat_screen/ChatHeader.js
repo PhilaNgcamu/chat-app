@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { getDatabase, off, onValue, ref } from "firebase/database";
 import {
   View,
   Text,
@@ -29,6 +30,32 @@ const ChatHeader = ({
     "Poppins-SemiBold": require("../../../assets/fonts/Poppins-SemiBold.ttf"),
     "Poppins-Regular": require("../../../assets/fonts/Poppins-Regular.ttf"),
   });
+  const [notifications, setNotifications] = useState(0);
+  const [notifyUserId, setNotifyUserId] = useState("");
+
+  useEffect(() => {
+    const db = getDatabase();
+    const privateNotifications = ref(db, `chats/${chatId}/notifications`);
+    const groupsNotificationsRef = ref(db, `groups/${chatId}/notifications`);
+
+    const handlePrivateMessagesNotification = (snapshot) => {
+      const data = snapshot.val();
+      setNotifications(data?.notificationsCount || 0);
+      setNotifyUserId(data?.userId);
+    };
+    const handleGroupsNotifications = (snapshot) => {
+      const data = snapshot.val();
+      setNotifications(data?.notificationsCount || 0);
+    };
+
+    onValue(privateNotifications, handlePrivateMessagesNotification);
+    onValue(groupsNotificationsRef, handleGroupsNotifications);
+
+    return () => {
+      off(privateNotifications, handlePrivateMessagesNotification);
+      off(groupsNotificationsRef, handleGroupsNotifications);
+    };
+  }, [chatId]);
 
   const isPrivate = type === "private";
 
@@ -44,8 +71,11 @@ const ChatHeader = ({
     <View style={styles.header}>
       <TouchableOpacity
         onPress={async () => {
-          await updateNotification(userId, chatId, true, type);
           navigation.goBack();
+          if (notifyUserId === userId) {
+            return;
+          }
+          await updateNotification(userId, chatId, true, type);
         }}
       >
         <Ionicons name="arrow-back" size={24} color="#000" />

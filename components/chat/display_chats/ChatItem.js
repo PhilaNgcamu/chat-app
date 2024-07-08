@@ -10,6 +10,7 @@ import { useSelector } from "react-redux";
 const ChatItem = ({ item, onPress }) => {
   const chatId = useSelector((state) => state.chatScreen.chatId);
   const [notifications, setNotifications] = useState(0);
+  const [notifyUserId, setNotifyUserId] = useState("");
 
   const [lastIndividualMessage, setLastIndividualMessage] = useState("");
 
@@ -35,6 +36,7 @@ const ChatItem = ({ item, onPress }) => {
     const handlePrivateMessagesNotification = (snapshot) => {
       const data = snapshot.val();
       setNotifications(data?.notificationsCount || 0);
+      setNotifyUserId(data?.userId);
     };
     const handleGroupsNotifications = (snapshot) => {
       const data = snapshot.val();
@@ -59,12 +61,14 @@ const ChatItem = ({ item, onPress }) => {
   console.log("Notifications Groups", notifications);
 
   const handlePress = () => {
-    updateNotification(
-      currentUserId,
-      item.chatType === "group" ? item.groupId : chatId,
-      true,
-      item.chatType || item.type
-    );
+    if (auth.currentUser.uid !== notifyUserId) {
+      updateNotification(
+        currentUserId,
+        item.chatType === "group" ? item.groupId : chatId,
+        true,
+        item.chatType || item.type
+      );
+    }
   };
 
   if (!fontsLoaded) {
@@ -99,7 +103,7 @@ const ChatItem = ({ item, onPress }) => {
         </View>
         <View style={styles.extraInfo}>
           <Text style={styles.lastTimeMessageSent}>2 min ago</Text>
-          {notifications > 0 && (
+          {notifications > 0 && currentUserId !== item.id && (
             <NotificationStatus notificationsCount={notifications} />
           )}
         </View>
