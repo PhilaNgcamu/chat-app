@@ -61,7 +61,8 @@ const ChatItem = ({ item, onPress }) => {
   console.log("Notifications Groups", notifications);
 
   const handlePress = () => {
-    if (auth.currentUser.uid !== notifyUserId) {
+    if (auth.currentUser.uid !== notifyUserId && chatId !== null) {
+      console.log("NotificationsSe", chatId);
       updateNotification(
         currentUserId,
         item.chatType === "group" ? item.groupId : chatId,
@@ -94,16 +95,17 @@ const ChatItem = ({ item, onPress }) => {
             <Text
               style={[
                 styles.itemLastMessage,
-                notifications === 0 && { fontFamily: "Poppins-Regular" },
+                currentUserId !== notifyUserId &&
+                  notifications === 0 && { fontFamily: "Poppins-Regular" },
               ]}
             >
-              {lastIndividualMessage || item.lastGroupMessage}
+              {lastIndividualMessage}
             </Text>
           )}
         </View>
         <View style={styles.extraInfo}>
           <Text style={styles.lastTimeMessageSent}>2 min ago</Text>
-          {notifications > 0 && currentUserId !== item.id && (
+          {notifications > 0 && currentUserId !== notifyUserId && (
             <NotificationStatus notificationsCount={notifications} />
           )}
         </View>
