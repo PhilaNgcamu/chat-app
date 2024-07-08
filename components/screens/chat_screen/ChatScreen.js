@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useCallback, useState } from "react";
+import React, { useEffect, useRef, useCallback } from "react";
 import { StyleSheet, KeyboardAvoidingView, Platform } from "react-native";
 import * as Notifications from "expo-notifications";
 import {
