@@ -1,18 +1,22 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { View, Text, Image, StyleSheet } from "react-native";
 import { format } from "date-fns";
 import { getDatabase, ref, onValue, off } from "firebase/database";
 import { auth } from "../../../backend/firebaseConfig";
 import { useFonts } from "expo-font";
+import { useDispatch } from "react-redux";
+import { setImageToBeSent } from "../../../redux/chat_screen/chatScreenActions";
 
 const MessageItem = ({ item, type }) => {
+  const dispatch = useDispatch();
+
+  const imageToBeSent = useSelector((state) => state.chatScreen.imageToBeSent);
+
   const [fontsLoaded] = useFonts({
     "Poppins-Bold": require("../../../assets/fonts/Poppins-Bold.ttf"),
     "Poppins-SemiBold": require("../../../assets/fonts/Poppins-SemiBold.ttf"),
     "Poppins-Regular": require("../../../assets/fonts/Poppins-Regular.ttf"),
   });
-
-  const [photoURL, setPhotoURL] = useState(null);
 
   useEffect(() => {
     const db = getDatabase();
@@ -22,8 +26,8 @@ const MessageItem = ({ item, type }) => {
       onValue(contactsRef, (snapshot) => {
         const usersData = snapshot.val();
         const user = usersData[item.userId];
-        if (user && user.photoURL) {
-          setPhotoURL(user.photoURL);
+        if (user?.photoURL) {
+          dispatch(setImageToBeSent(user.photoURL));
         }
       });
 
@@ -48,8 +52,8 @@ const MessageItem = ({ item, type }) => {
           item.userId !== auth.currentUser.uid && styles.messageItemContainer
         }
       >
-        {item.userId !== auth.currentUser.uid && photoURL && (
-          <Image source={{ uri: photoURL }} style={styles.photoItem} />
+        {item.userId !== auth.currentUser.uid && imageToBeSent && (
+          <Image source={{ uri: imageToBeSent }} style={styles.photoItem} />
         )}
         {isGroup ? (
           <View style={styles.groupMemberContainer}>
