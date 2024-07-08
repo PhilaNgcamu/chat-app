@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import {
   View,
   FlatList,
@@ -12,13 +12,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { auth } from "../../../backend/firebaseConfig";
 import { getDatabase, ref, get } from "firebase/database";
 import { setProfilePicture } from "../../../redux/actions";
+import { displayStatuses } from "../../../redux/chat_list/chatListActions";
 
 const PEXELS_API_KEY =
   "HOQhlLoeml32OchQuDRqmxSjfoRpbqBvwX8zpTVxnS65mKmPbXlZQl5s";
 
 const StatusList = () => {
   const dispatch = useDispatch();
-  const [pexelsPhotos, setPexelsPhotos] = useState([]);
   const statuses = useSelector((state) => state.chatList.statuses);
   const filterForImages = statuses.filter((status) => status.photoURL !== null);
   const profilePicture = useSelector(
@@ -48,7 +48,7 @@ const StatusList = () => {
   const fetchImages = async () => {
     try {
       const response = await fetch(
-        `https://api.pexels.com/v1/search?query=people&per_page=5`,
+        `https://api.pexels.com/v1/search?query=people&per_page=15`,
         {
           headers: {
             Authorization: PEXELS_API_KEY,
@@ -61,7 +61,7 @@ const StatusList = () => {
         photoURL: photo.src.small,
         name: photo.photographer,
       }));
-      setPexelsPhotos(photos);
+      dispatch(displayStatuses(photos));
     } catch (error) {
       console.error("Error fetching images from Pexels:", error);
     }
@@ -71,7 +71,7 @@ const StatusList = () => {
     fetchImages();
   }, []);
 
-  const dummyData = [...filterForImages, ...pexelsPhotos];
+  const displayFiveStatus = [...filterForImages.slice(7, 12)];
 
   const renderStatusItem = ({ item }) => {
     return (
@@ -95,7 +95,7 @@ const StatusList = () => {
         <Text style={styles.myStatusText}>My Status</Text>
       </View>
       <FlatList
-        data={dummyData}
+        data={displayFiveStatus}
         horizontal
         renderItem={renderStatusItem}
         keyExtractor={(item) => item.id}
