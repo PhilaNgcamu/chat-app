@@ -5,8 +5,10 @@ import { getDatabase, off, onValue, ref } from "firebase/database";
 import NotificationStatus from "./NotificationStatus";
 import { updateNotification } from "../../../utils/notificationUtils";
 import { auth } from "../../../backend/firebaseConfig";
+import { useSelector } from "react-redux";
 
 const ChatItem = ({ item, onPress }) => {
+  const chatId = useSelector((state) => state.chatScreen.chatId);
   const [notifications, setNotifications] = useState(0);
 
   const [lastIndividualMessage, setLastIndividualMessage] = useState("");
@@ -19,14 +21,11 @@ const ChatItem = ({ item, onPress }) => {
 
   const key = Object.keys(item).find((key) => key.includes("_"));
   const currentUserId = auth.currentUser.uid;
-  console.log("Item key", currentUserId, item?.users?.[currentUserId]);
+  console.log("Item key", chatId, currentUserId, item);
 
   useEffect(() => {
     const db = getDatabase();
-    const privateNotifications = ref(
-      db,
-      `chats/${key}/${item.id}/notifications`
-    );
+    const privateNotifications = ref(db, `chats/${key}/notifications`);
     const lastMessageRef = ref(db, `chats/${key}/lastIndividualMessage`);
     const groupsNotificationsRef = ref(
       db,
@@ -62,7 +61,7 @@ const ChatItem = ({ item, onPress }) => {
   const handlePress = () => {
     updateNotification(
       currentUserId,
-      item.groupId,
+      item.chatType === "group" ? item.groupId : chatId,
       true,
       item.chatType || item.type
     );

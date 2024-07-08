@@ -19,7 +19,7 @@ export const updateNotification = async (
   } else {
     console.log("Error Private", chatId);
 
-    notifyUserRef = ref(db, `chats/${chatId}/${userId}/notifications`);
+    notifyUserRef = ref(db, `chats/${chatId}/notifications`);
   }
   try {
     const snapshot = await get(notifyUserRef);

@@ -21,15 +21,6 @@ import { useFocusEffect } from "@react-navigation/native";
 import { StatusBar } from "expo-status-bar";
 import { useDispatch, useSelector } from "react-redux";
 import { useTabBarVisibility } from "../../chat/custom_hook/useTabBarVisibilityContext";
-// import {
-//   setImage,
-//   setGroupMessages,
-//   setPrivateMessages,
-//   addNewPrivateMessage,
-//   setPrivateChatId,
-//   setCurrentUserId,
-//   setReceiverId,
-// } from "../../../redux/actions";
 import ChatHeader from "./ChatHeader";
 import MessageList from "./MessageList";
 import ChatInput from "./ChatInput";
@@ -64,10 +55,12 @@ const ChatScreen = ({ route, navigation }) => {
 
   const dispatch = useDispatch();
 
-  const privateMessages = useSelector((state) => state.privateMessages);
-  const groupMessages = useSelector((state) => state.groupMessages);
-  const newMessage = useSelector((state) => state.newMessage);
-  const image = useSelector((state) => state.image);
+  const privateMessages = useSelector(
+    (state) => state.privateChat.privateMessages
+  );
+  const groupMessages = useSelector((state) => state.groupChat.groupMessages);
+  const newMessage = useSelector((state) => state.privateChat.newMessage);
+  const image = useSelector((state) => state.chatScreen.chosenImageToBeSent);
   const inputRef = useRef(null);
 
   const { setTabBarVisible } = useTabBarVisibility();
@@ -130,13 +123,19 @@ const ChatScreen = ({ route, navigation }) => {
       unsubscribeMessages();
     };
   }, [groupChatId, contactId, chatType, dispatch, userId]);
-  dispatch(setCurrentUserId(userId));
-  dispatch(setRecipientId(contactId));
-  dispatch(
-    setChatId(
-      chatType === "group" ? groupChatId : [userId, contactId].sort().join("_")
-    )
-  );
+
+  useEffect(() => {
+    dispatch(setCurrentUserId(userId));
+    dispatch(setRecipientId(contactId));
+    dispatch(
+      setChatId(
+        chatType === "group"
+          ? groupChatId
+          : [userId, contactId].sort().join("_")
+      )
+    );
+  }, [contactId, groupChatId, chatType, userId, dispatch]);
+
   const handleSend = async () => {
     if (newMessage.trim() === "" && !image) {
       return;
@@ -249,7 +248,7 @@ const ChatScreen = ({ route, navigation }) => {
       responseListener.current &&
         Notifications.removeNotificationSubscription(responseListener.current);
     };
-  }, []);
+  }, [dispatch]);
 
   return (
     <KeyboardAvoidingView

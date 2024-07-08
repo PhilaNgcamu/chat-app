@@ -220,7 +220,7 @@ const ChatList = ({ navigation }) => {
           </View>
         ) : (
           <FlatList
-            data={items}
+            data={[combinedObject]}
             renderItem={renderItem}
             keyExtractor={(item) => item.id}
             style={styles.list}

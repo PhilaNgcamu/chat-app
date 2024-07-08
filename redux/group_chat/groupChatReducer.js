@@ -3,6 +3,7 @@ import { groupChatType } from "./groupChatActions";
 const initialState = {
   selectedGroupContacts: [],
   groupContacts: [],
+  groupMessages: [],
   groupImage: null,
   groupName: "",
 };
@@ -28,6 +29,12 @@ const groupChatReducer = (state = initialState, action) => {
       return {
         ...state,
         groupName: action.payload,
+      };
+
+    case groupChatType.DISPLAY_GROUP_MESSAGES:
+      return {
+        ...state,
+        groupMessages: action.payload,
       };
 
     default:
