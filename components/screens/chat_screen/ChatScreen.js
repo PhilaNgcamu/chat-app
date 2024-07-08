@@ -40,6 +40,7 @@ import {
   setCurrentUserId,
   setImageToBeSent,
   setRecipientId,
+  setNotification,
 } from "../../../redux/chat_screen/chatScreenActions";
 
 const ChatScreen = ({ route, navigation }) => {
@@ -68,7 +69,6 @@ const ChatScreen = ({ route, navigation }) => {
 
   const { setTabBarVisible } = useTabBarVisibility();
 
-  const [notification, setNotification] = useState(undefined);
   const notificationListener = useRef();
   const responseListener = useRef();
 
