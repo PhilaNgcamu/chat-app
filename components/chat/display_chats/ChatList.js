@@ -166,20 +166,21 @@ const ChatList = ({ navigation }) => {
     }
   };
 
-  const uniqueEntries = new Map();
+  const uniqueContactsMap = new Map();
   contacts.forEach((entry) => {
-    uniqueEntries.set(entry.id, entry);
+    uniqueContactsMap.set(entry.id, entry);
   });
-  const uniqueData = Array.from(uniqueEntries.values());
-  const combinedObject = uniqueData.reduce((obj, item) => {
+  const listOfUniqueContacts = Array.from(uniqueContactsMap.values());
+  const validContacts = listOfUniqueContacts.reduce((obj, item) => {
     return { ...obj, ...item };
   }, []);
-  const uniqueGroups = new Map();
+
+  const uniqueGroupsMap = new Map();
   groups.forEach((entry) => {
-    uniqueGroups.set(entry.groupId, entry);
+    uniqueGroupsMap.set(entry.groupId, entry);
   });
-  const uniqueGroupData = Array.from(uniqueGroups.values());
-  const combinedGroupObject = uniqueGroupData.reduce((obj, item) => {
+  const listOfUniqueGroups = Array.from(uniqueGroupsMap.values());
+  const validGroups = listOfUniqueGroups.reduce((obj, item) => {
     return { ...obj, ...item };
   }, {});
 
@@ -212,9 +213,9 @@ const ChatList = ({ navigation }) => {
         ) : (
           <FlatList
             data={
-              Object.keys(combinedGroupObject).length > 0
-                ? [combinedObject, combinedGroupObject]
-                : [combinedObject]
+              Object.keys(validGroups).length > 0
+                ? [validContacts, validGroups]
+                : [validContacts]
             }
             renderItem={renderItem}
             keyExtractor={(item) => item.id}
