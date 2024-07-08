@@ -95,8 +95,10 @@ const ChatItem = ({ item, onPress }) => {
             <Text
               style={[
                 styles.itemLastMessage,
-                currentUserId !== notifyUserId &&
-                  notifications === 0 && { fontFamily: "Poppins-Regular" },
+                notifications > 0 &&
+                  currentUserId !== notifyUserId && {
+                    fontFamily: "Poppins-SemiBold",
+                  },
               ]}
             >
               {lastIndividualMessage}
@@ -141,7 +143,7 @@ const styles = StyleSheet.create({
   itemLastMessage: {
     fontSize: 14,
     color: "#888",
-    fontFamily: "Poppins-SemiBold",
+    fontFamily: "Poppins-Regular",
     marginTop: 4,
   },
   extraInfo: {
