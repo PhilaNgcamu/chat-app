@@ -186,7 +186,10 @@ const ChatList = ({ navigation }) => {
     return { ...obj, ...item };
   }, {});
 
-  console.log("combined object:", JSON.stringify(combinedObject, null, 2));
+  console.log(
+    "combined object:",
+    JSON.stringify(Object.keys(combinedGroupObject), null, 2)
+  );
 
   const renderItem = ({ item }) => {
     console.log("Itemzz:", JSON.stringify(item, null, 2));
@@ -217,7 +220,11 @@ const ChatList = ({ navigation }) => {
           </View>
         ) : (
           <FlatList
-            data={[combinedObject]}
+            data={
+              Object.keys(combinedGroupObject).length > 0
+                ? [combinedObject, combinedGroupObject]
+                : [combinedObject]
+            }
             renderItem={renderItem}
             keyExtractor={(item) => item.id}
             style={styles.list}

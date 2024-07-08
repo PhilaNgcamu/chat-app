@@ -83,13 +83,13 @@ const UserLogin = ({ navigation }) => {
         <Separator color="#797C7B" />
         <InputField
           label="Your email"
-          value={email}
+          value={userEmail}
           onChangeText={(text) => dispatch(setUserEmail(text))}
           keyboardType="email-address"
         />
         <InputField
           label="Password"
-          value={password}
+          value={userPassword}
           onChangeText={(text) => dispatch(setUserPassword(text))}
           secureTextEntry
         />
