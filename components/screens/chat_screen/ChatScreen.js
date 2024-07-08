@@ -86,14 +86,7 @@ const ChatScreen = ({ route, navigation }) => {
   useEffect(() => {
     const db = getDatabase();
     const isGroupChat = chatType === "group";
-    console.log(
-      "ChatScreen: ",
-      groupChatId,
-      isGroupChat,
-      chatType,
-      chatName,
-      chatAvatar
-    );
+
     const messagesRef = ref(
       db,
       `${
