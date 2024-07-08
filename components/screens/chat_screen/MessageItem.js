@@ -4,7 +4,7 @@ import { format } from "date-fns";
 import { getDatabase, ref, onValue, off } from "firebase/database";
 import { auth } from "../../../backend/firebaseConfig";
 import { useFonts } from "expo-font";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setImageToBeSent } from "../../../redux/chat_screen/chatScreenActions";
 
 const MessageItem = ({ item, type }) => {
