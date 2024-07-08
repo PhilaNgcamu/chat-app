@@ -16,7 +16,7 @@ import {
 
 const ChatList = ({ navigation }) => {
   const dispatch = useDispatch();
-  const items = useSelector((state) => state.chatList.contacts);
+  const contacts = useSelector((state) => state.chatList.contacts);
   const groups = useSelector((state) => state.chatList.groups);
 
   useEffect(() => {
@@ -26,7 +26,7 @@ const ChatList = ({ navigation }) => {
     const groupsRef = ref(db, "groups");
     const currentUserID = auth.currentUser.uid;
 
-    const fetchItems = () => {
+    const fetchAllChats = () => {
       const individualChatsList = [];
       const contactsList = [];
       const groupChatsList = [];
@@ -145,7 +145,7 @@ const ChatList = ({ navigation }) => {
       };
     };
 
-    fetchItems();
+    fetchAllChats();
   }, [dispatch]);
 
   const handleItemPress = async (item) => {
@@ -167,7 +167,7 @@ const ChatList = ({ navigation }) => {
   };
 
   const uniqueEntries = new Map();
-  items.forEach((entry) => {
+  contacts.forEach((entry) => {
     uniqueEntries.set(entry.id, entry);
   });
   const uniqueData = Array.from(uniqueEntries.values());
@@ -202,7 +202,7 @@ const ChatList = ({ navigation }) => {
       <StatusList />
       <View style={styles.listContainer}>
         <View style={styles.dragger}></View>
-        {items.length === 0 ? (
+        {contacts.length === 0 ? (
           <View style={styles.emptyStateContainer}>
             <MaterialIcons name="chat-bubble-outline" size={80} color="#ddd" />
             <Text style={styles.emptyStateText}>
