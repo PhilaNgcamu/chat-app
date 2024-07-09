@@ -1,11 +1,12 @@
+import { FIREBASE_API_KEY, FIREBASE_AUTH_DOMAIN } from "@env";
 import { initializeApp } from "firebase/app";
 import { getDatabase } from "firebase/database";
 import { initializeAuth, getReactNativePersistence } from "firebase/auth";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCqcsdwFL_EveXmtr_fiGu_Ww9Q1HVXmJo",
-  authDomain: "lss-chat-app.firebaseapp.com",
+  apiKey: FIREBASE_API_KEY,
+  authDomain: FIREBASE_AUTH_DOMAIN,
   projectId: "lss-chat-app",
   storageBucket: "lss-chat-app.appspot.com",
   messagingSenderId: "137259105751",

@@ -1,3 +1,4 @@
+import { PEXELS_API_URL, PEXELS_API_KEY } from "@env";
 import React, { useEffect } from "react";
 import {
   View,
@@ -13,9 +14,6 @@ import { auth } from "../../../backend/firebaseConfig";
 import { getDatabase, ref, get } from "firebase/database";
 import { setProfilePicture } from "../../../redux/actions";
 import { displayStatuses } from "../../../redux/chat_list/chatListActions";
-
-const PEXELS_API_KEY =
-  "HOQhlLoeml32OchQuDRqmxSjfoRpbqBvwX8zpTVxnS65mKmPbXlZQl5s";
 
 const StatusList = () => {
   const dispatch = useDispatch();
@@ -48,7 +46,7 @@ const StatusList = () => {
   const fetchImages = async () => {
     try {
       const response = await fetch(
-        `https://api.pexels.com/v1/search?query=person&per_page=5`,
+        `${PEXELS_API_URL}?query=person&per_page=5`,
         {
           headers: {
             Authorization: PEXELS_API_KEY,
@@ -61,7 +59,7 @@ const StatusList = () => {
         photoURL: photo.src.small,
         name: photo.photographer,
       }));
-      dispatch(displayStatuses([...photos]));
+      dispatch(displayStatuses(photos));
     } catch (error) {
       console.error("Error fetching images from Pexels:", error);
     }
@@ -71,7 +69,7 @@ const StatusList = () => {
     fetchImages();
   }, []);
 
-  const displayFiveStatuses = filterForImages;
+  const displayFiveStatuses = filterForImages.length > 0 ? filterForImages : [];
 
   const renderStatusItem = ({ item }) => {
     return (
