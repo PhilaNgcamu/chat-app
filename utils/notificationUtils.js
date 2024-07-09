@@ -18,7 +18,6 @@ export const updateNotification = async (
     notifyUserRef = ref(db, `groups/${chatId}/notifications`);
   } else {
     console.log("Error Private", chatId);
-
     notifyUserRef = ref(db, `chats/${chatId}/notifications`);
   }
   try {
@@ -40,14 +39,6 @@ export const updateNotification = async (
     console.error("Error updating notification count:", error);
   }
 };
-
-Notifications.setNotificationHandler({
-  handleNotification: async () => ({
-    shouldShowAlert: true,
-    shouldPlaySound: false,
-    shouldSetBadge: false,
-  }),
-});
 
 export async function sendPushNotification(expoPushToken, title, body) {
   const message = {
