@@ -61,16 +61,7 @@ const StatusList = () => {
         photoURL: photo.src.small,
         name: photo.photographer,
       }));
-      dispatch(
-        displayStatuses([
-          {
-            id: "0",
-            photoURL: profilePicture,
-            name: auth.currentUser.displayName,
-          },
-          ...photos,
-        ])
-      );
+      dispatch(displayStatuses([...photos]));
     } catch (error) {
       console.error("Error fetching images from Pexels:", error);
     }
