@@ -6,18 +6,19 @@ import {
   Image,
   StyleSheet,
 } from "react-native";
-
 import { useFonts } from "expo-font";
 import PaperclipIcon from "../../../utils/icons/PaperclipIcon";
 import DocumentsOutlineIcon from "../../../utils/icons/DocumentsOutlineIcon";
 import CameraIcon from "../../../utils/icons/CameraIcon";
 import MicrophoneIcon from "../../../utils/icons/MicrophoneIcon";
+import { MaterialIcons } from "@expo/vector-icons";
 
 const ChatInput = ({
   newMessage,
   handleTyping,
   handleSend,
   pickImage,
+  removeImage,
   image,
 }) => {
   const [fontsLoaded] = useFonts({
@@ -25,11 +26,27 @@ const ChatInput = ({
     "Poppins-SemiBold": require("../../../assets/fonts/Poppins-SemiBold.ttf"),
     "Poppins-Regular": require("../../../assets/fonts/Poppins-Regular.ttf"),
   });
+
   if (!fontsLoaded) {
     return null;
   }
+
   return (
-    <View>
+    <View style={styles.container}>
+      {image && (
+        <View style={styles.imageContainer}>
+          <Image source={{ uri: image }} style={styles.selectedImage} />
+          <TouchableOpacity
+            style={styles.removeImageButton}
+            onPress={removeImage}
+          >
+            <MaterialIcons name="cancel" size={24} color="red" />
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.sendImageButton} onPress={handleSend}>
+            <MaterialIcons name="send" size={24} color="black" />
+          </TouchableOpacity>
+        </View>
+      )}
       <View style={styles.inputContainer}>
         <TouchableOpacity onPress={pickImage} style={styles.iconButton}>
           <PaperclipIcon />
@@ -57,24 +74,21 @@ const ChatInput = ({
           </TouchableOpacity>
         </View>
       </View>
-      {image && (
-        <View style={styles.imageContainer}>
-          <Image source={{ uri: image }} style={styles.selectedImage} />
-        </View>
-      )}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  inputContainer: {
-    flexDirection: "row",
+  container: {
     padding: 16,
     borderTopWidth: 1,
     borderTopColor: "#ddd",
     backgroundColor: "#FFFFFF",
+  },
+  inputContainer: {
+    flexDirection: "row",
     alignItems: "center",
-    height: 90,
+    height: 50,
   },
   inputWrapper: {
     flex: 1,
@@ -83,17 +97,16 @@ const styles = StyleSheet.create({
     backgroundColor: "#f9f9f9",
     borderRadius: 15,
     padding: 7,
+    marginHorizontal: 8,
   },
   input: {
     flex: 1,
     color: "#333",
-    marginRight: 8,
     fontFamily: "Poppins-Bold",
   },
   iconButtons: {
     flexDirection: "row",
     alignItems: "center",
-    marginLeft: 2,
   },
   iconButton: {
     padding: 8,
@@ -105,14 +118,30 @@ const styles = StyleSheet.create({
     backgroundColor: "#f0f0f0",
   },
   imageContainer: {
+    position: "relative",
     alignItems: "center",
+    marginBottom: 10,
   },
   selectedImage: {
     width: 100,
     height: 100,
     borderRadius: 10,
-    marginBottom: 10,
-    alignSelf: "center",
+  },
+  removeImageButton: {
+    position: "absolute",
+    top: 5,
+    right: 5,
+    backgroundColor: "#F2F7FB",
+    borderRadius: 12,
+    padding: 5,
+  },
+  sendImageButton: {
+    position: "absolute",
+    bottom: 5,
+    right: 5,
+    backgroundColor: "#F2F7FB",
+    borderRadius: 12,
+    padding: 5,
   },
 });
 

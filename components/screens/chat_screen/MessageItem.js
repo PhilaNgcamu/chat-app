@@ -10,7 +10,7 @@ import { setImageToBeSent } from "../../../redux/chat_screen/chatScreenActions";
 const MessageItem = ({ item, type }) => {
   const dispatch = useDispatch();
 
-  const imageToBeSent = useSelector((state) => state.chatScreen.imageToBeSent);
+  const imageSent = useSelector((state) => state.chatScreen.imageToBeSent);
 
   const [fontsLoaded] = useFonts({
     "Poppins-Bold": require("../../../assets/fonts/Poppins-Bold.ttf"),
@@ -52,8 +52,8 @@ const MessageItem = ({ item, type }) => {
           item.userId !== auth.currentUser.uid && styles.messageItemContainer
         }
       >
-        {item.userId !== auth.currentUser.uid && imageToBeSent && (
-          <Image source={{ uri: imageToBeSent }} style={styles.photoItem} />
+        {item.userId !== auth.currentUser.uid && imageSent && (
+          <Image source={{ uri: imageSent }} style={styles.photoItem} />
         )}
         {isGroup ? (
           <View style={styles.groupMemberContainer}>

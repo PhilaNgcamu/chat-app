@@ -213,8 +213,12 @@ const ChatScreen = ({ route, navigation }) => {
     });
 
     if (!result.canceled) {
-      dispatch(setImage(result.assets[0].uri));
+      dispatch(setImageToBeSent(result.assets[0].uri));
     }
+  };
+
+  const removeImage = () => {
+    dispatch(setImageToBeSent(null));
   };
 
   const handleTyping = (text) => {
@@ -269,6 +273,7 @@ const ChatScreen = ({ route, navigation }) => {
         handleTyping={handleTyping}
         handleSend={handleSend}
         pickImage={pickImage}
+        removeImage={removeImage}
         image={image}
       />
     </KeyboardAvoidingView>
