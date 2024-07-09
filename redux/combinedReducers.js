@@ -5,7 +5,6 @@ import groupChatReducer from "./group_chat/groupChatReducer";
 import tabBarVisibilityReducer from "./tab_bar/tabBarReducer";
 import chatScreenReducer from "./chat_screen/chatScreenReducer";
 import privateChatReducer from "./private_chat/privateChatReducer";
-import authenticatedUserReducer from "./authenticated_user/authenticatedUserReducer";
 import userVerificationReducer from "./user_profile_sign_up_and_login/userProfileSignupAndLoginReducer";
 
 const rootReducers = combineReducers({
@@ -14,7 +13,6 @@ const rootReducers = combineReducers({
   privateChat: privateChatReducer,
   chatScreen: chatScreenReducer,
   tabBarVisibility: tabBarVisibilityReducer,
-  authenticatedUser: authenticatedUserReducer,
   userVerification: userVerificationReducer,
 });
 
