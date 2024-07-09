@@ -133,35 +133,22 @@ const ChatScreen = ({ route, navigation }) => {
   }, [contactId, groupChatId, chatType, userId, dispatch]);
 
   const handleSend = async () => {
-    if (newMessage.trim() === "" && !image) {
+    if (newMessage?.trim() === "" && !image) {
       return;
     }
-    console.log(groupChatId, "What Group Chat");
 
     const db = getDatabase();
-    const userId = auth.currentUser.uid;
     const chatIdPath =
       chatType === "group"
         ? `groups/${groupChatId}/messages`
         : `chats/${[userId, contactId].sort().join("_")}/messages`;
-    console.log("chatIdPath: ", chatIdPath);
 
     const messageData = {
       createdAt: serverTimestamp(),
       userId,
       receiverId: chatType !== "group" ? contactId : groupChatId,
       senderName: auth.currentUser.displayName,
-      text: newMessage.trim() !== "" ? newMessage.trim() : undefined,
     };
-    if (chatType !== "group") {
-      messageData["contactName"] = contactName;
-    }
-    if (chatType === "group") {
-      update(ref(db, `groups/${groupChatId}`), {
-        lastGroupMessage:
-          newMessage.trim() !== "" ? newMessage.trim() : undefined,
-      });
-    }
 
     if (image) {
       try {
@@ -179,6 +166,15 @@ const ChatScreen = ({ route, navigation }) => {
       } catch (error) {
         console.error("Error uploading image: ", error);
       }
+    } else {
+      messageData.text = newMessage?.trim();
+    }
+
+    if (chatType === "group") {
+      update(ref(db, `groups/${groupChatId}`), {
+        lastGroupMessage:
+          newMessage?.trim() !== "" ? newMessage?.trim() : undefined,
+      });
     }
 
     await updateNotification(

@@ -1,138 +1,69 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { View, Text, Image, StyleSheet } from "react-native";
 import { format } from "date-fns";
-import { getDatabase, ref, onValue, off } from "firebase/database";
 import { auth } from "../../../backend/firebaseConfig";
 import { useFonts } from "expo-font";
-import { useDispatch, useSelector } from "react-redux";
-import { setImageToBeSent } from "../../../redux/chat_screen/chatScreenActions";
 
 const MessageItem = ({ item, type }) => {
-  const dispatch = useDispatch();
-
-  const imageSent = useSelector((state) => state.chatScreen.imageToBeSent);
-
   const [fontsLoaded] = useFonts({
     "Poppins-Bold": require("../../../assets/fonts/Poppins-Bold.ttf"),
     "Poppins-SemiBold": require("../../../assets/fonts/Poppins-SemiBold.ttf"),
     "Poppins-Regular": require("../../../assets/fonts/Poppins-Regular.ttf"),
   });
 
-  useEffect(() => {
-    const db = getDatabase();
-    const contactsRef = ref(db, "users");
-
-    const fetchUserPhoto = () => {
-      onValue(contactsRef, (snapshot) => {
-        const usersData = snapshot.val();
-        const user = usersData[item.userId];
-        if (user?.photoURL) {
-          dispatch(setImageToBeSent(user.photoURL));
-        }
-      });
-
-      return () => {
-        off(contactsRef);
-      };
-    };
-
-    fetchUserPhoto();
-  }, [item.userId]);
-
   if (!fontsLoaded) {
     return null;
   }
 
   const isGroup = type === "group";
+  const isCurrentUser = item.userId === auth.currentUser.uid;
 
   return (
     <View style={styles.inputContainer}>
-      <View
-        style={
-          item.userId !== auth.currentUser.uid && styles.messageItemContainer
-        }
-      >
-        {item.userId !== auth.currentUser.uid && imageSent && (
-          <Image source={{ uri: imageSent }} style={styles.photoItem} />
-        )}
-        {isGroup ? (
-          <View style={styles.groupMemberContainer}>
-            <Text style={styles.groupMemberName}>
-              {item.userId !== auth.currentUser.uid && item.senderName}
-            </Text>
-            <View
-              style={[
-                styles.messageItem,
-                item.userId === auth.currentUser.uid
-                  ? styles.myMessage
-                  : styles.otherMessage,
-              ]}
-            >
-              <View style={styles.messageMeta}>
-                <View>
-                  {item.text && (
-                    <Text
-                      style={[
-                        styles.messageText,
-                        item.userId === auth.currentUser.uid
-                          ? styles.myMessageText
-                          : styles.otherMessageText,
-                      ]}
-                    >
-                      {item.text.trim()}
-                    </Text>
-                  )}
-                </View>
-              </View>
+      <View style={isCurrentUser ? null : styles.messageItemContainer}>
+        <View
+          style={[
+            styles.messageItem,
+            isCurrentUser ? styles.myMessage : styles.otherMessage,
+          ]}
+        >
+          {isGroup && !isCurrentUser && (
+            <Text style={styles.groupMemberName}>{item.senderName}</Text>
+          )}
+          <View style={styles.messageMeta}>
+            {item.text && (
               <Text
                 style={[
-                  styles.messageTimestamp,
-                  item.userId === auth.currentUser.uid
-                    ? styles.myMessageTimestamp
-                    : styles.otherMemberMessageTimestamp,
+                  styles.messageText,
+                  isCurrentUser
+                    ? styles.myMessageText
+                    : styles.otherMessageText,
                 ]}
               >
-                {format(new Date(item.createdAt), "HH:mm")} AM
+                {item.text.trim()}
               </Text>
-            </View>
+            )}
+            {item.imageUrl && (
+              <Image
+                source={{ uri: item.imageUrl }}
+                style={[
+                  styles.photoItem,
+                  isCurrentUser ? styles.myMessage : styles.otherMessage,
+                ]}
+              />
+            )}
           </View>
-        ) : (
-          <View
+          <Text
             style={[
-              styles.messageItem,
-              item.userId === auth.currentUser.uid
-                ? styles.myMessage
-                : styles.otherMessage,
+              styles.messageTimestamp,
+              isCurrentUser
+                ? styles.myMessageTimestamp
+                : styles.otherMessageTimestamp,
             ]}
           >
-            <View style={styles.messageMeta}>
-              <View>
-                {item.text && (
-                  <Text
-                    style={[
-                      styles.messageText,
-                      item.userId === auth.currentUser.uid
-                        ? styles.myMessageText
-                        : styles.otherMessageText,
-                    ]}
-                  >
-                    {item.text.trim()}
-                  </Text>
-                )}
-              </View>
-            </View>
-            <Text
-              style={[
-                styles.messageTimestamp,
-                item.userId === auth.currentUser.uid
-                  ? styles.myMessageTimestamp
-                  : styles.otherMessageTimestamp,
-              ]}
-            >
-              {format(new Date(item.createdAt), "HH:mm")} AM
-            </Text>
-          </View>
-        )}
+            {format(new Date(item.createdAt), "HH:mm")} AM
+          </Text>
+        </View>
       </View>
     </View>
   );
@@ -155,12 +86,10 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   photoItem: {
-    alignSelf: "flex-start",
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    marginRight: 8,
-    backgroundColor: "red",
+    width: 150,
+    height: 150,
+    borderRadius: 10,
+    marginTop: 8,
   },
   messageItem: {
     paddingLeft: 15,
@@ -185,8 +114,6 @@ const styles = StyleSheet.create({
     alignSelf: "flex-start",
   },
   groupMemberName: {
-    position: "relative",
-    top: 0,
     fontSize: 14,
     color: "#000E08",
     fontFamily: "Poppins-Regular",
@@ -205,14 +132,7 @@ const styles = StyleSheet.create({
   otherMessageText: {
     color: "#000",
   },
-  image: {
-    width: 200,
-    height: 200,
-    borderRadius: 8,
-  },
   messageTimestamp: {
-    width: "100%",
-    position: "relative",
     top: 28,
     fontSize: 12,
     color: "#797C7B",
@@ -228,7 +148,6 @@ const styles = StyleSheet.create({
   },
   otherMemberMessageTimestamp: {
     alignSelf: "flex-end",
-    position: "relative",
     left: 50,
     color: "#797C7B",
   },

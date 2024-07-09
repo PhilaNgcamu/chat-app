@@ -75,22 +75,22 @@ const ChatList = ({ navigation }) => {
                     [`chats/${[userId, receiverId]
                       .sort()
                       .join("_")}/lastIndividualMessage`]:
-                      lastIndividualMessage,
+                      lastIndividualMessage || "🖼️ Image",
                     [`users/${userId}/${[userId, receiverId]
                       .sort()
                       .join("_")}/lastIndividualMessage`]:
-                      lastIndividualMessage,
+                      lastIndividualMessage || "🖼️ Image",
                   };
 
                   const updatesTwo = {
                     [`chats/${[userId, receiverId]
                       .sort()
                       .join("_")}/lastIndividualMessage`]:
-                      lastIndividualMessage,
+                      lastIndividualMessage || "🖼️ Image",
                     [`users/${receiverId}/${[userId, receiverId]
                       .sort()
                       .join("_")}/lastIndividualMessage`]:
-                      lastIndividualMessage,
+                      lastIndividualMessage || "🖼️ Image",
                   };
 
                   try {
