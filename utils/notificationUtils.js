@@ -14,10 +14,8 @@ export const updateNotification = async (
   let notifyUserRef;
 
   if (chatType === "group") {
-    console.log("Error Group", chatId, userId);
     notifyUserRef = ref(db, `groups/${chatId}/notifications`);
   } else {
-    console.log("Error Private", chatId);
     notifyUserRef = ref(db, `chats/${chatId}/notifications`);
   }
   try {

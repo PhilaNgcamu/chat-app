@@ -3,17 +3,17 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { StyleSheet } from "react-native";
-
-import { TabBarVisibilityProvider } from "../chat/custom_hook/useTabBarVisibilityContext";
+import {
+  TabBarVisibilityProvider,
+  useTabBarVisibility,
+} from "../chat/custom_hook/useTabBarVisibilityContext";
 import UserLogin from "../user_login/UserLogin";
 import UserSignUp from "../user_sign_up/UserSignUp";
 import UserProfile from "../user_profile/UserProfile";
 import ChatList from "../chat/display_chats/ChatList";
 import Home from "./HomeNavigation";
-
 import ChatScreen from "./chat_screen/ChatScreen";
 import Onboarding from "../onboarding/Onboarding";
-import { useSelector } from "react-redux";
 import { useFonts } from "expo-font";
 import GroupIcon from "../../utils/icons/GroupIcon";
 import MessageIcon from "../../utils/icons/MessageIcon";
@@ -79,7 +79,7 @@ function BottomTabNavigator() {
     "Poppins-Regular": require("../../assets/fonts/Poppins-Regular.ttf"),
   });
 
-  const tabBarVisible = useSelector((state) => state.tabBarVisible);
+  const { isTabBarVisible } = useTabBarVisibility();
 
   if (!fontsLoaded) {
     return null;
@@ -91,7 +91,7 @@ function BottomTabNavigator() {
         tabBarShowLabel: true,
         tabBarStyle: [
           styles.tabBar,
-          { display: tabBarVisible ? "flex" : "none" },
+          { display: isTabBarVisible ? "flex" : "none" },
         ],
         tabBarActiveTintColor: "#24786D",
         tabBarInactiveTintColor: "#888",
@@ -112,7 +112,7 @@ function BottomTabNavigator() {
         name="Calls"
         component={SettingsStackNavigator}
         options={{
-          tabBarIcon: ({ color, size }) => <CallsIcon color={color} />,
+          tabBarIcon: ({ color }) => <CallsIcon color={color} />,
           headerShown: false,
         }}
       />
