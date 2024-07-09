@@ -48,7 +48,7 @@ const StatusList = () => {
   const fetchImages = async () => {
     try {
       const response = await fetch(
-        `https://api.pexels.com/v1/search?query=people&per_page=5`,
+        `https://api.pexels.com/v1/search?query=person&per_page=5`,
         {
           headers: {
             Authorization: PEXELS_API_KEY,
