@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   View,
   TextInput,
   TouchableOpacity,
   Image,
   StyleSheet,
+  ActivityIndicator,
 } from "react-native";
 import { useFonts } from "expo-font";
 import PaperclipIcon from "../../../utils/icons/PaperclipIcon";
@@ -20,6 +21,7 @@ const ChatInput = ({
   pickImage,
   removeImage,
   image,
+  isLoading,
 }) => {
   const [fontsLoaded] = useFonts({
     "Poppins-Bold": require("../../../assets/fonts/Poppins-Bold.ttf"),
@@ -33,7 +35,7 @@ const ChatInput = ({
 
   return (
     <View style={styles.container}>
-      {image && (
+      {image !== null && (
         <View style={styles.imageContainer}>
           <Image source={{ uri: image }} style={styles.selectedImage} />
           <TouchableOpacity
@@ -42,8 +44,16 @@ const ChatInput = ({
           >
             <MaterialIcons name="cancel" size={24} color="red" />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.sendImageButton} onPress={handleSend}>
-            <MaterialIcons name="send" size={24} color="black" />
+          <TouchableOpacity
+            style={styles.sendImageButton}
+            onPress={handleSend}
+            disabled={isLoading}
+          >
+            {isLoading ? (
+              <ActivityIndicator size="small" color="black" />
+            ) : (
+              <MaterialIcons name="send" size={24} color="black" />
+            )}
           </TouchableOpacity>
         </View>
       )}

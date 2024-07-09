@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useCallback } from "react";
+import React, { useEffect, useRef, useCallback, useState } from "react";
 import { StyleSheet, KeyboardAvoidingView, Platform } from "react-native";
 import * as Notifications from "expo-notifications";
 import {
@@ -42,6 +42,7 @@ import {
   setRecipientId,
   setNotification,
 } from "../../../redux/chat_screen/chatScreenActions";
+import { setLoading } from "../../../redux/user_profile_sign_up_and_login/userProfileSignupAndLoginActions";
 
 const ChatScreen = ({ route, navigation }) => {
   const {
@@ -65,6 +66,7 @@ const ChatScreen = ({ route, navigation }) => {
   const expoNotifyToken = useSelector(
     (state) => state.chatScreen.expoPushToken
   );
+  const isLoading = useSelector((state) => state.userVerification.isLoading);
   const inputRef = useRef(null);
 
   const { setTabBarVisible } = useTabBarVisibility();
@@ -137,6 +139,8 @@ const ChatScreen = ({ route, navigation }) => {
       return;
     }
 
+    dispatch(setLoading(true));
+
     const db = getDatabase();
     const chatIdPath =
       chatType === "group"
@@ -198,6 +202,8 @@ const ChatScreen = ({ route, navigation }) => {
       `${auth.currentUser.displayName.trim()} sent you a message`,
       messageData.text || "You've received a new message"
     );
+
+    dispatch(setLoading(false));
   };
 
   const pickImage = async () => {
@@ -271,6 +277,7 @@ const ChatScreen = ({ route, navigation }) => {
         pickImage={pickImage}
         removeImage={removeImage}
         image={image}
+        isLoading={isLoading}
       />
     </KeyboardAvoidingView>
   );
