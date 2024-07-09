@@ -1,4 +1,4 @@
-import { Platform } from "react-native";
+import { Alert, Platform } from "react-native";
 import { getDatabase, ref, get, update } from "firebase/database";
 import * as Device from "expo-device";
 import * as Notifications from "expo-notifications";
@@ -36,7 +36,7 @@ export const updateNotification = async (
 
     await update(notifyUserRef, notifyUser);
   } catch (error) {
-    console.error("Error updating notification count:", error);
+    Alert.alert("Oops!", "Something wrong happened. Please try again.");
   }
 };
 

@@ -7,6 +7,7 @@ import {
   FlatList,
   Image,
   StyleSheet,
+  Alert,
 } from "react-native";
 import { getDatabase, ref, set, get } from "firebase/database";
 import {
@@ -101,7 +102,7 @@ const CreateGroupChat = () => {
         const imageUrl = await getDownloadURL(imageRef);
         newGroupData.imageUrl = imageUrl;
       } catch (error) {
-        console.error("Error uploading image: ", error);
+        Alert.alert("Oops!", "Error uploading image. Please try again.");
       }
     }
 

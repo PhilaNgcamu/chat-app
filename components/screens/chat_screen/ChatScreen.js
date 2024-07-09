@@ -1,5 +1,10 @@
 import React, { useEffect, useRef, useCallback } from "react";
-import { StyleSheet, KeyboardAvoidingView, Platform } from "react-native";
+import {
+  StyleSheet,
+  KeyboardAvoidingView,
+  Platform,
+  Alert,
+} from "react-native";
 import * as Notifications from "expo-notifications";
 import {
   getDatabase,
@@ -169,7 +174,10 @@ const ChatScreen = ({ route, navigation }) => {
         messageData.imageUrl = imageUrl;
         dispatch(setImageToBeSent(null));
       } catch (error) {
-        console.error("Error uploading image: ", error);
+        Alert.alert(
+          "Oops!",
+          "An error occurred while uploading the image. Please try again later."
+        );
       }
     } else {
       messageData.text = newMessage?.trim();
@@ -194,8 +202,8 @@ const ChatScreen = ({ route, navigation }) => {
         await push(ref(db, chatIdPath), messageData);
         dispatch(addNewPrivateMessage(""));
       })
-      .catch((error) => {
-        console.error("Error notifying user", error);
+      .catch(() => {
+        Alert.alert("Oops!", "Something wrong happened. Please try again.");
       });
 
     await sendPushNotification(

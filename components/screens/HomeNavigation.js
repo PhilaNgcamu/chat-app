@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet, Alert } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { signOut } from "firebase/auth";
 import { auth } from "../../backend/firebaseConfig";
@@ -13,7 +13,7 @@ const Home = () => {
       await signOut(auth);
       navigation.navigate("UserLogin");
     } catch (error) {
-      console.error("Failed to logout:", error);
+      Alert.alert("Oops!", "Something wrong happened. Please try again.");
     }
   };
 

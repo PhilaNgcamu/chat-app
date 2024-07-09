@@ -7,6 +7,7 @@ import {
   Image,
   Text,
   StyleSheet,
+  Alert,
 } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useDispatch, useSelector } from "react-redux";
@@ -61,7 +62,7 @@ const StatusList = () => {
       }));
       dispatch(displayStatuses(photos));
     } catch (error) {
-      console.error("Error fetching images from Pexels:", error);
+      Alert.alert("Oops!", "Could not show statuses.");
     }
   };
 

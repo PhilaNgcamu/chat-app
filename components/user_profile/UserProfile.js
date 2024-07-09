@@ -166,7 +166,7 @@ const UserProfile = () => {
         const downloadUrl = await getDownloadURL(storeRef);
         dispatch(setProfilePicture(downloadUrl));
       } catch (error) {
-        console.error("Upload failed: ", error);
+        Alert.alert("Oops!", "Something went wrong. Please try again.");
       }
     }
   };

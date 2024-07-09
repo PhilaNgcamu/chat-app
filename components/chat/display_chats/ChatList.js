@@ -102,9 +102,9 @@ const ChatList = ({ navigation }) => {
                       unreadMessages: true,
                     });
                   } catch (error) {
-                    console.error(
-                      "Error updating last individual messages",
-                      error
+                    Alert.alert(
+                      "Oops!",
+                      "The last message could not be sent. Please try again."
                     );
                   }
                 }
