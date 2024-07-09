@@ -67,6 +67,7 @@ const ChatScreen = ({ route, navigation }) => {
     (state) => state.chatScreen.expoPushToken
   );
   const isLoading = useSelector((state) => state.userVerification.isLoading);
+
   const inputRef = useRef(null);
 
   const { setTabBarVisible } = useTabBarVisibility();
@@ -134,7 +135,7 @@ const ChatScreen = ({ route, navigation }) => {
     );
   }, [contactId, groupChatId, chatType, userId, dispatch]);
 
-  const handleSend = async () => {
+  const handleSend = useCallback(async () => {
     if (newMessage?.trim() === "" && !image) {
       return;
     }
@@ -204,9 +205,18 @@ const ChatScreen = ({ route, navigation }) => {
     );
 
     dispatch(setLoading(false));
-  };
+  }, [
+    chatType,
+    groupChatId,
+    contactId,
+    userId,
+    newMessage,
+    image,
+    expoNotifyToken,
+    dispatch,
+  ]);
 
-  const pickImage = async () => {
+  const pickImage = useCallback(async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
@@ -217,15 +227,18 @@ const ChatScreen = ({ route, navigation }) => {
     if (!result.canceled) {
       dispatch(setImageToBeSent(result.assets[0].uri));
     }
-  };
+  }, [dispatch]);
 
-  const removeImage = () => {
+  const removeImage = useCallback(() => {
     dispatch(setImageToBeSent(null));
-  };
+  }, [dispatch]);
 
-  const handleTyping = (text) => {
-    dispatch(addNewPrivateMessage(text));
-  };
+  const handleTyping = useCallback(
+    (text) => {
+      dispatch(addNewPrivateMessage(text));
+    },
+    [dispatch]
+  );
 
   useEffect(() => {
     registerForPushNotificationsAsync()
