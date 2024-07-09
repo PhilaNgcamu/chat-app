@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useEffect, useCallback } from "react";
 import {
   View,
   Alert,
@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import { useFonts } from "expo-font";
 import { getAuth, updateProfile, updateEmail } from "firebase/auth";
-import { getDatabase, ref, set, get } from "firebase/database";
+import { getDatabase, ref, update, get } from "firebase/database";
 import {
   getStorage,
   ref as storageRef,
@@ -125,7 +125,7 @@ const UserProfile = () => {
       });
 
       const db = getDatabase();
-      await set(ref(db, "users/" + user.uid), {
+      await update(ref(db, "users/" + user.uid), {
         photoURL: profilePicture,
         name: userName,
         email: userEmail,
@@ -133,11 +133,13 @@ const UserProfile = () => {
         phoneNumber: phoneNumber,
       });
 
-      Alert.alert("Profile Updated Successfully");
+      await updateEmail(user, userEmail);
+
+      Alert.alert("Success!", "Profile updated successfully.");
 
       navigation.navigate("Home");
     } catch (error) {
-      console.log("Error updating profile:", error);
+      Alert.alert("Oops!", "Something went wrong. Please try again.");
     }
   };
 
