@@ -44,10 +44,16 @@ This is a professional chat application built using Expo/React Native, Firebase,
 
 First version (v1.0): [Chatbox](https://drive.google.com/file/d/1IXMiI6VnF_7UYra7S5F28c7LMJhy7K5v/view?usp=drive_link)
 
+### Improved versions
+
+1. v1.1:
+   - Integrated push notifications for real-time updates.
+   - Improved UI/UX for error handling by supporting the user if there's a problem on the app.
+
 ### Future Improvements
 
-- Integrate push notifications for real-time updates.
-- Improve UI/UX overall
+- Improve performance of the app.
+- Improve UI/UX overall.
 
 ### License
 
@@ -55,4 +61,4 @@ This project is licensed under the [MIT License](https://opensource.org/licenses
 
 ### Acknowledgements
 
-Special thanks to the Tumi Gede and Navisha for providing the Figma designs and inspiration for the UI/UX of the application.
+Special thanks to the Tumi and Navisha for providing the Figma designs and inspiration for the UI/UX of the application.
