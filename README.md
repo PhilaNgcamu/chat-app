@@ -42,7 +42,8 @@ This is a professional chat application built using Expo/React Native, Firebase,
 
 ### Download the App
 
-First version (v1.0): [Chatbox](https://drive.google.com/file/d/1IXMiI6VnF_7UYra7S5F28c7LMJhy7K5v/view?usp=drive_link)
+- v1.0: [Chatbox v1.0](https://drive.google.com/file/d/1IXMiI6VnF_7UYra7S5F28c7LMJhy7K5v/view?usp=drive_link)
+- Latest version (v1.1): [Chatbox v1.1](https://drive.google.com/file/d/1N8jnFT4wGv4l21U4BtaH9pdnvt0MPyWm/view?usp=sharing)
 
 ### Improved versions
 
@@ -52,8 +53,9 @@ First version (v1.0): [Chatbox](https://drive.google.com/file/d/1IXMiI6VnF_7UYra
 
 ### Future Improvements
 
-- Improve performance of the app.
+- Implement such as search functionality and message filtering.
 - Make a Calls Screen.
+- Improve performance of the app.
 - Improve UI/UX overall.
 
 ### License
