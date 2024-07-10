@@ -1,7 +1,6 @@
 import React from "react";
 import { TouchableOpacity, StyleSheet } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
-
 import { horizontalScale, verticalScale } from "../../utils/scale";
 
 const BackButton = ({ onPress }) => {

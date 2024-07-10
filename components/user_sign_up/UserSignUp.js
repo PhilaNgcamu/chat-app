@@ -3,7 +3,6 @@ import { View, ActivityIndicator, StyleSheet, Alert } from "react-native";
 import { useFonts } from "expo-font";
 import { StatusBar } from "expo-status-bar";
 import { useDispatch, useSelector } from "react-redux";
-
 import InputField from "./InputField";
 import ExistingOrCreateAccountButton from "./ExistingOrCreateAccountButton";
 import {

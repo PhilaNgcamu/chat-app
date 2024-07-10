@@ -11,7 +11,7 @@ import { getAuth, updateProfile, updateEmail } from "firebase/auth";
 import { getDatabase, ref, update, get } from "firebase/database";
 import {
   getStorage,
-  ref as storageRef,
+  storageRef,
   uploadBytes,
   getDownloadURL,
 } from "firebase/storage";

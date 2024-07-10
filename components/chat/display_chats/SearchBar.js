@@ -2,12 +2,12 @@ import React, { useEffect } from "react";
 import { View, StyleSheet, Image, Text, TouchableOpacity } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import { useDispatch, useSelector } from "react-redux";
-import { setProfilePicture } from "../../../redux/actions";
 import { auth } from "../../../backend/firebaseConfig";
 import { getDatabase, ref, get } from "firebase/database";
 import { useFonts } from "expo-font";
 import { useNavigation } from "@react-navigation/native";
 import { StatusBar } from "expo-status-bar";
+import { setProfilePicture } from "../../../redux/user_profile_sign_up_and_login/userProfileSignupAndLoginActions";
 
 const SearchBar = () => {
   const dispatch = useDispatch();

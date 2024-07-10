@@ -16,7 +16,7 @@ import {
 } from "firebase/database";
 import {
   getStorage,
-  ref as storageRef,
+  storageRef,
   uploadBytes,
   getDownloadURL,
 } from "firebase/storage";

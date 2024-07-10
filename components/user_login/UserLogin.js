@@ -4,14 +4,12 @@ import { useFonts } from "expo-font";
 import { StatusBar } from "expo-status-bar";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../backend/firebaseConfig";
-
 import {
   horizontalScale,
   verticalScale,
   moderateScale,
 } from "../../utils/scale";
 import { useDispatch, useSelector } from "react-redux";
-
 import BackButton from "./BackButton";
 import SocialLoginButtons from "../onboarding/SocialLoginButtons";
 import AppleBlackIcon from "../../utils/icons/AppleBlackIcon";

@@ -1,6 +1,5 @@
 import React from "react";
 import { View, StyleSheet } from "react-native";
-
 import { horizontalScale, verticalScale } from "../../utils/scale";
 import GoogleIcon from "../../utils/icons/GoogleIcon";
 import FacebookIcon from "../../utils/icons/FacebookIcon";

@@ -13,8 +13,8 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { useDispatch, useSelector } from "react-redux";
 import { auth } from "../../../backend/firebaseConfig";
 import { getDatabase, ref, get } from "firebase/database";
-import { setProfilePicture } from "../../../redux/actions";
 import { displayStatuses } from "../../../redux/chat_list/chatListActions";
+import { setProfilePicture } from "../../../redux/user_profile_sign_up_and_login/userProfileSignupAndLoginActions";
 
 const StatusList = () => {
   const dispatch = useDispatch();

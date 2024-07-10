@@ -5,7 +5,6 @@ import { useFonts } from "expo-font";
 import AppleWhiteIcon from "../../utils/icons/AppleWhiteIcon";
 import { horizontalScale, verticalScale } from "../../utils/scale";
 import { StatusBar } from "expo-status-bar";
-
 import Header from "./Header";
 import Subtitle from "./Subtitle";
 import SocialLoginButtons from "./SocialLoginButtons";
