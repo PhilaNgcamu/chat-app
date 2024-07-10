@@ -20,7 +20,7 @@ This is a professional chat application built using Expo/React Native, Firebase,
 
 2. **Registration Screen**: Enables users to create a new account by providing necessary details.
 
-3. **Profile Screen**: Allows users to view and update their profile informati non and settings.
+3. **Profile Screen**: Allows users to view and update their profile information non and settings.
 
 4. **Individual Chat Screen**: Displays private conversations between two users with message timestamps, read receipts, and typing indicators.
 
@@ -53,6 +53,7 @@ First version (v1.0): [Chatbox](https://drive.google.com/file/d/1IXMiI6VnF_7UYra
 ### Future Improvements
 
 - Improve performance of the app.
+- Make a Calls Screen.
 - Improve UI/UX overall.
 
 ### License
@@ -61,4 +62,4 @@ This project is licensed under the [MIT License](https://opensource.org/licenses
 
 ### Acknowledgements
 
-Special thanks to the Tumi and Navisha for providing the Figma designs and inspiration for the UI/UX of the application.
+Special thanks to the Tumi Gede and Navisha Sookoo for providing the Figma designs and inspiration for the UI/UX of the application.
