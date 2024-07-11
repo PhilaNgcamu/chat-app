@@ -22,6 +22,8 @@ const ChatItem = ({ item, onPress }) => {
     (state) => state.chatList.lastMessage
   );
 
+  console.log(JSON.stringify(item, null, 2), "itemzzs");
+
   const dispatch = useDispatch();
 
   const [fontsLoaded] = useFonts({
@@ -36,7 +38,10 @@ const ChatItem = ({ item, onPress }) => {
   useEffect(() => {
     const db = getDatabase();
     const privateNotifications = ref(db, `chats/${key}/notifications`);
-    const lastMessageRef = ref(db, `chats/${key}/lastIndividualMessage`);
+    const lastIndividualMessageRef = ref(
+      db,
+      `chats/${key}/lastIndividualMessage`
+    );
     const groupsNotificationsRef = ref(
       db,
       `groups/${item.groupId}/notifications`
@@ -58,12 +63,12 @@ const ChatItem = ({ item, onPress }) => {
 
     onValue(privateNotifications, handlePrivateMessagesNotification);
     onValue(groupsNotificationsRef, handleGroupsNotifications);
-    onValue(lastMessageRef, handleLastMessage);
+    onValue(lastIndividualMessageRef, handleLastMessage);
 
     return () => {
       off(privateNotifications, handlePrivateMessagesNotification);
       off(groupsNotificationsRef, handleGroupsNotifications);
-      off(lastMessageRef, handleLastMessage);
+      off(lastIndividualMessageRef, handleLastMessage);
     };
   }, [key]);
 
@@ -107,7 +112,7 @@ const ChatItem = ({ item, onPress }) => {
                   },
               ]}
             >
-              {lastIndividualMessage}
+              {lastIndividualMessage || item.lastGroupMessage}
             </Text>
           )}
         </View>
