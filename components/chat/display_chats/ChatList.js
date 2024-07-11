@@ -35,19 +35,20 @@ const ChatList = ({ navigation }) => {
         return new Promise((resolve) => {
           onValue(contactsRef, (snapshot) => {
             contactsList.length = 0;
-
-            Object.entries(snapshot.val()).forEach(([id, data]) => {
-              if (id !== currentUserID) {
-                contactsList.push({
-                  id,
-                  chatType: "private",
-                  ...data,
-                });
-              }
-            });
-            dispatch(displayStatuses(contactsList));
-            dispatch(displayContacts([...contactsList]));
-            resolve(contactsList);
+            if (snapshot.exists()) {
+              Object.entries(snapshot?.val()).forEach(([id, data]) => {
+                if (id !== currentUserID) {
+                  contactsList.push({
+                    id,
+                    chatType: "private",
+                    ...data,
+                  });
+                }
+              });
+              dispatch(displayStatuses(contactsList));
+              dispatch(displayContacts([...contactsList]));
+              resolve(contactsList);
+            }
           });
         });
       };

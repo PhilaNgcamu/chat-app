@@ -11,7 +11,7 @@ import { getAuth, updateProfile, updateEmail } from "firebase/auth";
 import { getDatabase, ref, update, get } from "firebase/database";
 import {
   getStorage,
-  storageRef,
+  ref as storageRef,
   uploadBytes,
   getDownloadURL,
 } from "firebase/storage";
@@ -206,7 +206,7 @@ const UserProfile = () => {
             phoneNumber={phoneNumber}
             setPhoneNumber={handlePhoneNumber}
           />
-          <MediaShared profilePicture={profilePicture} />
+          <MediaShared userId={user.uid} />
           <SaveButton handleSave={handleSave} />
         </View>
       </View>

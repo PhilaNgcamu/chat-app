@@ -118,6 +118,25 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     marginTop: 16,
   },
+  overlayContainer: {
+    position: "relative",
+  },
+  overlay: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    borderRadius: 16,
+    backgroundColor: "#000E08CC",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  overlayText: {
+    color: "#FFF",
+    fontSize: 18,
+    fontWeight: "bold",
+  },
 });
 
 export default styles;
