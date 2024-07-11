@@ -118,9 +118,12 @@ const ChatItem = ({ item, onPress }) => {
         </View>
         <View style={styles.extraInfo}>
           <Text style={styles.lastTimeMessageSent}>2 min ago</Text>
-          {notifications > 0 && currentUserId !== notifyRecipient && (
-            <NotificationStatus notificationsCount={notifications} />
-          )}
+          {(item.type === "group" ||
+            (item.chatType === "private" &&
+              currentUserId !== notifyRecipient)) &&
+            notifications > 0 && (
+              <NotificationStatus notificationsCount={notifications} />
+            )}
         </View>
       </View>
     </TouchableOpacity>
