@@ -34,7 +34,7 @@ import {
   registerForPushNotificationsAsync,
   sendPushNotification,
 } from "../../../utils/notificationUtils";
-import { displayGroupMessages } from "../../../redux/chat_list/chatListActions";
+import { displayGroupMessages } from "../../../redux/group_chat/groupChatActions";
 import {
   addNewPrivateMessage,
   displayPrivateMessages,
@@ -94,18 +94,11 @@ const ChatScreen = ({ route, navigation }) => {
   useEffect(() => {
     const db = getDatabase();
     const isGroupChat = chatType === "group";
-
     const messagesRef = ref(
       db,
-      `${
-        isGroupChat
-          ? `groups/${groupChatId}`
-          : `chats/${
-              userId < contactId
-                ? `${userId}_${contactId}`
-                : `${contactId}_${userId}`
-            }`
-      }/messages`
+      isGroupChat
+        ? `groups/${groupChatId}/messages`
+        : `chats/${[userId, contactId].sort().join("_")}/messages`
     );
 
     const unsubscribeMessages = onValue(messagesRef, (snapshot) => {
@@ -126,7 +119,7 @@ const ChatScreen = ({ route, navigation }) => {
     return () => {
       unsubscribeMessages();
     };
-  }, [groupChatId, contactId, chatType, dispatch, userId]);
+  }, [chatType, groupChatId, contactId, userId, dispatch]);
 
   useEffect(() => {
     dispatch(setCurrentUserId(userId));
@@ -158,6 +151,7 @@ const ChatScreen = ({ route, navigation }) => {
       userId,
       receiverId: chatType !== "group" ? contactId : groupChatId,
       senderName: auth.currentUser.displayName,
+      senderImage: auth.currentUser.photoURL,
     };
 
     if (image) {
