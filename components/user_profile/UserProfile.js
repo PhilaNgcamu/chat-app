@@ -7,7 +7,12 @@ import {
   Platform,
 } from "react-native";
 import { useFonts } from "expo-font";
-import { getAuth, updateProfile, updateEmail } from "firebase/auth";
+import {
+  getAuth,
+  updateProfile,
+  updateEmail,
+  updatePhoneNumber,
+} from "firebase/auth";
 import { getDatabase, ref, update, get } from "firebase/database";
 import {
   getStorage,
@@ -134,6 +139,7 @@ const UserProfile = () => {
       });
 
       await updateEmail(user, userEmail);
+      await updateProfile(user, { userName, photoURL: profilePicture });
 
       Alert.alert("Success!", "Profile updated successfully.");
 
