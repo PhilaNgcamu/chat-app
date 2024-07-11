@@ -25,6 +25,7 @@ import { StatusBar } from "expo-status-bar";
 import {
   setGroupImage,
   setGroupName,
+  setGroupContacts,
   setSelectedGroupContacts,
 } from "../../../redux/group_chat/groupChatActions";
 
@@ -33,11 +34,11 @@ const CreateGroupChat = () => {
   const navigation = useNavigation();
 
   const groupName = useSelector((state) => state.groupChat.groupName);
-  const contacts = useSelector((state) => state.groupContacts.contacts);
+  const contacts = useSelector((state) => state.groupChat.groupContacts);
   const selectedContacts = useSelector(
-    (state) => state.selectedGroupContacts.selectedContacts
+    (state) => state.groupChat.selectedGroupContacts
   );
-  const groupImage = useSelector((state) => state.groupImage.groupImage);
+  const groupImage = useSelector((state) => state.groupChat.groupImage);
 
   useEffect(() => {
     const fetchContacts = async () => {
@@ -155,7 +156,7 @@ const CreateGroupChat = () => {
     <View style={styles.container}>
       <StatusBar style="dark" />
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
+        <TouchableOpacity onPress={() => navigation.navigate("Home")}>
           <MaterialIcons name="arrow-back" size={24} color="#000" />
         </TouchableOpacity>
         <Text style={styles.title}>Create Group Chat</Text>

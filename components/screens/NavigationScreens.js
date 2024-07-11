@@ -130,7 +130,7 @@ function BottomTabNavigator() {
         name="Settings"
         component={SettingsStackNavigator}
         options={{
-          tabBarIcon: ({ color, size }) => <SettingsIcon color={color} />,
+          tabBarIcon: ({ color }) => <SettingsIcon color={color} />,
           headerShown: false,
         }}
       />
