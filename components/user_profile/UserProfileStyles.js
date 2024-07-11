@@ -118,6 +118,15 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     marginTop: 16,
   },
+  imageListContainer: {
+    flexDirection: "row",
+    gap: 25,
+    marginBottom: 5,
+  },
+  noImagesIcon: {
+    position: "relative",
+    right: horizontalScale(15),
+  },
   overlayContainer: {
     position: "relative",
   },

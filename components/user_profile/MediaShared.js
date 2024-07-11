@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { View, Text, Image, FlatList, TouchableOpacity } from "react-native";
 import { getStorage, ref, listAll, getDownloadURL } from "firebase/storage";
 import styles from "./UserProfileStyles";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 const MediaShared = ({ userId }) => {
   const [images, setImages] = useState([]);
@@ -45,14 +46,24 @@ const MediaShared = ({ userId }) => {
       <TouchableOpacity>
         <Text style={styles.viewAllText}>View All</Text>
       </TouchableOpacity>
-      <FlatList
-        data={images.slice(0, 3)}
-        renderItem={renderItem}
-        keyExtractor={(item, index) => index.toString()}
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        style={styles.imageList}
-      />
+
+      {!images.length ? (
+        <MaterialCommunityIcons
+          style={styles.noImagesIcon}
+          name="image"
+          size={140}
+          color="gray"
+        />
+      ) : (
+        <FlatList
+          data={images.slice(0, 3)}
+          renderItem={renderItem}
+          keyExtractor={(item, index) => index.toString()}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.imageListContainer}
+        />
+      )}
     </View>
   );
 };
