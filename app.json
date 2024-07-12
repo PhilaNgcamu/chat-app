@@ -9,26 +9,29 @@
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#24786D"
+      "backgroundColor": "#ffffff"
     },
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true
-    },
-    "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/c-logo.png",
-        "backgroundColor": "#24786D"
-      },
-      "package": "com.philangcamu.lsschatapp"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "plugins": ["expo-font"],
     "extra": {
       "eas": {
-        "projectId": "9dd274ca-37e7-4e67-a731-4988656ce431"
+        "projectId": "7ba8bc3a-3e0c-44f9-a260-06f08ab5ffd3"
       }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "splashImage": "./assets/c-logo.png",
+        "resizeMode": "contain",
+
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "package": "com.philahappy.lsschatapp"
     }
   }
 }

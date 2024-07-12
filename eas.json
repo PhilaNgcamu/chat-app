@@ -1,21 +1,32 @@
 {
+  "cli": {
+    "version": ">= 10.1.1"
+  },
   "build": {
-    "preview": {
-      "android": {
-        "buildType": "apk"
-      }
-    },
-    "preview2": {
-      "android": {
-        "gradleCommand": ":app:assembleRelease"
-      }
-    },
-    "preview3": {
-      "developmentClient": true
-    },
-    "preview4": {
+    "development": {
+      "developmentClient": true,
       "distribution": "internal"
     },
+    "preview": {
+      "distribution": "internal",
+      "android": {
+        "buildType": "apk"
+      },
+      "env": {
+        "FIREBASE_API_KEY": "AIzaSyCqcsdwFL_EveXmtr_fiGu_Ww9Q1HVXmJo",
+        "FIREBASE_AUTH_DOMAIN": "lss-chat-app.firebaseapp.com",
+        "PEXELS_API_KEY": "HOQhlLoeml32OchQuDRqmxSjfoRpbqBvwX8zpTVxnS65mKmPbXlZQl5s",
+        "PEXELS_API_URL": "https://api.pexels.com/v1/search"
+      }
+    },
+
+    "production": {
+      "android": {
+        "buildType": "app-bundle"
+      }
+    }
+  },
+  "submit": {
     "production": {}
   }
 }
