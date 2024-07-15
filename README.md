@@ -43,7 +43,7 @@ This is a professional chat application built using Expo/React Native, Firebase,
 ### Download the App
 
 - v1.0: [Chatbox v1.0](https://drive.google.com/file/d/1IXMiI6VnF_7UYra7S5F28c7LMJhy7K5v/view?usp=drive_link)
-- Latest version (v1.1): [Chatbox v1.1](https://drive.google.com/file/d/1N8jnFT4wGv4l21U4BtaH9pdnvt0MPyWm/view?usp=sharing) - Built on the 10/07/2024
+- Latest version (v1.1): [Chatbox v1.1](https://drive.google.com/file/d/1lNfZo16UtkG6cHrUYiSH2kNbXdSWTdnQ/view?usp=sharing) - Built on the 12/07/2024
 
 ### Improved versions
 
